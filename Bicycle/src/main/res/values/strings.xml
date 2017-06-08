@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SchoolBicycle</string>
+
+    <string name="company">北京****科技公司</string>
+    <string name="complete">完成</string>
+    <string name="next_step">下一步</string>
+    <string name="evaluate">评价</string>
+</resources>

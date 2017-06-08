@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -44,6 +43,12 @@
             android:name="me.iwf.photopicker.PhotoPagerActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="cb45e68d4be17377b29d791758b144e0"/>
+
+
     </application>
 
 </manifest>

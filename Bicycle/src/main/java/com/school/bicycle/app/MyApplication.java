@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.school.bicycle.http.APIFactory;
+
 /**
  * Created by zht on 2017/04/08 9:09
  */
@@ -23,7 +25,7 @@ public class MyApplication extends MultiDexApplication {
 //
 //        initAnalytics();
 //
-//        initRetrofit();
+        initRetrofit();
 //
 //        initPush();
 //
@@ -90,13 +92,13 @@ public class MyApplication extends MultiDexApplication {
 //
 //
 //
-//    private void initRetrofit() {
-//
-//        aContext = this;
-//        //初始化网络请求工具
-//        APIFactory.getInstance().init(this);
-//
-//    }
+    private void initRetrofit() {
+
+        aContext = this;
+        //初始化网络请求工具
+        APIFactory.getInstance().init(this);
+
+    }
 //
 //    private void initAnalytics() {
 //        MobclickAgent.setDebugMode(true);

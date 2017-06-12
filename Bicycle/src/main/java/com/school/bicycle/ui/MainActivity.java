@@ -1,8 +1,8 @@
 package com.school.bicycle.ui;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
@@ -16,7 +16,7 @@ public class MainActivity extends BaseActivity implements IMainView{
     @BindView(R.id.map)
     MapView mMapView;
     @BindView(R.id.fab_refresh)
-    FloatingActionButton floatingActionButton;
+    ImageView floatingActionButton;
     AMap aMap;
     IMainPresenter iMainPresenter;
 

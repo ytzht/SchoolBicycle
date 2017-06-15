@@ -1,4 +1,4 @@
-package com.school.bicycle.ui;
+package com.school.bicycle.ui.main;
 
 import android.content.Context;
 import android.location.Location;

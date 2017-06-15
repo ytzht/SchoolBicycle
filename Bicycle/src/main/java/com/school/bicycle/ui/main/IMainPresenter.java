@@ -1,4 +1,4 @@
-package com.school.bicycle.ui;
+package com.school.bicycle.ui.main;
 
 import com.amap.api.maps.AMap;
 

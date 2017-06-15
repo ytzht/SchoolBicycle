@@ -1,13 +1,15 @@
-package com.school.bicycle.ui;
+package com.school.bicycle.ui.main;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseActivity;
+import com.school.bicycle.ui.register.RegisterActivity;
 
 import butterknife.BindView;
 
@@ -17,6 +19,8 @@ public class MainActivity extends BaseActivity implements IMainView{
     MapView mMapView;
     @BindView(R.id.fab_refresh)
     ImageView floatingActionButton;
+    @BindView(R.id.btn_use)
+    Button btnUse;
     AMap aMap;
     IMainPresenter iMainPresenter;
 
@@ -42,7 +46,17 @@ public class MainActivity extends BaseActivity implements IMainView{
         });
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
 
+        initClickListener();
 
+    }
+
+    private void initClickListener() {
+        btnUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(RegisterActivity.class);
+            }
+        });
     }
 
     @Override

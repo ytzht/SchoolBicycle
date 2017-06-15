@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseActivity;
+import com.school.bicycle.ui.main.MainActivity;
 
 public class AppLauncherActivity extends BaseActivity {
 

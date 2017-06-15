@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -31,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:launchMode="singleTask"
             android:theme="@style/MainTheme"
             android:windowSoftInputMode="adjustPan|stateHidden" />
@@ -46,9 +47,11 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="e9ec77c7977cb1ddd650da3e6576c9e6"/>
+            android:value="e9ec77c7977cb1ddd650da3e6576c9e6" />
 
-
+        <activity android:name=".ui.register.RegisterActivity"
+            android:label="注册"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

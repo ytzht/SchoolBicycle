@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.school.bicycle.ui.MainActivity">
+    tools:context="com.school.bicycle.ui.main.MainActivity">
 
 
     <com.amap.api.maps.MapView
@@ -24,6 +24,7 @@
         android:src="@drawable/btn_refresh" />
 
     <Button
+        android:id="@+id/btn_use"
         android:layout_width="140dp"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"

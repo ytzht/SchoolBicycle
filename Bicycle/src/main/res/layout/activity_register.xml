@@ -8,6 +8,7 @@
     tools:context="com.school.bicycle.ui.register.RegisterActivity">
 
     <RelativeLayout
+        android:id="@+id/rl_phone"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
@@ -23,15 +24,105 @@
             android:layout_height="22dp" />
 
         <EditText
+            android:id="@+id/et_phone"
             android:layout_toRightOf="@id/iv_reg_phone"
             android:layout_width="match_parent"
             android:layout_centerVertical="true"
             android:background="@null"
             android:maxLines="1"
+            android:hint="请输入手机号"
+            android:textSize="14sp"
             android:maxLength="11"
-
+            android:inputType="phone"
             android:layout_height="30dp" />
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_code"
+        android:layout_below="@id/rl_phone"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="130dp"
+        android:background="@drawable/bg_reg"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <ImageView
+            android:id="@+id/iv_reg_code"
+            android:layout_width="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="7dp"
+            android:src="@drawable/iv_yanzheng"
+            android:layout_height="22dp" />
+
+        <EditText
+            android:id="@+id/et_code"
+            android:layout_toRightOf="@id/iv_reg_code"
+            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:maxLines="1"
+            android:hint="请输入验证码"
+            android:textSize="14sp"
+            android:maxLength="6"
+            android:inputType="number"
+            android:layout_height="30dp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_code"
+        android:layout_below="@id/rl_phone"
+        android:layout_width="95dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:text="获取验证码"
+        android:gravity="center"
+        android:textColor="@color/cube_mints_white"
+        android:background="@drawable/bg_code"
+        android:layout_marginTop="18dp"
+        android:layout_height="27dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_below="@id/rl_code"
+        android:layout_height="40dp">
+        <CheckBox
+            android:id="@+id/cb_ruler"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="我已经认真阅读并同意"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="《用户协议》"
+            android:textColor="#ff6a38"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/reg_next"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/btn_button"
+        android:layout_width="150dp"
+        android:text="下一步"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textColor="@color/cube_mints_white"
+        android:layout_height="45dp" />
+
 
 </RelativeLayout>

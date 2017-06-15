@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3492EA</color>
-    <color name="colorPrimaryDark">#3492EA</color>
-    <color name="colorAccent">#3492EA</color>
-    <color name="burro_primary_ext">#3492EA</color>
+    <color name="colorPrimary">#2a2f36</color>
+    <color name="colorPrimaryDark">#2a2f36</color>
+    <color name="colorAccent">#2a2f36</color>
+    <color name="burro_primary_ext">#2a2f36</color>
 
     <color name="baseColor">#56d177</color>
     <color name="baseOrange">#f79f0a</color>

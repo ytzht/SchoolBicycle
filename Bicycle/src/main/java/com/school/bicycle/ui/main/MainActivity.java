@@ -22,7 +22,7 @@ public class MainActivity extends BaseActivity implements IMainView{
     @BindView(R.id.btn_use)
     Button btnUse;
     AMap aMap;
-    IMainPresenter iMainPresenter;
+    private IMainPresenter iMainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

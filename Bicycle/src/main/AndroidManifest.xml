@@ -49,9 +49,12 @@
             android:name="com.amap.api.v2.apikey"
             android:value="e9ec77c7977cb1ddd650da3e6576c9e6" />
 
-        <activity android:name=".ui.register.RegisterActivity"
+        <activity
+            android:name=".ui.register.RegisterActivity"
             android:label="注册"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
+        <activity android:name=".ui.eposit.DepositActivity" />
+        <activity android:name=".ui.result.ResultActivity"></activity>
     </application>
 
 </manifest>

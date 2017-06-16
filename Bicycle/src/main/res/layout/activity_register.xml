@@ -7,14 +7,41 @@
     android:background="@color/white"
     tools:context="com.school.bicycle.ui.register.RegisterActivity">
 
+
     <RelativeLayout
-        android:id="@+id/rl_phone"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@color/actionbar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:paddingLeft="12dp"
+            android:id="@+id/rn_back"
+            android:src="@drawable/btn_arrow" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="注册"
+            android:id="@+id/te_reg_back"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="51dp"
         android:background="@drawable/bg_reg"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="40dp"
+        android:id="@+id/relativeLayout3"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true">
         <ImageView
             android:id="@+id/iv_reg_phone"
             android:layout_width="27dp"
@@ -24,105 +51,126 @@
             android:layout_height="22dp" />
 
         <EditText
-            android:id="@+id/et_phone"
             android:layout_toRightOf="@id/iv_reg_phone"
             android:layout_width="match_parent"
             android:layout_centerVertical="true"
             android:background="@null"
             android:maxLines="1"
-            android:hint="请输入手机号"
-            android:textSize="14sp"
             android:maxLength="11"
-            android:inputType="phone"
+            android:id="@+id/ed_reg_phonenum"
+            android:hint="请输入手机号"
+            android:textColorHint="@color/blackHint"
             android:layout_height="30dp" />
 
     </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_code"
-        android:layout_below="@id/rl_phone"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="130dp"
-        android:background="@drawable/bg_reg"
+
+        <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <ImageView
-            android:id="@+id/iv_reg_code"
-            android:layout_width="20dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="7dp"
-            android:src="@drawable/iv_yanzheng"
-            android:layout_height="22dp" />
-
-        <EditText
-            android:id="@+id/et_code"
-            android:layout_toRightOf="@id/iv_reg_code"
-            android:layout_width="match_parent"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:maxLines="1"
-            android:hint="请输入验证码"
-            android:textSize="14sp"
-            android:maxLength="6"
-            android:inputType="number"
-            android:layout_height="30dp" />
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_code"
-        android:layout_below="@id/rl_phone"
-        android:layout_width="95dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="12dp"
-        android:text="获取验证码"
-        android:gravity="center"
-        android:textColor="@color/cube_mints_white"
-        android:background="@drawable/bg_code"
+        android:layout_height="40dp"
+        android:layout_below="@+id/relativeLayout3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="18dp"
-        android:layout_height="27dp" />
-
-    <LinearLayout
+            android:id="@+id/relativeLayout5">
+        <RelativeLayout
+            android:background="@drawable/bg_reg"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:id="@+id/relativeLayout4"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <ImageView
+                android:id="@+id/iv_reg_code"
+                android:layout_width="27dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="14dp"
+                android:src="@drawable/btn_yanzheng"
+                android:layout_height="22dp" />
+    
+            <EditText
+                android:layout_toRightOf="@id/iv_reg_code"
+                android:layout_width="match_parent"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:maxLines="1"
+                android:maxLength="11"
+                android:id="@+id/ed_reg_codenum"
+                android:hint="请输入验证码"
+                android:textColorHint="@color/blackHint"
+                android:layout_height="30dp" />
+    
+        </RelativeLayout>
+    
+        <TextView
+            android:layout_width="95dp"
+            android:layout_height="27dp"
+            android:background="@drawable/btn_yanzheng_press"
+            android:text="获取验证码"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="15dp"
+            android:id="@+id/te_reg_getcode"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/relativeLayout4"
+            android:layout_toEndOf="@+id/relativeLayout4" />
+    </RelativeLayout>
+    
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginLeft="12dp"
-        android:layout_below="@id/rl_code"
-        android:layout_height="40dp">
-        <CheckBox
-            android:id="@+id/cb_ruler"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout5"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp">
+        <RadioButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/ra_reg_agree"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="13dp"
+            android:layout_marginStart="13dp" />
         <TextView
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:text="我已经认真阅读并同意"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
+            android:layout_height="wrap_content"
+            android:text="我已认真阅读并同意"
+            android:textSize="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/ra_reg_agree"
+            android:layout_toEndOf="@+id/ra_reg_agree"
+            android:id="@+id/textView4" />
         <TextView
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="《用户协议》"
-            android:textColor="#ff6a38"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:textSize="10dp"
+            android:id="@+id/te_reg_Useragreement"
+            android:textColor="#fe916e"
+            android:layout_alignBaseline="@+id/ra_reg_agree"
+            android:layout_alignBottom="@+id/ra_reg_agree"
+            android:layout_toRightOf="@+id/textView4"
+            android:layout_toEndOf="@+id/textView4" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/reg_next"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/btn_button"
+    <Button
         android:layout_width="150dp"
-        android:text="下一步"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:textColor="@color/cube_mints_white"
-        android:layout_height="45dp" />
+        android:layout_height="45dp"
+        android:text="立即支付"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_btton_pressed"
+        android:layout_marginBottom="32dp"
+        android:id="@+id/dps_paynow"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    
 
 
 </RelativeLayout>

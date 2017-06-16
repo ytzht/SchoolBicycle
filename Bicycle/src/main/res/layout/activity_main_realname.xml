@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.school.bicycle.ui.MainActivity_realname">
+    tools:context="com.school.bicycle.ui.authentication.RealnameActivity">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:padding="5dp"
             android:paddingLeft="12dp"
+            android:id="@+id/rn_back"
             android:src="@drawable/btn_arrow" />
 
         <TextView

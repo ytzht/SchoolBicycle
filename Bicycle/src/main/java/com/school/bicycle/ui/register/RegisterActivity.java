@@ -1,41 +1,101 @@
 package com.school.bicycle.ui.register;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.CheckBox;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
-import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.utils.Forms;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends BaseToolBarActivity implements IRegisterView{
 
-    @BindView(R.id.ed_reg_phonenum)
-    EditText edRegPhonenum;
-    @BindView(R.id.ed_reg_codenum)
-    EditText edRegCodenum;
-    @BindView(R.id.te_reg_getcode)
-    TextView teRegGetcode;
-    @BindView(R.id.ra_reg_agree)
-    CheckBox raRegAgree;
-    @BindView(R.id.te_reg_Useragreement)
-    TextView teRegUseragreement;
-    @BindView(R.id.dps_paynow)
-    Button dpsPaynow;
-    @BindView(R.id.rn_back)
-    ImageView rnBack;
-
+    @BindView(R.id.et_phone)
+    EditText etPhone;
+    @BindView(R.id.et_code)
+    EditText etCode;
+    @BindView(R.id.tv_code)
+    TextView tvCode;
+    @BindView(R.id.reg_next)
+    TextView regNext;
+    private IRegisterPresenter iRegisterPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        ButterKnife.bind(this);
+        setToolbarText("注册");
+
+        iRegisterPresenter = new RegisterPresenter(getBaseContext(), this);
+        initClick();
+
+    }
+
+
+    private Handler handler;
+    private Runnable runnable;
+    private int sec = 60;
+
+    public void djs() {
+        sec = 60;
+        handler.post(runnable);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (handler != null) {
+            if (runnable != null) {
+                handler.removeCallbacks(runnable);
+                runnable = null;
+            }
+            handler = null;
+        }
+    }
+
+
+    private void initClick() {
+
+        tvCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String accout = etPhone.getEditableText().toString();
+                if (Forms.disValid(accout, Forms.PHONENUM)) {
+                    etPhone.requestFocus();
+                    showShort("请输入正确的手机号");
+                } else {
+                    iRegisterPresenter.verificationPhone(etPhone.getText().toString());
+                }
+
+            }
+        });
+        regNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iRegisterPresenter.verificationCode(etCode.getText().toString());
+            }
+        });
+    }
+
+    @Override
+    public void isPhone(boolean b) {
+        if (!b){
+            showShort("请输入正确的手机号码");
+        } else {
+            iRegisterPresenter.getCode(etPhone.getText().toString());
+        }
+    }
+
+    @Override
+    public void goNext() {
+        showShort("下一步");
+    }
+
+    @Override
+    public void sendCode(String s) {
+        showShort(s);
     }
 }

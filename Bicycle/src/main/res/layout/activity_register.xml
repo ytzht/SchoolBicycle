@@ -102,6 +102,7 @@
             android:layout_height="match_parent" />
 
         <TextView
+            android:id="@+id/tv_user"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:text="《用户协议》"

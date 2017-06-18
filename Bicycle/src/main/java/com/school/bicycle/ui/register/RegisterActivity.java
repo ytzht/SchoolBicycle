@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.utils.Forms;
 
 import butterknife.BindView;
 
@@ -37,7 +38,15 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
         tvCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iRegisterPresenter.verificationPhone(etPhone.getText().toString());
+
+                String accout = etPhone.getEditableText().toString();
+                if (Forms.disValid(accout, Forms.PHONENUM)) {
+                    etPhone.requestFocus();
+                    showShort("请输入正确的手机号");
+                } else {
+                    iRegisterPresenter.verificationPhone(etPhone.getText().toString());
+                }
+
             }
         });
         regNext.setOnClickListener(new View.OnClickListener() {

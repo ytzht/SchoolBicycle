@@ -1,6 +1,7 @@
 package com.school.bicycle.ui.register;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,6 +33,29 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
         initClick();
 
     }
+
+
+    private Handler handler;
+    private Runnable runnable;
+    private int sec = 60;
+
+    public void djs() {
+        sec = 60;
+        handler.post(runnable);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (handler != null) {
+            if (runnable != null) {
+                handler.removeCallbacks(runnable);
+                runnable = null;
+            }
+            handler = null;
+        }
+    }
+
 
     private void initClick() {
 

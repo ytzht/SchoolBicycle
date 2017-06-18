@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="lm_witdh" >130dp</dimen>
+    <dimen name="shadow_width" >10dp</dimen>
+</resources>

@@ -2,18 +2,20 @@ package com.school.bicycle.ui.register;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
+import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.BaseToolBarActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RegisterActivity extends BaseToolBarActivity {
+public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.ed_reg_phonenum)
     EditText edRegPhonenum;
@@ -22,7 +24,7 @@ public class RegisterActivity extends BaseToolBarActivity {
     @BindView(R.id.te_reg_getcode)
     TextView teRegGetcode;
     @BindView(R.id.ra_reg_agree)
-    RadioButton raRegAgree;
+    CheckBox raRegAgree;
     @BindView(R.id.te_reg_Useragreement)
     TextView teRegUseragreement;
     @BindView(R.id.dps_paynow)

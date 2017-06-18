@@ -73,7 +73,7 @@
         <ImageView
             android:layout_width="43dp"
             android:layout_height="43dp"
-            android:src="@drawable/ico_WeChat"
+            android:src="@drawable/ico_wechat"
             android:id="@+id/imageView6"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -112,7 +112,7 @@
         <ImageView
             android:layout_width="43dp"
             android:layout_height="43dp"
-            android:src="@drawable/ico_Alipay"
+            android:src="@drawable/ico_alipay"
             android:id="@+id/imageView7"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"

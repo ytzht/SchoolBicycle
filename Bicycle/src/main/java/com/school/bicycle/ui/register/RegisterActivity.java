@@ -1,6 +1,7 @@
 package com.school.bicycle.ui.register;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;

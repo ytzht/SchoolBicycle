@@ -54,7 +54,11 @@
             android:label="注册"
             android:launchMode="singleTask" />
         <activity android:name=".ui.eposit.DepositActivity" />
-        <activity android:name=".ui.result.ResultActivity"></activity>
+        <activity android:name=".ui.result.ResultActivity" />
+        <activity
+            android:name=".ui.DrawerActivity"
+            android:label="@string/title_activity_drawer"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

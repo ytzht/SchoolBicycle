@@ -5,8 +5,7 @@
 
     </style>
 
-    <style name="BaseTheme.ToolBar" parent="Theme.AppCompat.Light.DarkActionBar">
-    </style>
+    <style name="BaseTheme.ToolBar" parent="Theme.AppCompat.Light.DarkActionBar"></style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="BaseTheme">
         <!-- Customize your theme here. -->
@@ -38,7 +37,8 @@
     <style name="ToolbarPopupTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:colorBackground">@color/white</item>
         <item name="android:textColor">@android:color/black</item>
-        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item> <!--新增一个item，用于控制menu-->
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle
+        </item> <!--新增一个item，用于控制menu-->
     </style>
 
     <style name="OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
@@ -54,7 +54,7 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="lm_style" >
+    <style name="lm_style">
         <item name="android:textSize">17dp</item>
         <item name="android:textColor">#394045</item>
     </style>

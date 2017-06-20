@@ -4,39 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
     tools:context="com.school.bicycle.ui.main.MainActivity">
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@color/actionbar"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="31dp"
-            android:padding="5dp"
-            android:paddingLeft="16dp"
-            android:id="@+id/iv_res_menu"
-            android:src="@drawable/btn_menu"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:text="首页"
-            android:textSize="18sp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
 
     <com.amap.api.maps.MapView
         android:id="@+id/map"

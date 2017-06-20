@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.school.bicycle"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -112,8 +112,7 @@ dependencies {
     compile 'com.amap.api:3dmap:latest.integration'
     compile 'com.amap.api:location:latest.integration'
     compile 'com.amap.api:search:latest.integration'
+    compile 'com.github.traex.calendarlistview:library:1.2.3'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile 'com.github.traex.calendarlistview:library:1.2.3'
-    compile project(path: ':slidelibrary')
 }

@@ -32,6 +32,28 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
         iRegisterPresenter = new RegisterPresenter(getBaseContext(), this);
         initClick();
 
+        initHandler();
+    }
+
+    private void initHandler() {
+        handler = new Handler();
+        runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                tvCode.setText(sec + "");
+                sec--;
+                if (sec > 0) {
+                    tvCode.setEnabled(false);
+                    if (handler != null && runnable != null) {
+                        handler.postDelayed(runnable, 1000);
+                    }
+                } else {
+                    tvCode.setText("获取验证码");
+                    tvCode.setEnabled(true);
+                }
+            }
+        };
     }
 
 
@@ -69,6 +91,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                     showShort("请输入正确的手机号");
                 } else {
                     iRegisterPresenter.verificationPhone(etPhone.getText().toString());
+                    djs();
                 }
 
             }

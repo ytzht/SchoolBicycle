@@ -24,7 +24,13 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.AppLauncherActivity"
-            android:theme="@style/BaseTheme.Volunteer.Launcher"></activity>
+            android:theme="@style/BaseTheme.Volunteer.Launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.main.MainActivity"
             android:label="首页"
@@ -51,11 +57,7 @@
         <activity android:name=".ui.eposit.DepositActivity" />
         <activity android:name=".ui.result.ResultActivity" />
         <activity android:name=".ui.search.SearchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.DrawerActivity"

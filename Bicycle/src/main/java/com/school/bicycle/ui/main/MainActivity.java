@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         int id = item.getItemId();
 
         if (id == R.id.my_bicycle) {
-            // Handle the camera action
+            startActivity(RegisterActivity.class);
         } else if (id == R.id.my_wallet) {
 
         } else if (id == R.id.my_invitation) {

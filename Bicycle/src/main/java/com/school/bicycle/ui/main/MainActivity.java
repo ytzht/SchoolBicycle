@@ -18,6 +18,7 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseActivity;
+import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
 
 import butterknife.BindView;
@@ -85,7 +86,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
                 showShort("111");
             }
         });
-//        iMainPresenter.downloadMap(MainActivity.this, aMap);
+//        iMainPresenter.downloadMap(MainActivity.tis, aMap);
 
         initClickListener();
 
@@ -165,7 +166,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         int id = item.getItemId();
 
         if (id == R.id.my_bicycle) {
-            startActivity(RegisterActivity.class);
+            startActivity(MyBicycleActivity.class);
         } else if (id == R.id.my_wallet) {
 
         } else if (id == R.id.my_invitation) {

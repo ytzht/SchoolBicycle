@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
 
-public class myBicycleActivity extends BaseToolBarActivity {
+public class MyBicycleActivity extends BaseToolBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

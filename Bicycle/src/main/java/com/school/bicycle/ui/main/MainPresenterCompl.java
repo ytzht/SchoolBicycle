@@ -125,9 +125,9 @@ public class MainPresenterCompl implements IMainPresenter{
     @Override
     public void initUISettings(AMap aMap) {
         mUiSettings = aMap.getUiSettings();//实例化UiSettings类对象
-//        mUiSettings.setZoomControlsEnabled(true);
+        mUiSettings.setZoomControlsEnabled(false);
 
-//        mUiSettings.setCompassEnabled(true);
+        mUiSettings.setCompassEnabled(false);
 
 //        aMap.setLocationSource();//通过aMap对象设置定位数据源的监听
 
@@ -136,6 +136,8 @@ public class MainPresenterCompl implements IMainPresenter{
         aMap.setMyLocationEnabled(true);// 可触发定位并显示当前位置
 
         mUiSettings.setScaleControlsEnabled(true);
+
+
 
     }
 }

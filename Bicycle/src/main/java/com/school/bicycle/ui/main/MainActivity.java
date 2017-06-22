@@ -53,9 +53,9 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
 
         if (aMap == null) {
             aMap = mMapView.getMap();
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.drawer, menu);
+//        getMenuInflater().inflate(R.menu.drawer, menu);
         return true;
     }
 

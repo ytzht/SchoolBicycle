@@ -35,6 +35,7 @@
             android:name=".ui.main.MainActivity"
             android:launchMode="singleTask"
             android:theme="@style/MainTheme"
+            android:label="首页"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name="me.iwf.photopicker.PhotoPickerActivity"
@@ -58,7 +59,7 @@
         <activity
             android:name=".ui.DrawerActivity"
             android:label="@string/title_activity_drawer"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

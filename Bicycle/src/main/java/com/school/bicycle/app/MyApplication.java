@@ -5,6 +5,8 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.school.bicycle.http.APIFactory;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 /**
  * Created by zht on 2017/04/08 9:09
@@ -29,10 +31,18 @@ public class MyApplication extends MultiDexApplication {
 //
 //        initPush();
 //
-//        initShare();
+        initShare();
 
     }
-//
+
+    private void initShare() {
+        UMShareAPI.get(this);
+        PlatformConfig.setWeixin("wx71fd0a9986ec271f", "0df892f43906044db30c6efbb2f259ef");
+        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
+    }
+
+    //
 //    private void initShare() {
 //        UMShareAPI.get(this);
 //        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");

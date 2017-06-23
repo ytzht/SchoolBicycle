@@ -1,5 +1,6 @@
 package com.school.bicycle.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -18,7 +20,12 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.ui.register.RegisterActivity;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +48,8 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
 
 
     private IMainPresenter iMainPresenter;
+    private ImageView headImg;
+    private TextView name, score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,9 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
 
+        headImg = (ImageView) headerView.findViewById(R.id.iv_header);
+        name = (TextView) headerView.findViewById(R.id.tv_name);
+        score = (TextView) headerView.findViewById(R.id.tv_score);
         if (aMap == null) {
             aMap = mMapView.getMap();
         }
@@ -167,7 +179,9 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         if (id == R.id.my_bicycle) {
             startActivity(RegisterActivity.class);
         } else if (id == R.id.my_wallet) {
-
+            new ShareAction(MainActivity.this).withText("hello")
+                    .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA)
+                    .setCallback(umShareListener).open();
         } else if (id == R.id.my_invitation) {
 
         } else if (id == R.id.my_fault) {
@@ -183,5 +197,34 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            L.d("onStart");
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            L.d("onResult");
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            L.e("onError" + throwable);
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            L.d("onCancel");
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+
     }
 }

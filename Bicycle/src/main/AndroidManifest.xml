@@ -84,9 +84,9 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
+            android:label="首页"
             android:launchMode="singleTask"
             android:theme="@style/MainTheme"
-            android:label="首页"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name="me.iwf.photopicker.PhotoPickerActivity"
@@ -107,10 +107,14 @@
             android:launchMode="singleTask" />
         <activity android:name=".ui.eposit.DepositActivity" />
         <activity android:name=".ui.result.ResultActivity" />
+        <activity android:name=".ui.search.SearchActivity">
+
+        </activity>
         <activity
             android:name=".ui.DrawerActivity"
             android:label="@string/title_activity_drawer"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.lockopen.LockOpenActivity"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,5 @@
 package com.school.bicycle.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -20,12 +18,7 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseActivity;
-import com.school.bicycle.global.L;
 import com.school.bicycle.ui.register.RegisterActivity;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,7 +77,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
 
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);//定位一次，且将视角移动到地图中心点。
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//显示地图等级15级
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +170,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         int id = item.getItemId();
 
         if (id == R.id.my_bicycle) {
-            startActivity(RegisterActivity.class);
+            startActivity(MyBicycleActivity.class);
         } else if (id == R.id.my_wallet) {
             new ShareAction(MainActivity.this).withText("hello")
                     .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA)

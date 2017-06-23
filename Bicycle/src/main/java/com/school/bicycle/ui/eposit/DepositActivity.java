@@ -7,11 +7,12 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import com.school.bicycle.R;
+import com.school.bicycle.global.BaseToolBarActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DepositActivity extends AppCompatActivity {
+public class DepositActivity extends BaseToolBarActivity implements IDepositView{
 
     @BindView(R.id.rdb_wchatpay)
     RadioButton rdbWchatpay;
@@ -19,13 +20,13 @@ public class DepositActivity extends AppCompatActivity {
     RadioButton rdbAlipay;
     @BindView(R.id.dps_paynow)
     Button dpsPaynow;
-    @BindView(R.id.dps_back)
-    ImageView dpsBack;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__deposit);
         ButterKnife.bind(this);
+        setToolbarText("押金充值");
     }
 }

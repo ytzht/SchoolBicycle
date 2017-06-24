@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -21,17 +22,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--新浪-->
+
+        <!-- 新浪 -->
         <activity
             android:name=".WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--wx-->
+        <!-- wx -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -39,39 +42,35 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--qq-->
+        <!-- qq -->
         <activity
             android:name="com.umeng.qq.tencent.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
-
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tencent100424468" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.umeng.qq.tencent.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--分享编辑页-->
+        <!-- 分享编辑页 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
-            android:theme="@style/Theme.UMDefault"
             android:excludeFromRecents="true"
-            />
-        <!--友盟appkey-->
+            android:theme="@style/Theme.UMDefault" />
+        <!-- 友盟appkey -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="594bd7b107fe6525ee0009ba" >
-        </meta-data>
-
-
+            android:value="594bd7b107fe6525ee0009ba" />
 
         <activity
             android:name=".ui.AppLauncherActivity"
@@ -107,14 +106,15 @@
             android:launchMode="singleTask" />
         <activity android:name=".ui.eposit.DepositActivity" />
         <activity android:name=".ui.result.ResultActivity" />
-        <activity android:name=".ui.search.SearchActivity">
-
-        </activity>
+        <activity android:name=".ui.search.SearchActivity" />
         <activity
             android:name=".ui.DrawerActivity"
             android:label="@string/title_activity_drawer"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.lockopen.LockOpenActivity"></activity>
+        <activity android:name=".ui.lockopen.LockOpenActivity" />
+        <activity android:name=".ui.longtimeLease.LongTimeLeaseActivity" />
+        <activity android:name=".ui.Myeserve.MyReserveActivity" />
+        <activity android:name=".ui.Withdrawals.WithdrawalsActivity"></activity>
     </application>
 
 </manifest>

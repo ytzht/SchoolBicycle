@@ -23,6 +23,7 @@ import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
+import com.school.bicycle.ui.search.SearchActivity;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -184,7 +185,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
                     .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA)
                     .setCallback(umShareListener).open();
         } else if (id == R.id.my_invitation) {
-
+            startActivity(SearchActivity.class);
         } else if (id == R.id.my_fault) {
 
         } else if (id == R.id.my_tel) {

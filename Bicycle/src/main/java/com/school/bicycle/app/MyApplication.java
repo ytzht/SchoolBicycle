@@ -7,6 +7,13 @@ import android.support.multidex.MultiDexApplication;
 import com.school.bicycle.http.APIFactory;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.log.LoggerInterceptor;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+
 
 /**
  * Created by zht on 2017/04/08 9:09
@@ -33,6 +40,21 @@ public class MyApplication extends MultiDexApplication {
 //
         initShare();
 
+        initokhttp();
+
+    }
+
+    private void initokhttp() {
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .addInterceptor(new LoggerInterceptor("TAG"))
+                //其他配置
+                .build();
+
+        OkHttpUtils.initClient(okHttpClient);
     }
 
     private void initShare() {

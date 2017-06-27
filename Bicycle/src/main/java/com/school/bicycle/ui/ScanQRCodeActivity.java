@@ -8,6 +8,8 @@ import com.school.bicycle.utils.QrdecodeUtil;
 
 /**
  * Created by Administrator on 2017/6/27.
+ *
+ * 二维码扫描
  */
 
 public class ScanQRCodeActivity extends QrdecodeUtil

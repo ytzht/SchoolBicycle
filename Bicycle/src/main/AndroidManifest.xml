@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -76,9 +75,7 @@
 
         <activity
             android:name=".ui.AppLauncherActivity"
-            android:theme="@style/BaseTheme.Volunteer.Launcher">
-
-        </activity>
+            android:theme="@style/BaseTheme.Volunteer.Launcher"></activity>
         <activity
             android:name=".ui.main.MainActivity"
             android:label="首页"
@@ -112,11 +109,15 @@
         <activity android:name=".ui.lockopen.LockOpenActivity" />
         <activity android:name=".ui.longtimeLease.LongTimeLeaseActivity" />
         <activity android:name=".ui.Myeserve.MyReserveActivity" />
-        <activity android:name=".ui.Withdrawals.WithdrawalsActivity"></activity>
+        <activity android:name=".ui.Withdrawals.WithdrawalsActivity" />
         <activity
             android:name=".ui.ScanQRCodeActivity"
             android:label="扫描二维码"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask">
+
+        </activity>
+        <activity android:name=".ui.usebicycle.UseBicycleActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -75,6 +75,7 @@ dependencies {
 
     // 搜索功能
     compile 'com.github.traex.calendarlistview:library:1.2.3'
+    //    compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.github.traex.calendarlistview:library:1.2.3'
     compile 'com.wanjian:sak:0.0.2'
     compile 'top.zibin:Luban:1.0.9'
@@ -87,7 +88,6 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.9'
     compile 'com.jude:swipebackhelper:3.1.2'
     compile 'com.jakewharton:butterknife:8.5.1'
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:multidex:1.0.1'
@@ -114,7 +114,7 @@ dependencies {
     compile 'com.amap.api:3dmap:latest.integration'
     compile 'com.amap.api:location:latest.integration'
     compile 'com.amap.api:search:latest.integration'
+    compile 'com.zhy:okhttputils:2.6.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile files('libs/zxing.jar')
 }

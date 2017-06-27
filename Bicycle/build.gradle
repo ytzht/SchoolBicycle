@@ -116,4 +116,5 @@ dependencies {
     compile 'com.amap.api:search:latest.integration'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile files('libs/zxing.jar')
 }

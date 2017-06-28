@@ -75,7 +75,13 @@
 
         <activity
             android:name=".ui.AppLauncherActivity"
-            android:theme="@style/BaseTheme.Volunteer.Launcher"></activity>
+            android:theme="@style/BaseTheme.Volunteer.Launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.main.MainActivity"
             android:label="首页"
@@ -117,12 +123,6 @@
 
         </activity>
         <activity android:name=".ui.usebicycle.UseBicycleActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

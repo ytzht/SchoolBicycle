@@ -2,15 +2,22 @@ package com.school.bicycle.ui.register;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
+import com.google.gson.Gson;
 import com.school.bicycle.R;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.utils.Forms;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
+import okhttp3.Call;
 
 public class RegisterActivity extends BaseToolBarActivity implements IRegisterView{
 
@@ -92,6 +99,26 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                 } else {
                     iRegisterPresenter.verificationPhone(etPhone.getText().toString());
                     djs();
+                    String url = getResources().getString(R.string.baseurl)+"user/getCode?mobile="+accout;
+                    OkHttpUtils.get()
+                            .url(url)
+                            .build()
+                            .execute(new StringCallback()
+                            {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    showShort("no");
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    Log.d("response=",response);
+                                    Gson gson = new Gson();
+                                    BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+                                    showLong(baseResult.getMsg());
+                                }
+
+                            });
                 }
 
             }

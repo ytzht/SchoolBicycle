@@ -51,7 +51,6 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                 //按车牌号搜索
                 llSearch.setVisibility(View.GONE);
                 llSearchBicyclenum.setVisibility(View.VISIBLE);
-
                 break;
             case R.id.tv_date_use:
                 //按日期搜索

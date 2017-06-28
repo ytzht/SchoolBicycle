@@ -11,4 +11,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+    <string name="baseurl">http://pos.xvo2o.com/xyxapi/</string>
+
+
 </resources>

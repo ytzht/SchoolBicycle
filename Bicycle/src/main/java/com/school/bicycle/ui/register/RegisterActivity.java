@@ -11,10 +11,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
+import com.school.bicycle.entity.Login;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.utils.Forms;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.UUID;
 
 import butterknife.BindView;
 import okhttp3.Call;
@@ -30,6 +33,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
     @BindView(R.id.reg_next)
     TextView regNext;
     private IRegisterPresenter iRegisterPresenter;
+    Gson gson = new Gson();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +117,6 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                                 @Override
                                 public void onResponse(String response, int id) {
                                     Log.d("response=",response);
-                                    Gson gson = new Gson();
                                     BaseResult baseResult = gson.fromJson(response,BaseResult.class);
                                     showLong(baseResult.getMsg());
                                 }
@@ -127,6 +130,26 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
             @Override
             public void onClick(View v) {
                 iRegisterPresenter.verificationCode(etCode.getText().toString());
+                String url = getResources().getString(R.string.baseurl)+"user/register";
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addParams("device_id",UUID.randomUUID().toString())
+                        .addParams("code", "1234")
+                        .addParams("reg_from", "android")
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.d("response=",response);
+                                Login login = gson.fromJson(response,Login.class);
+                            }
+                        });
             }
         });
     }

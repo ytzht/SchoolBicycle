@@ -67,8 +67,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     AMapLocation aMapLocation ;
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
-    double latitude;
-    double longitude;
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
 
@@ -83,7 +81,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                     double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
                     lat = amapLocation.getLatitude();//获取纬度
                     lon = amapLocation.getLongitude();//获取经度
-                    Log.e("Amap==经度：纬度", "locationType:"+locationType+",latitude:"+latitude);
+                    Log.e("经纬度=", "locationType:"+locationType+",latitude:"+lat+"longitude"+lon);
+                    initgetBikeMapList();
+                    mLocationClient.stopLocation();
                 }else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                     Log.e("AmapError","location Error, ErrCode:"
@@ -121,7 +121,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
 
         initClickListener();
-        initgetBikeMapList();
+//        initgetBikeMapList();
         initmap();
     }
     //初始化设置地图
@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
         String url = getResources().getString(R.string.baseurl) +
                 "order/getBikeMapList?locations="
-                +"121.450397,37.486531";
+                +lon+","+lat;
         Log.d("经纬度=",lon+","+lat);
 
         OkHttpUtils.get()

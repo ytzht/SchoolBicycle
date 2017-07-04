@@ -62,7 +62,7 @@ public class RealnameActivity extends BaseToolBarActivity {
                             @Override
                             public void onResponse(String response, int id) {
                                 Log.d("response=", response);
-                                Log.d("response=", DEVICE_ID);
+                                Log.d("response=", "");
                                 Login login = gson.fromJson(response, Login.class);
                             }
                         });

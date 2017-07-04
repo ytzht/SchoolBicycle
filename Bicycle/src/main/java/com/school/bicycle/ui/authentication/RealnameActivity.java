@@ -49,8 +49,8 @@ public class RealnameActivity extends BaseToolBarActivity {
                 OkHttpUtils
                         .post()
                         .url(url)
-                        .addParams("name", DEVICE_ID)
-                        .addParams("id_number", etCode.getText().toString())
+                        .addParams("name", "")
+                        .addParams("id_number", "")
                         .addParams("campus_card_number", "android")
                         .build()
                         .execute(new StringCallback() {

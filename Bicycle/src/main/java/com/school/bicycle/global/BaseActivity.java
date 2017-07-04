@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.flyco.dialog.listener.OnBtnClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.google.gson.Gson;
 import com.school.bicycle.http.APIFactory;
 import com.school.bicycle.http.SubscriberOnNextListener;
 import com.umeng.analytics.MobclickAgent;
@@ -33,6 +34,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public static String _ID = "_id_";
     public static String _TITLE = "_title_";
+    public static Gson gson= new Gson();
 
     public SubscriberOnNextListener getResultOnNext;
     public static final APIFactory retrofitUtil = (APIFactory) APIFactory.getInstance();

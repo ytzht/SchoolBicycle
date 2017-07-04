@@ -124,6 +124,8 @@
         <activity android:name=".ui.mybicycle.MyBicycleActivity"></activity>
         <activity android:name=".ui.usebicycle.UseBicycleActivity">
         </activity>
+
+        <service android:name="com.amap.api.location.APSService"></service>
     </application>
 
 </manifest>

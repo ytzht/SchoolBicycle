@@ -1,12 +1,14 @@
 package com.school.bicycle.ui.register;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-
 
 import com.google.gson.Gson;
 import com.school.bicycle.R;
@@ -20,9 +22,10 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.util.UUID;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 
-public class RegisterActivity extends BaseToolBarActivity implements IRegisterView{
+public class RegisterActivity extends BaseToolBarActivity implements IRegisterView {
 
     @BindView(R.id.et_phone)
     EditText etPhone;
@@ -32,18 +35,28 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
     TextView tvCode;
     @BindView(R.id.reg_next)
     TextView regNext;
+    @BindView(R.id.cb_ruler)
+    CheckBox cbRuler;
     private IRegisterPresenter iRegisterPresenter;
     Gson gson = new Gson();
+    TelephonyManager tm;
+    String DEVICE_ID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        ButterKnife.bind(this);
         setToolbarText("注册");
+
 
         iRegisterPresenter = new RegisterPresenter(getBaseContext(), this);
         initClick();
 
         initHandler();
+
+        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        DEVICE_ID = tm.getDeviceId();
     }
 
     private void initHandler() {
@@ -103,12 +116,11 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                 } else {
                     iRegisterPresenter.verificationPhone(etPhone.getText().toString());
                     djs();
-                    String url = getResources().getString(R.string.baseurl)+"user/getCode?mobile="+accout;
+                    String url = getResources().getString(R.string.baseurl) + "user/getCode?mobile=" + accout;
                     OkHttpUtils.get()
                             .url(url)
                             .build()
-                            .execute(new StringCallback()
-                            {
+                            .execute(new StringCallback() {
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
                                     showShort("no");
@@ -116,8 +128,8 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("response=",response);
-                                    BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+                                    Log.d("response=", response);
+                                    BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                     showLong(baseResult.getMsg());
                                 }
 
@@ -129,34 +141,42 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
         regNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 iRegisterPresenter.verificationCode(etCode.getText().toString());
-                String url = getResources().getString(R.string.baseurl)+"user/register";
-                OkHttpUtils
-                        .post()
-                        .url(url)
-                        .addParams("device_id",UUID.randomUUID().toString())
-                        .addParams("code", "1234")
-                        .addParams("reg_from", "android")
-                        .build()
-                        .execute(new StringCallback() {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
+                String url = getResources().getString(R.string.baseurl) + "user/register";
 
-                            }
+                if (cbRuler.isChecked()){
+                    OkHttpUtils
+                            .post()
+                            .url(url)
+                            .addParams("device_id", DEVICE_ID)
+                            .addParams("code", etCode.getText().toString())
+                            .addParams("reg_from", "android")
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
 
-                            @Override
-                            public void onResponse(String response, int id) {
-                                Log.d("response=",response);
-                                Login login = gson.fromJson(response,Login.class);
-                            }
-                        });
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    Log.d("response=", response);
+                                    Log.d("response=", DEVICE_ID);
+                                    Login login = gson.fromJson(response, Login.class);
+                                }
+                            });
+                }else {
+
+                }
+
             }
         });
     }
 
     @Override
     public void isPhone(boolean b) {
-        if (!b){
+        if (!b) {
             showShort("请输入正确的手机号码");
         } else {
             iRegisterPresenter.getCode(etPhone.getText().toString());

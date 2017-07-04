@@ -7,18 +7,24 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.school.bicycle.R;
+import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.ScanQRCodeActivity;
@@ -29,11 +35,14 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 
-public class MainActivity extends BaseActivity implements IMainView, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements IMainView,
+        NavigationView.OnNavigationItemSelectedListener{
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -53,13 +62,47 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
     private IMainPresenter iMainPresenter;
     private ImageView headImg;
     private TextView name, score;
+    double lat ;//获取纬度
+    double lon ;//获取经度
+    AMapLocation aMapLocation ;
+    private AMapLocationClient mlocationClient;
+    private AMapLocationClientOption mLocationOption;
+    double latitude;
+    double longitude;
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+
+    public AMapLocationListener mLocationListener = new AMapLocationListener() {
+
+        @Override
+        public void onLocationChanged(AMapLocation amapLocation) {
+            // TODO Auto-generated method stub
+            if (amapLocation != null) {
+                if (amapLocation.getErrorCode() == 0) {
+                    //可在其中解析amapLocation获取相应内容。
+                    double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                    lat = amapLocation.getLatitude();//获取纬度
+                    lon = amapLocation.getLongitude();//获取经度
+                    Log.e("Amap==经度：纬度", "locationType:"+locationType+",latitude:"+latitude);
+                }else {
+                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                    Log.e("AmapError","location Error, ErrCode:"
+                            + amapLocation.getErrorCode() + ", errInfo:"
+                            + amapLocation.getErrorInfo());
+                }
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
         ButterKnife.bind(this);
-        mMapView.onCreate(savedInstanceState);
+        mMapView.onCreate(savedInstanceState);// 此方法必须重写
+//        mMapView.onCreate(savedInstanceState);
+
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -72,8 +115,20 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         headImg = (ImageView) headerView.findViewById(R.id.iv_header);
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
+
+
+
+//        iMainPresenter.downloadMap(MainActivity.this, aMap);
+
+        initClickListener();
+        initgetBikeMapList();
+        initmap();
+    }
+    //初始化设置地图
+    private void initmap() {
         if (aMap == null) {
             aMap = mMapView.getMap();
+
         }
         iMainPresenter = new MainPresenterCompl(getBaseContext(), this);
         iMainPresenter.initLocation(aMap);
@@ -82,12 +137,66 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
         myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);
-//        设置默认定位按钮是否显示，非必需设置。
-
+        aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);//定位一次，且将视角移动到地图中心点。
         aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//显示地图等级15级
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为AMapLocationMode.Battery_Saving，低功耗模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
+        /**
+         * 获取一次定位
+         */
+        //该方法默认为false，true表示只定位一次
+        mLocationOption.setOnceLocation(true);
+    }
+
+
+    //获取周围单车位置列表
+    private void initgetBikeMapList() {
+
+        String url = getResources().getString(R.string.baseurl) +
+                "order/getBikeMapList?locations="
+                +"121.450397,37.486531";
+        Log.d("经纬度=",lon+","+lat);
+
+        OkHttpUtils.get()
+                .url(url)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        showShort("no");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d("response=", response);
+                        GetBikeMapList g = gson.fromJson(response, GetBikeMapList.class);
+                        showLong(g.getMsg());
+                    }
+
+                });
+    }
+
+    //点击事件
+    private void initClickListener() {
+        btnUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ScanQRCodeActivity.class);
+            }
+        });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,20 +209,8 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
                 showShort("111");
             }
         });
-//        iMainPresenter.downloadMap(MainActivity.this, aMap);
-
-        initClickListener();
-
     }
 
-    private void initClickListener() {
-        btnUse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(ScanQRCodeActivity.class);
-            }
-        });
-    }
 
     @Override
     protected void onDestroy() {
@@ -188,7 +285,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         } else if (id == R.id.my_invitation) {
             startActivity(SearchActivity.class);
         } else if (id == R.id.my_fault) {
-
+            startActivity(RegisterActivity.class);
         } else if (id == R.id.my_tel) {
 
         } else if (id == R.id.my_news) {
@@ -230,4 +327,10 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
 
     }
+
+
+
+
+
+
 }

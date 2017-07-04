@@ -2,6 +2,7 @@ package com.school.bicycle.ui;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.zxing.Result;
 import com.school.bicycle.utils.QrdecodeUtil;
@@ -17,6 +18,7 @@ public class ScanQRCodeActivity extends QrdecodeUtil
     @Override
     public void getRawResult(Result result) {
         showShort(result.toString());
+        Log.d("result",result.toString());
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(android.content.Intent.ACTION_VIEW);

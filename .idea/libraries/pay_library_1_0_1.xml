@@ -1,10 +1,10 @@
 <component name="libraryTable">
   <library name="pay_library-1.0.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/6fcb5c6a551f4ea565d490ce95a19005796509b0/output/jars/libs/libammsdk.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/6fcb5c6a551f4ea565d490ce95a19005796509b0/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/6fcb5c6a551f4ea565d490ce95a19005796509b0/output/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.android/build-cache/6fcb5c6a551f4ea565d490ce95a19005796509b0/output/jars/libs/alipaySDK-20150818.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/5178975ca90afbc0939acd890431b7fa67174143/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/5178975ca90afbc0939acd890431b7fa67174143/output/jars/libs/libammsdk.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/5178975ca90afbc0939acd890431b7fa67174143/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/5178975ca90afbc0939acd890431b7fa67174143/output/jars/libs/alipaySDK-20150818.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -120,8 +120,8 @@
             android:name=".ui.ScanQRCodeActivity"
             android:label="扫描二维码"
             android:launchMode="singleTask">
-
         </activity>
+        <activity android:name=".ui.mybicycle.MyBicycleActivity"></activity>
         <activity android:name=".ui.usebicycle.UseBicycleActivity">
         </activity>
     </application>

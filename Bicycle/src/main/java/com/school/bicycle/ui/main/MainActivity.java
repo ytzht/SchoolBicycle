@@ -21,6 +21,7 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.search.SearchActivity;
@@ -109,7 +110,7 @@ public class MainActivity extends BaseActivity implements IMainView, NavigationV
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(RegisterActivity.class);
+                startActivity(ScanQRCodeActivity.class);
             }
         });
     }

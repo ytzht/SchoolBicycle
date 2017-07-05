@@ -9,19 +9,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -36,19 +37,19 @@ import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.search.SearchActivity;
-import com.umeng.qq.tencent.Constants;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity implements IMainView,
-        NavigationView.OnNavigationItemSelectedListener{
+        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener {
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -63,14 +64,32 @@ public class MainActivity extends BaseActivity implements IMainView,
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+    @BindView(R.id.tv_bicyclenum_info)
+    TextView tvBicyclenumInfo;
+    @BindView(R.id.tv_distance_info)
+    TextView tvDistanceInfo;
+    @BindView(R.id.tv_time_info)
+    TextView tvTimeInfo;
+    @BindView(R.id.tv_timerent_info)
+    TextView tvTimerentInfo;
+    @BindView(R.id.tv_dayrent_info)
+    TextView tvDayrentInfo;
+    @BindView(R.id.tv_longrent_info)
+    TextView tvLongrentInfo;
+    @BindView(R.id.tv_tirentbt_info)
+    TextView tvTirentbtInfo;
+    @BindView(R.id.tv_darentbt_info)
+    TextView tvDarentbtInfo;
+    @BindView(R.id.tv_lorentbt_info)
+    TextView tvLorentbtInfo;
 
 
     private IMainPresenter iMainPresenter;
     private ImageView headImg;
     private TextView name, score;
-    double lat ;//获取纬度
-    double lon ;//获取经度
-    AMapLocation aMapLocation ;
+    double lat;//获取纬度
+    double lon;//获取经度
+    AMapLocation aMapLocation;
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
     //声明AMapLocationClient类对象
@@ -87,12 +106,12 @@ public class MainActivity extends BaseActivity implements IMainView,
                     double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
                     lat = amapLocation.getLatitude();//获取纬度
                     lon = amapLocation.getLongitude();//获取经度
-                    Log.e("经纬度=", "locationType:"+locationType+",latitude:"+lat+"longitude"+lon);
+                    Log.e("经纬度=", "locationType:" + locationType + ",latitude:" + lat + "longitude" + lon);
                     initgetBikeMapList();
                     mLocationClient.stopLocation();
-                }else {
+                } else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                    Log.e("AmapError","location Error, ErrCode:"
+                    Log.e("AmapError", "location Error, ErrCode:"
                             + amapLocation.getErrorCode() + ", errInfo:"
                             + amapLocation.getErrorInfo());
                 }
@@ -123,13 +142,13 @@ public class MainActivity extends BaseActivity implements IMainView,
         score = (TextView) headerView.findViewById(R.id.tv_score);
 
 
-
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
 
         initClickListener();
 //        initgetBikeMapList();
         initmap();
     }
+
     //初始化设置地图
     private void initmap() {
         if (aMap == null) {
@@ -140,13 +159,14 @@ public class MainActivity extends BaseActivity implements IMainView,
         iMainPresenter.initLocation(aMap);
         iMainPresenter.initUISettings(aMap);
         MyLocationStyle myLocationStyle;
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
 //        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+//        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//定位一次，且将视角移动到地图中心点。
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(19));//显示地图等级15级
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW);//定位一次，且将视角移动到地图中心点。
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//显示地图等级15级
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
@@ -172,8 +192,8 @@ public class MainActivity extends BaseActivity implements IMainView,
 
         String url = getResources().getString(R.string.baseurl) +
                 "order/getBikeMapList?locations="
-                +lon+","+lat;
-        Log.d("经纬度=",lon+","+lat+"   "+url);
+                + lon + "," + lat;
+        Log.d("经纬度=", lon + "," + lat + "   " + url);
 //        String urlbug = "http://pos.xvo2o.com/xyxapi/order/getBikeMapList?locations=121.450397,37.486531";
 
         OkHttpUtils.get()
@@ -191,30 +211,31 @@ public class MainActivity extends BaseActivity implements IMainView,
                         GetBikeMapList g = gson.fromJson(response, GetBikeMapList.class);
 
                         //循环添加自定义点mark
-                        for (int i = 0;i<g.getBody().size();i++){
-                            LatLng latLng = new LatLng(g.getBody().get(i).getLat(),g.getBody().get(i).getLog());
+                        for (int i = 0; i < g.getBody().size(); i++) {
+                            LatLng latLng = new LatLng(g.getBody().get(i).getLat(), g.getBody().get(i).getLog());
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(latLng);
                             markerOption.title("自行车").snippet("自行车");
                             markerOption.draggable(false);//设置Marker可拖动
-                            if (g.getBody().get(i).getColor().equals("yellow")){
+                            if (g.getBody().get(i).getColor().equals("yellow")) {
                                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(),R.drawable.ico_yellow)));
-                            }else if (g.getBody().get(i).getColor().equals("blue")){
+                                        .decodeResource(getResources(), R.drawable.ico_yellow)));
+                            } else if (g.getBody().get(i).getColor().equals("blue")) {
                                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(),R.drawable.ico_blue)));
-                            }else if (g.getBody().get(i).getColor().equals("red")){
+                                        .decodeResource(getResources(), R.drawable.ico_blue)));
+                            } else if (g.getBody().get(i).getColor().equals("red")) {
                                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(),R.drawable.ico_red)));
-                            }else if (g.getBody().get(i).getColor().equals("green")){
+                                        .decodeResource(getResources(), R.drawable.ico_red)));
+                            } else if (g.getBody().get(i).getColor().equals("green")) {
                                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(),R.drawable.ico_green)));
+                                        .decodeResource(getResources(), R.drawable.ico_green)));
                             }
 
                             // 将Marker设置为贴地显示，可以双指下拉地图查看效果
                             markerOption.setFlat(true);//设置marker平贴地图效果
                             markerOption.visible(true);
                             Marker marker = aMap.addMarker(markerOption.position(latLng));
+
 
                         }
 
@@ -363,9 +384,41 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     }
 
+    View infoWindow = null;
 
+    @Override
+    public View getInfoWindow(Marker marker) {
 
+        if (infoWindow == null) {
+            infoWindow = LayoutInflater.from(this).inflate(
+                    R.layout.custom_info_window, null);
+        }
+        render(marker, infoWindow);
+        return infoWindow;
 
+    }
 
+    @Override
+    public View getInfoContents(Marker marker) {
+        return null;
+    }
 
+    //mark点击事件
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
+    }
+
+    //infowindow点击事件
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+    }
+
+    /**
+     * 自定义infowinfow窗口
+     */
+    public void render(Marker marker, View view) {
+//如果想修改自定义Infow中内容，请通过view找到它并修改
+    }
 }

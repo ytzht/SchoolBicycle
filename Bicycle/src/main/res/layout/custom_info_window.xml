@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="210dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_bicyclenum_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="7dp"
+        android:paddingLeft="7dp"
+        android:text="车牌号：0001"
+        android:textColor="@color/chengse"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/tv_distance_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:paddingRight="7dp"
+        android:text="距离：0.02km"
+        android:textColor="@color/all_textc"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/xian2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tv_bicyclenum_info"
+        android:layout_marginTop="7dp"
+        android:background="#cecece" />
+
+    <TextView
+        android:id="@+id/tv_time_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/xian2"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="7dp"
+        android:text="在租时段：06/01"
+        android:textColor="@color/all_textc"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/tv_timerent_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_time_info"
+        android:layout_marginTop="7dp"
+        android:paddingLeft="7dp"
+        android:text="时租：2元/小时"
+        android:textColor="@color/all_textc"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/tv_dayrent_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_timerent_info"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="7dp"
+        android:text="日租：20元/小时"
+        android:textColor="@color/all_textc"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/tv_longrent_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_dayrent_info"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="7dp"
+        android:text="长租：100元/小时；159元/三个月
+             199元/六个月；299元/一年"
+        android:textColor="@color/all_textc"
+        android:textSize="11dp" />
+
+    <TextView
+        android:id="@+id/xian1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_longrent_info"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="41dp"
+        android:text="长租用户可享受车辆共享收益"
+        android:textColor="@color/chengse"
+        android:textSize="11dp" />
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/xian1"
+        android:layout_marginTop="7dp"
+        android:background="@color/edittext" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:layout_below="@id/textView19"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="27dp"
+            android:layout_weight="1"
+            android:text="时租"
+            android:id="@+id/tv_tirentbt_info"
+            android:textColor="@color/chengse"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/edittext"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="27dp"
+            android:layout_weight="1"
+            android:text="日租"
+            android:id="@+id/tv_darentbt_info"
+            android:textColor="@color/chengse"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/edittext"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="27dp"
+            android:layout_weight="1"
+            android:text="长租"
+            android:id="@+id/tv_lorentbt_info"
+            android:textColor="@color/edittext"
+            android:gravity="center"/>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

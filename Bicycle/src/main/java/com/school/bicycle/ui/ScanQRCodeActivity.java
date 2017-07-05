@@ -17,19 +17,19 @@ public class ScanQRCodeActivity extends QrdecodeUtil
 {
     @Override
     public void getRawResult(Result result) {
-        showShort(result.toString());
+        showLong(result.toString());
         Log.d("result",result.toString());
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(android.content.Intent.ACTION_VIEW);
         Uri content_url;
-        if (result.toString().contains("http")) {
-            content_url = Uri.parse(result.toString());
-        } else {
-            content_url = Uri.parse("https://www.baidu.com/s?wd=" + result.toString());
-        }
-        intent.setData(content_url);
-        startActivity(intent);
+//        if (result.toString().contains("http")) {
+//            content_url = Uri.parse(result.toString());
+//        } else {
+//            content_url = Uri.parse("https://www.baidu.com/s?wd=" + result.toString());
+//        }
+//        intent.setData(content_url);
+//        startActivity(intent);
 //        finish();
 
     }

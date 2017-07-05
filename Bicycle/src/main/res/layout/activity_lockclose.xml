@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.school.bicycle.ui.lockclose.LockcloseActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="温馨提示"
+        android:textSize="18dp"
+        android:textColor="#ff6a38"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        android:id="@+id/textView8" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="为了车辆安全，方便维护人员对您的车辆的后期维护，请尽量把您的车辆放回固定停车点"
+        android:paddingLeft="45dp"
+        android:paddingRight="45dp"
+        android:textSize="17dp"
+        android:gravity="center"
+        android:id="@+id/textView12"
+        android:layout_below="@+id/textView8"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:text="未放回停车点"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="15dp"
+                android:background="@drawable/pay_bac"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:text="下次不再提示"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="15dp"
+                android:background="@drawable/pay_bac"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+
+        
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

@@ -119,13 +119,14 @@
         <activity
             android:name=".ui.ScanQRCodeActivity"
             android:label="扫描二维码"
-            android:launchMode="singleTask">
-        </activity>
-        <activity android:name=".ui.mybicycle.MyBicycleActivity"></activity>
-        <activity android:name=".ui.usebicycle.UseBicycleActivity">
-        </activity>
+            android:launchMode="singleTask" />
+        <activity android:name=".ui.mybicycle.MyBicycleActivity" />
+        <activity android:name=".ui.usebicycle.UseBicycleActivity" />
 
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name="com.amap.api.location.APSService" />
+
+        <activity android:name=".ui.lockclose.LockcloseActivity" />
+        <activity android:name=".ui.Ivfriends.IvfriendsActivity"></activity>
     </application>
 
 </manifest>

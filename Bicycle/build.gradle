@@ -74,8 +74,9 @@ dependencies {
     //定位功能
 
     // 搜索功能
-    compile 'com.github.traex.calendarlistview:library:1.2.3'
     //    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    //    compile 'io.github.mayubao:pay_library:1.0.1'
+    compile 'com.github.traex.calendarlistview:library:1.2.3'
     compile 'com.github.traex.calendarlistview:library:1.2.3'
     compile 'com.wanjian:sak:0.0.2'
     compile 'top.zibin:Luban:1.0.9'
@@ -117,5 +118,4 @@ dependencies {
     compile 'com.zhy:okhttputils:2.6.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-//    compile 'io.github.mayubao:pay_library:1.0.1'
 }

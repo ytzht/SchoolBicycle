@@ -60,8 +60,8 @@ public class GetBikeMapList {
 
         private int mybike;
         private int gd_id;
-        private String log;
-        private String lat;
+        private double log;
+        private double lat;
         private String number;
         private String distance;
         private int long_lease;
@@ -85,19 +85,19 @@ public class GetBikeMapList {
             this.gd_id = gd_id;
         }
 
-        public String getLog() {
+        public double getLog() {
             return log;
         }
 
-        public void setLog(String log) {
+        public void setLog(double log) {
             this.log = log;
         }
 
-        public String getLat() {
+        public double getLat() {
             return lat;
         }
 
-        public void setLat(String lat) {
+        public void setLat(double lat) {
             this.lat = lat;
         }
 

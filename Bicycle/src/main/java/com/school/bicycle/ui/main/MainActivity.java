@@ -64,24 +64,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @BindView(R.id.tv_bicyclenum_info)
-    TextView tvBicyclenumInfo;
-    @BindView(R.id.tv_distance_info)
-    TextView tvDistanceInfo;
-    @BindView(R.id.tv_time_info)
-    TextView tvTimeInfo;
-    @BindView(R.id.tv_timerent_info)
-    TextView tvTimerentInfo;
-    @BindView(R.id.tv_dayrent_info)
-    TextView tvDayrentInfo;
-    @BindView(R.id.tv_longrent_info)
-    TextView tvLongrentInfo;
-    @BindView(R.id.tv_tirentbt_info)
-    TextView tvTirentbtInfo;
-    @BindView(R.id.tv_darentbt_info)
-    TextView tvDarentbtInfo;
-    @BindView(R.id.tv_lorentbt_info)
-    TextView tvLorentbtInfo;
 
 
     private IMainPresenter iMainPresenter;
@@ -160,13 +142,16 @@ public class MainActivity extends BaseActivity implements IMainView,
         iMainPresenter.initUISettings(aMap);
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-//        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-//        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//定位一次，且将视角移动到地图中心点。
+
+//        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
+//        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE); //定位一次，且将视角移动到地图中心点。
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//显示地图等级15级
+        aMap.setInfoWindowAdapter(this);
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
@@ -174,7 +159,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         //初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Battery_Saving，低功耗模式。
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
@@ -183,7 +168,11 @@ public class MainActivity extends BaseActivity implements IMainView,
          * 获取一次定位
          */
         //该方法默认为false，true表示只定位一次
-        mLocationOption.setOnceLocation(true);
+        mLocationOption.setOnceLocation(false);
+
+
+
+
     }
 
 
@@ -230,12 +219,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                                         .decodeResource(getResources(), R.drawable.ico_green)));
                             }
-
                             // 将Marker设置为贴地显示，可以双指下拉地图查看效果
                             markerOption.setFlat(true);//设置marker平贴地图效果
                             markerOption.visible(true);
                             Marker marker = aMap.addMarker(markerOption.position(latLng));
-
+                            marker.setObject(g.getBody().get(i));
 
                         }
 
@@ -388,7 +376,45 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     @Override
     public View getInfoWindow(Marker marker) {
+        return null;
+    }
 
+    /**
+     * 自定义infowinfow窗口
+     */
+    private TextView tv_bicyclenum_info;
+    private TextView tv_distance_info;
+    private TextView tv_time_info;
+    private TextView tv_timerent_info;
+    private TextView tv_dayrent_info;
+    private TextView tv_longrent_info;
+    private TextView tv_tirentbt_info;
+    private TextView tv_darentbt_info;
+    private TextView tv_lorentbt_info;
+
+    public void render(Marker marker, View view) {
+        //如果想修改自定义Infow中内容，请通过view找到它并修改
+        tv_bicyclenum_info = (TextView) view.findViewById(R.id.tv_bicyclenum_info);
+        tv_distance_info = (TextView) view.findViewById(R.id.tv_distance_info);
+        tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
+        tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
+        tv_dayrent_info = (TextView) view.findViewById(R.id.tv_dayrent_info);
+        tv_longrent_info = (TextView) view.findViewById(R.id.tv_longrent_info);
+        tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
+        tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
+        tv_lorentbt_info = (TextView) view.findViewById(R.id.tv_lorentbt_info);
+        GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
+        tv_bicyclenum_info.setText("车牌号：" + data.getNumber());
+        tv_distance_info.setText("距离：" + data.getDistance() + "m");
+//        tv_time_info.setText("在租时段"+data.getValid_time());
+        tv_timerent_info.setText("时租：" + data.getLease_info().getHour());
+        tv_dayrent_info.setText("日租：" + data.getLease_info().getDay());
+        tv_longrent_info.setText("长租：" + data.getLease_info().getLongX());
+
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
         if (infoWindow == null) {
             infoWindow = LayoutInflater.from(this).inflate(
                     R.layout.custom_info_window, null);
@@ -398,14 +424,10 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     }
 
-    @Override
-    public View getInfoContents(Marker marker) {
-        return null;
-    }
-
     //mark点击事件
     @Override
     public boolean onMarkerClick(Marker marker) {
+
         return false;
     }
 
@@ -415,10 +437,5 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     }
 
-    /**
-     * 自定义infowinfow窗口
-     */
-    public void render(Marker marker, View view) {
-//如果想修改自定义Infow中内容，请通过view找到它并修改
-    }
+
 }

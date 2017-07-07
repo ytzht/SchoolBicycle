@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -170,9 +171,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         //该方法默认为false，true表示只定位一次
         mLocationOption.setOnceLocation(false);
 
-
-
-
     }
 
 
@@ -199,33 +197,37 @@ public class MainActivity extends BaseActivity implements IMainView,
                         Log.d("GetBikeMapList=", response);
                         GetBikeMapList g = gson.fromJson(response, GetBikeMapList.class);
 
-                        //循环添加自定义点mark
-                        for (int i = 0; i < g.getBody().size(); i++) {
-                            LatLng latLng = new LatLng(g.getBody().get(i).getLat(), g.getBody().get(i).getLog());
-                            MarkerOptions markerOption = new MarkerOptions();
-                            markerOption.position(latLng);
-                            markerOption.title("自行车").snippet("自行车");
-                            markerOption.draggable(false);//设置Marker可拖动
-                            if (g.getBody().get(i).getColor().equals("yellow")) {
-                                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(), R.drawable.ico_yellow)));
-                            } else if (g.getBody().get(i).getColor().equals("blue")) {
-                                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(), R.drawable.ico_blue)));
-                            } else if (g.getBody().get(i).getColor().equals("red")) {
-                                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(), R.drawable.ico_red)));
-                            } else if (g.getBody().get(i).getColor().equals("green")) {
-                                markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                        .decodeResource(getResources(), R.drawable.ico_green)));
-                            }
-                            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-                            markerOption.setFlat(true);//设置marker平贴地图效果
-                            markerOption.visible(true);
-                            Marker marker = aMap.addMarker(markerOption.position(latLng));
-                            marker.setObject(g.getBody().get(i));
+                        if(g.getCode()==0){
 
+                        }else {
+                            //循环添加自定义点mark
+                            for (int i = 0; i < g.getBody().size(); i++) {
+                                LatLng latLng = new LatLng(g.getBody().get(i).getLat(), g.getBody().get(i).getLog());
+                                MarkerOptions markerOption = new MarkerOptions();
+                                markerOption.position(latLng);
+                                markerOption.title("自行车").snippet("自行车");
+                                markerOption.draggable(false);//设置Marker可拖动
+                                if (g.getBody().get(i).getColor().equals("yellow")) {
+                                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                            .decodeResource(getResources(), R.drawable.ico_yellow)));
+                                } else if (g.getBody().get(i).getColor().equals("blue")) {
+                                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                            .decodeResource(getResources(), R.drawable.ico_blue)));
+                                } else if (g.getBody().get(i).getColor().equals("red")) {
+                                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                            .decodeResource(getResources(), R.drawable.ico_red)));
+                                } else if (g.getBody().get(i).getColor().equals("green")) {
+                                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                            .decodeResource(getResources(), R.drawable.ico_green)));
+                                }
+                                // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                                markerOption.setFlat(true);//设置marker平贴地图效果
+                                markerOption.visible(true);
+                                Marker marker = aMap.addMarker(markerOption.position(latLng));
+                                marker.setObject(g.getBody().get(i));
+                            }
                         }
+
 
                         showLong(g.getMsg());
                     }
@@ -244,7 +246,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShort("111");
+                new AlertDialog.Builder(MainActivity.this)
+                        .setView(R.layout.custom_alert)
+                        .show();
             }
         });
         fabQr.setOnClickListener(new View.OnClickListener() {
@@ -410,6 +414,30 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_timerent_info.setText("时租：" + data.getLease_info().getHour());
         tv_dayrent_info.setText("日租：" + data.getLease_info().getDay());
         tv_longrent_info.setText("长租：" + data.getLease_info().getLongX());
+        tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setView(R.layout.custom_alert)
+                        .show();
+            }
+        });
+        tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setView(R.layout.custom_alert)
+                        .show();
+            }
+        });
+        tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setView(R.layout.custom_alert)
+                        .show();
+            }
+        });
 
     }
 

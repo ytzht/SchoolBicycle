@@ -10,19 +10,7 @@
     android:paddingTop="31dp">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/dialog_close"
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            android:src="@drawable/btn_colse"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
 
 
     <TextView

@@ -27,6 +27,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
@@ -36,6 +37,7 @@ import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.ScanQRCodeActivity;
+import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.search.SearchActivity;
@@ -51,7 +53,7 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity implements IMainView,
-        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener {
+        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.OnCameraChangeListener {
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -120,20 +122,12 @@ public class MainActivity extends BaseActivity implements IMainView,
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
-
         headImg = (ImageView) headerView.findViewById(R.id.iv_header);
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
-
-
-
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
         initClickListener();
         initmap();
@@ -157,6 +151,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//显示地图等级15级
         aMap.setInfoWindowAdapter(this);
+        aMap.setOnCameraChangeListener(this);
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
@@ -195,12 +190,12 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void onError(Call call, Exception e, int id) {
                         showShort("no");
                     }
-
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("GetBikeMapList=", response);
                         GetBikeMapList g = gson.fromJson(response, GetBikeMapList.class);
-
+                        AMap aMap = mMapView.getMap();
+                        aMap.clear();
                         if (g.getCode() == 0) {
 
                         } else {
@@ -225,7 +220,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 marker.setObject(g.getBody().get(i));
                             }
                         }
-//                        showLong(g.getMsg());
+                        showLong(g.getMsg());
                     }
 
                 });
@@ -243,21 +238,8 @@ public class MainActivity extends BaseActivity implements IMainView,
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
-                        R.layout.custom_alert, null);
-                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
-                paydialog = new AlertDialog.Builder(MainActivity.this)
-                        .setView(pay_lay);
-                dialog = paydialog.show();
-
-                dialog_close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        showShort("close");
-                        dialog.dismiss();
-
-                    }
-                });
+                //重新定位并重新请求当前位置周边车辆信息
+                mLocationClient.startLocation();
             }
         });
         fabQr.setOnClickListener(new View.OnClickListener() {
@@ -426,60 +408,21 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
-                        R.layout.custom_alert, null);
-                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
-                paydialog = new AlertDialog.Builder(MainActivity.this)
-                        .setView(pay_lay);
-                dialog = paydialog.show();
-                dialog_close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        showShort("close");
-                        dialog.dismiss();
 
-                    }
-                });
+                startActivity(LongTimeLeaseActivity.class);
+
             }
         });
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
-                        R.layout.custom_alert, null);
-                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
-                paydialog = new AlertDialog.Builder(MainActivity.this)
-                        .setView(pay_lay);
-                dialog = paydialog.show();
 
-                dialog_close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        showShort("close");
-                        dialog.dismiss();
-
-                    }
-                });
             }
         });
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
-                        R.layout.custom_alert, null);
-                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
-                paydialog = new AlertDialog.Builder(MainActivity.this)
-                        .setView(pay_lay);
-                dialog = paydialog.show();
 
-                dialog_close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        showShort("close");
-                        dialog.dismiss();
-
-                    }
-                });
             }
         });
 
@@ -510,4 +453,18 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
 
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+
+    }
+
+    @Override
+    public void onCameraChangeFinish(CameraPosition cameraPosition) {
+        LatLng target = cameraPosition.target;
+        Log.d("onCameraChange",target.latitude + "jinjin------" + target.longitude);
+        lon = target.longitude;
+        lat = target.latitude;
+        initgetBikeMapList();
+
+    }
 }

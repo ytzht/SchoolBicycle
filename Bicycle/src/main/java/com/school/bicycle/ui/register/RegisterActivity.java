@@ -156,13 +156,11 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                             .execute(new StringCallback() {
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
-
+                                    showLong("你的网络貌似不太好？");
                                 }
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("response=", response);
-                                    Log.d("response=", DEVICE_ID);
                                     Login login = gson.fromJson(response, Login.class);
                                 }
                             });

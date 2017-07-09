@@ -29,13 +29,6 @@
             android:gravity="center"
             android:text="按日期搜索" />
 
-        <TextView
-            android:id="@+id/tv_time_use"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="按小时搜索" />
     </LinearLayout>
 
     <LinearLayout

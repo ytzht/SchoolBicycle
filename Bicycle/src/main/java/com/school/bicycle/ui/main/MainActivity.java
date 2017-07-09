@@ -1,5 +1,6 @@
 package com.school.bicycle.ui.main;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -77,6 +78,11 @@ public class MainActivity extends BaseActivity implements IMainView,
     private AMapLocationClientOption mLocationOption;
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
+    private ImageView dialog_close;
+    //初始化dialog
+    AlertDialog.Builder paydialog;
+    Dialog dialog;
+    View pay_lay;
 
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
 
@@ -109,13 +115,15 @@ public class MainActivity extends BaseActivity implements IMainView,
         setContentView(R.layout.activity_drawer);
         ButterKnife.bind(this);
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
-//        mMapView.onCreate(savedInstanceState);
-
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
@@ -125,10 +133,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         score = (TextView) headerView.findViewById(R.id.tv_score);
 
 
-//        iMainPresenter.downloadMap(MainActivity.this, aMap);
 
+//        iMainPresenter.downloadMap(MainActivity.this, aMap);
         initClickListener();
-//        initgetBikeMapList();
         initmap();
     }
 
@@ -143,9 +150,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         iMainPresenter.initUISettings(aMap);
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-
-//        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE);
-//        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE); //定位一次，且将视角移动到地图中心点。
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
@@ -197,9 +201,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                         Log.d("GetBikeMapList=", response);
                         GetBikeMapList g = gson.fromJson(response, GetBikeMapList.class);
 
-                        if(g.getCode()==0){
+                        if (g.getCode() == 0) {
 
-                        }else {
+                        } else {
                             //循环添加自定义点mark
                             for (int i = 0; i < g.getBody().size(); i++) {
                                 LatLng latLng = new LatLng(g.getBody().get(i).getLat(), g.getBody().get(i).getLog());
@@ -210,12 +214,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 if (g.getBody().get(i).getColor().equals("yellow")) {
                                     markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                                             .decodeResource(getResources(), R.drawable.ico_yellow)));
-                                } else if (g.getBody().get(i).getColor().equals("blue")) {
-                                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                            .decodeResource(getResources(), R.drawable.ico_blue)));
-                                } else if (g.getBody().get(i).getColor().equals("red")) {
-                                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                                            .decodeResource(getResources(), R.drawable.ico_red)));
                                 } else if (g.getBody().get(i).getColor().equals("green")) {
                                     markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                                             .decodeResource(getResources(), R.drawable.ico_green)));
@@ -227,9 +225,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 marker.setObject(g.getBody().get(i));
                             }
                         }
-
-
-                        showLong(g.getMsg());
+//                        showLong(g.getMsg());
                     }
 
                 });
@@ -243,12 +239,25 @@ public class MainActivity extends BaseActivity implements IMainView,
                 startActivity(ScanQRCodeActivity.class);
             }
         });
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setView(R.layout.custom_alert)
-                        .show();
+                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
+                        R.layout.custom_alert, null);
+                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
+                paydialog = new AlertDialog.Builder(MainActivity.this)
+                        .setView(pay_lay);
+                dialog = paydialog.show();
+
+                dialog_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        showShort("close");
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
         fabQr.setOnClickListener(new View.OnClickListener() {
@@ -417,25 +426,60 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setView(R.layout.custom_alert)
-                        .show();
+                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
+                        R.layout.custom_alert, null);
+                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
+                paydialog = new AlertDialog.Builder(MainActivity.this)
+                        .setView(pay_lay);
+                dialog = paydialog.show();
+                dialog_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        showShort("close");
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setView(R.layout.custom_alert)
-                        .show();
+                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
+                        R.layout.custom_alert, null);
+                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
+                paydialog = new AlertDialog.Builder(MainActivity.this)
+                        .setView(pay_lay);
+                dialog = paydialog.show();
+
+                dialog_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        showShort("close");
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setView(R.layout.custom_alert)
-                        .show();
+                pay_lay = LayoutInflater.from(MainActivity.this).inflate(
+                        R.layout.custom_alert, null);
+                dialog_close = (ImageView) pay_lay.findViewById(R.id.dialog_close);
+                paydialog = new AlertDialog.Builder(MainActivity.this)
+                        .setView(pay_lay);
+                dialog = paydialog.show();
+
+                dialog_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        showShort("close");
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
 

@@ -21,8 +21,6 @@ public class UseBicycleActivity extends BaseToolBarActivity {
     TextView tvBicyclenumUse;
     @BindView(R.id.tv_date_use)
     TextView tvDateUse;
-    @BindView(R.id.tv_time_use)
-    TextView tvTimeUse;
     @BindView(R.id.ll_search)
     LinearLayout llSearch;
     @BindView(R.id.ll_search_bicyclenum_num)
@@ -45,7 +43,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
     }
 
-    @OnClick({R.id.tv_bicyclenum_use, R.id.tv_date_use, R.id.tv_time_use, R.id.ll_search_bicyclenum_sure})
+    @OnClick({R.id.tv_bicyclenum_use, R.id.tv_date_use, R.id.ll_search_bicyclenum_sure})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_bicyclenum_use:
@@ -56,9 +54,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
             case R.id.tv_date_use:
                 //按日期搜索
                 break;
-            case R.id.tv_time_use:
-                //按时间搜索
-                break;
+
             case R.id.ll_search_bicyclenum_sure:
                 if (llSearchBicyclenumSure.getText().equals("取消")){
                     llSearch.setVisibility(View.VISIBLE);

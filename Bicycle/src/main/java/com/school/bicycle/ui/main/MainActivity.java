@@ -53,7 +53,8 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity implements IMainView,
-        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter, AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.OnCameraChangeListener {
+        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter,
+        AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.OnCameraChangeListener {
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -152,6 +153,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//显示地图等级15级
         aMap.setInfoWindowAdapter(this);
         aMap.setOnCameraChangeListener(this);
+        aMap.setOnMarkerClickListener(this);
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
@@ -218,6 +220,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 markerOption.visible(true);
                                 Marker marker = aMap.addMarker(markerOption.position(latLng));
                                 marker.setObject(g.getBody().get(i));
+
                             }
                         }
                         showLong(g.getMsg());
@@ -422,7 +425,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(SearchActivity.class);
             }
         });
 
@@ -442,8 +445,9 @@ public class MainActivity extends BaseActivity implements IMainView,
     //mark点击事件
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-        return false;
+        Log.d("mark dian","true");
+        marker.showInfoWindow();
+        return true;
     }
 
     //infowindow点击事件

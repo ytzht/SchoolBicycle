@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="banner-1.4.9">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/ce5f7cee9fdb695efa943fe5d13c27e000e5e535/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/ce5f7cee9fdb695efa943fe5d13c27e000e5e535/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/494acd3936e6a823efe1934bebd73f3daddc34f5/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/494acd3936e6a823efe1934bebd73f3daddc34f5/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

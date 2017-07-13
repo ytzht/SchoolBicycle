@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:background="@color/white"
+    android:layout_marginRight="20dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="17dp"
+        android:layout_centerHorizontal="true"
+        android:background="#111"
+        android:id="@+id/iv_pull"/>
+    <TextView
+        android:id="@+id/tv_use"
+        android:layout_width="wrap_content"
+        android:text="用车中"
+        android:layout_marginTop="17dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tv_use"
+        android:text="000006"
+        android:textColor="#ff6a38"
+        android:layout_marginLeft="8dp"
+        android:id="@+id/use_no"
+        android:layout_toRightOf="@id/tv_use"/>
+
+
+    <TextView
+        android:layout_width="75dp"
+        android:layout_height="25dp"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="10dp"
+        android:text="结束用车"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_org"/>
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tv_use"
+        android:layout_marginTop="12dp"
+        android:background="#cecece"/>
+
+    <LinearLayout
+        android:id="@+id/ll_detail"
+        android:visibility="visible"
+        android:layout_below="@id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="039卡"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:gravity="center"
+                android:text="运动燃烧"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="1900米"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:gravity="center"
+                android:text="骑行距离"
+                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:text="039卡"
+                android:src="@drawable/btn_scan"
+                android:layout_width="36dp"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:gravity="center"
+                android:text="运动燃烧"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

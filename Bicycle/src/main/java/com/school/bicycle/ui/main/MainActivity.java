@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -69,6 +70,10 @@ public class MainActivity extends BaseActivity implements IMainView,
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+//    @BindView(R.id.iv_pull)
+    private ImageView iv_pull;
+//    @BindView(R.id.ll_detail)
+    private LinearLayout ll_detail;
 
 
     private IMainPresenter iMainPresenter;
@@ -229,8 +234,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                 });
     }
 
+
     //点击事件
     private void initClickListener() {
+        iv_pull = (ImageView) findViewById(R.id.iv_pull);
+        ll_detail = (LinearLayout) findViewById(R.id.ll_detail);
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,6 +259,19 @@ public class MainActivity extends BaseActivity implements IMainView,
                 showShort("111");
             }
         });
+
+        iv_pull.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ll_detail.getVisibility() == View.GONE){
+                    ll_detail.setVisibility(View.VISIBLE);
+                }else {
+                    ll_detail.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
     }
 
 

@@ -21,9 +21,9 @@
         android:id="@+id/imageView16"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ico_pin"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:src="@drawable/ico_pin" />
 
     <ImageView
         android:id="@+id/fab_refresh"
@@ -53,5 +53,17 @@
         android:layout_alignParentRight="true"
         android:layout_margin="20dp"
         android:src="@drawable/btn_scan" />
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="106dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/useing_bicycle"/>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

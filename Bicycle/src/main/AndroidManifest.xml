@@ -126,7 +126,8 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".ui.lockclose.LockcloseActivity" />
-        <activity android:name=".ui.Ivfriends.IvfriendsActivity"></activity>
+        <activity android:name=".ui.Ivfriends.IvfriendsActivity" />
+        <activity android:name=".ui.cancelusebiycle_activity.Cancellusebiycle_Activity"></activity>
     </application>
 
 </manifest>

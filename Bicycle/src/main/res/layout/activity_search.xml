@@ -7,11 +7,12 @@
     android:orientation="vertical"
     tools:context="com.school.bicycle.ui.search.SearchActivity">
 
-    <com.andexert.calendarlistview.library.DayPickerView
-        android:id="@+id/pickerView"
-        xmlns:calendar="http://schemas.android.com/apk/res-auto"
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:currentDaySelected="true"
+        android:layout_height="wrap_content"
+        app:mcv_showOtherDates="all"
+        app:mcv_selectionColor="#00F"
         />
 </LinearLayout>

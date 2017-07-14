@@ -7,10 +7,11 @@ import android.graphics.drawable.Drawable;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.school.bicycle.R;
 
 import java.util.Calendar;
 
-import cn.fcrj.volunteer1.R;
+
 
 /**
  * Highlight Saturdays and Sundays with a background
@@ -23,7 +24,7 @@ public class HighlightWeekendsDecorator implements DayViewDecorator {
 
     public HighlightWeekendsDecorator(Activity context) {
 //        highlightDrawable = new ColorDrawable(color);
-        highlightDrawable= context.getResources().getDrawable(R.drawable.sign_allbg);
+        highlightDrawable= context.getResources().getDrawable(R.color.all_textc);
     }
 
     @Override

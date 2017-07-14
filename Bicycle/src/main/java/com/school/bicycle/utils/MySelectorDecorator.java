@@ -6,8 +6,7 @@ import android.graphics.drawable.Drawable;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
-
-import cn.fcrj.volunteer1.R;
+import com.school.bicycle.R;
 
 
 /**
@@ -18,7 +17,7 @@ public class MySelectorDecorator implements DayViewDecorator {
     private final Drawable drawable;
 
     public MySelectorDecorator(Activity context) {
-        drawable = context.getResources().getDrawable(R.drawable.my_selector);
+        drawable = context.getResources().getDrawable(R.color.white);
     }
 
     @Override

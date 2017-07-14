@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ScanQRCodeActivity.class);
+//                startActivity(ScanQRCodeActivity.class);
             }
         });
 
@@ -256,7 +256,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         fabQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShort("111");
+                startActivity(ScanQRCodeActivity.class);
             }
         });
 

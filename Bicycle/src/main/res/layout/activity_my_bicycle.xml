@@ -16,6 +16,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:id="@+id/re_biyclenum_mybiycle"
             android:layout_weight="1">
 
             <ImageView
@@ -52,6 +53,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:id="@+id/re_Income_mybiycle"
             android:layout_weight="1">
 
             <TextView
@@ -92,34 +94,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider"/>
+        android:background="@color/divider" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="39dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="39dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingLeft="12dp"
-                android:text="我的行程"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:paddingRight="12dp"
-                android:src="@drawable/mybic_next" />
-        </RelativeLayout>
+        android:layout_height="39dp"
+        android:id="@+id/re_myTrip_mybiycle">
 
         <TextView
             android:layout_width="wrap_content"
@@ -128,7 +109,10 @@
             android:paddingLeft="12dp"
             android:text="我的行程"
             android:textColor="@color/black"
-            android:textSize="17dp" />
+            android:textSize="17dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <ImageView
             android:layout_width="20dp"
@@ -139,13 +123,12 @@
             android:paddingRight="12dp"
             android:src="@drawable/mybic_next" />
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider"/>
+
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="39dp">
+        android:layout_height="39dp"
+        android:id="@+id/re_mystate_mybiycle">
 
         <TextView
             android:layout_width="wrap_content"
@@ -165,13 +148,21 @@
             android:paddingRight="12dp"
             android:src="@drawable/mybic_next" />
     </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider"/>
+        android:background="@color/divider" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider" />
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="39dp">
+        android:layout_height="39dp"
+        android:id="@+id/re_myReservation_mybiycle">
 
         <TextView
             android:layout_width="wrap_content"
@@ -191,10 +182,34 @@
             android:paddingRight="12dp"
             android:src="@drawable/mybic_next" />
     </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider"/>
+        android:background="@color/divider" />
 
+    <RelativeLayout
+        android:id="@+id/re_mypolice_mybiycle"
+        android:layout_width="match_parent"
+        android:layout_height="39dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:text="车辆报警"
+            android:textColor="@color/black"
+            android:textSize="17dp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:paddingRight="12dp"
+            android:src="@drawable/mybic_next" />
+    </RelativeLayout>
 
 </LinearLayout>

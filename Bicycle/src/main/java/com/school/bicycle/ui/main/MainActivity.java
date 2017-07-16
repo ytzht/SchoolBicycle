@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -75,6 +76,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     private ImageView iv_pull;
 //    @BindView(R.id.ll_detail)
     private LinearLayout ll_detail;
+    private RelativeLayout useing_biycle_lay;
 
 
     private IMainPresenter iMainPresenter;
@@ -202,6 +204,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void onResponse(String response, int id) {
                         Log.d("GetBikeMapList=", response);
                         GetBikeMapList g = gson.fromJson(response, GetBikeMapList.class);
+                        //清除地图中的mark点
                         AMap aMap = mMapView.getMap();
                         aMap.clear();
                         if (g.getCode() == 0) {
@@ -236,10 +239,14 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
 
+
     //点击事件
     private void initClickListener() {
+
         iv_pull = (ImageView) findViewById(R.id.iv_pull);
         ll_detail = (LinearLayout) findViewById(R.id.ll_detail);
+        useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
+        useing_biycle_lay.setVisibility(View.GONE);
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

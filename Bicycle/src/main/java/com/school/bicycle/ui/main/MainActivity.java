@@ -38,6 +38,7 @@ import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.ScanQRCodeActivity;
+import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
@@ -354,7 +355,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_news) {
 
         } else if (id == R.id.my_set) {
-
+startActivity(ZxingActivity.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

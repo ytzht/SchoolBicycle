@@ -45,7 +45,7 @@
 
     <color name="dps_textc">#383f45</color>
     <color name="all_textc">#393e46</color>
-
+    <color name="scan_corner_color">#0effc2</color>
 
 
 </resources>

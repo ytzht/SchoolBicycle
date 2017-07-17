@@ -38,6 +38,7 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.ui.Calendar.CalendarSelectActivity;
 import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
@@ -362,7 +363,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_tel) {
             startActivity(RealnameActivity.class);
         } else if (id == R.id.my_news) {
-
+startActivity(CalendarSelectActivity.class);
         } else if (id == R.id.my_set) {
 startActivity(ZxingActivity.class);
         }

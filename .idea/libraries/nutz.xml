@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="nutz">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/Bicycle/libs/nutz.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

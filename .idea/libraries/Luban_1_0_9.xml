@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Luban-1.0.9">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/08b0daa661bc139c70450ba4d868b09ef82cd507/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/08b0daa661bc139c70450ba4d868b09ef82cd507/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/04c237ed734097db50df8453ed34371ce6a4b574/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/04c237ed734097db50df8453ed34371ce6a4b574/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

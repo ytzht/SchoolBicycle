@@ -2,7 +2,7 @@ package com.school.bicycle.http;
 
 import android.content.Context;
 
-import com.school.bicycle.global.APIService;
+import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BuildConfig;
 
 import java.io.File;
@@ -34,7 +34,7 @@ public class RetrofitHttpUtil {
      */
     private static final String BASE_URL = "http://139.198.11.78:8080/mylawyer/";
 
-    public APIService apiService;
+    public Apis apiService;
     private static Retrofit retrofit = null;
     private static OkHttpClient okHttpClient = null;
 
@@ -52,9 +52,9 @@ public class RetrofitHttpUtil {
         isUseCache = useCache;
     }
 
-    public APIService getService() {
+    public Apis getService() {
         if (apiService == null && retrofit != null) {
-            apiService = retrofit.create(APIService.class);
+            apiService = retrofit.create(Apis.class);
         }
         return apiService;
     }
@@ -64,7 +64,7 @@ public class RetrofitHttpUtil {
         initOkHttp();
         initRetrofit();
         if (apiService == null) {
-            apiService = retrofit.create(APIService.class);
+            apiService = retrofit.create(Apis.class);
         }
     }
 

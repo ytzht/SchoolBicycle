@@ -38,8 +38,6 @@ public class RealnameActivity extends BaseToolBarActivity {
     EditText rnIdnumber;
     @BindView(R.id.rn_idstudent)
     EditText rnIdstudent;
-    @BindView(R.id.rn_back)
-    ImageView rnBack;
     @BindView(R.id.shangchuan)
     Button shangchuan;
     @BindView(R.id.rn_photo)

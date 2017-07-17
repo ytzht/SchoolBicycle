@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -103,6 +105,10 @@
 
         <activity
             android:name=".ui.register.RegisterActivity"
+            android:label="注册"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".ui.authentication.RealnameActivity"
             android:label="注册"
             android:launchMode="singleTask" />
         <activity android:name=".ui.eposit.DepositActivity" />

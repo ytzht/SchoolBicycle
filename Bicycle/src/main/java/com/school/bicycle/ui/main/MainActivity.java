@@ -40,10 +40,12 @@ import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.ZxingActivity;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.search.SearchActivity;
+import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -250,7 +252,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(ScanQRCodeActivity.class);
+                startActivity(UseBicycleActivity.class);
             }
         });
 
@@ -358,7 +360,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_fault) {
             startActivity(RegisterActivity.class);
         } else if (id == R.id.my_tel) {
-
+            startActivity(RealnameActivity.class);
         } else if (id == R.id.my_news) {
 
         } else if (id == R.id.my_set) {

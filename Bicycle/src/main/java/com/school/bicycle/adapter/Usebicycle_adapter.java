@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
-import com.school.bicycle.entity.Usebicycle;
+import com.school.bicycle.entity.QueryBikeListByBikeNumber;
 
 import java.util.List;
 
@@ -23,10 +23,10 @@ import butterknife.ButterKnife;
 public class Usebicycle_adapter extends BaseAdapter {
 
     private Context context;
-    private List<Usebicycle> data;
+    private List<QueryBikeListByBikeNumber.BikeInfoBean> data;
 
 
-    public Usebicycle_adapter(Context context, List<Usebicycle> data) {
+    public Usebicycle_adapter(Context context, List<QueryBikeListByBikeNumber.BikeInfoBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -58,7 +58,14 @@ public class Usebicycle_adapter extends BaseAdapter {
         } else {
             viewHolde = (ViewHolder) view.getTag();
         }
-
+        viewHolde.tvBiyclenumAda.setText("车牌号："+ data.get(i).getNumber());
+        viewHolde.tvDistanceAda.setText("距离："+ data.get(i).getNumber());
+        if (data.get(i).getColor().equals("yellow")){
+            viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_yellow);
+        }else {
+            viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_yellow);
+        }
+        viewHolde.tvSharingtimeAda.setText("共享时间："+data.get(i).getStart_time());
         return view;
     }
 

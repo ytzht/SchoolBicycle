@@ -59,14 +59,12 @@ public class RealnameActivity extends BaseToolBarActivity {
         Uri uri = data.getData();
         if (uri != null) {
             photo = BitmapFactory.decodeFile(uri.getPath());
-            rnPhoto.setImageBitmap(photo);
             saveImage(photo,1);
         }
         if (photo == null) {
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 photo = (Bitmap) bundle.get("data");
-                rnPhoto.setImageBitmap(photo);
                 saveImage(photo,1);
             } else {
                 return;

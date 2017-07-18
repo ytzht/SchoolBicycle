@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CampusCardImage;
+import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.utils.CheckCardID;
 import com.zhy.http.okhttp.OkHttpUtils;

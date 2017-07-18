@@ -1,4 +1,4 @@
-package com.school.bicycle.ui.Calendar;
+package com.school.bicycle.ui.calendar;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +15,6 @@ import com.school.bicycle.utils.HighlightWeekendsDecorator;
 import com.school.bicycle.utils.MySelectorDecorator;
 import com.school.bicycle.utils.OneDayDecorator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarSelectActivity extends BaseToolBarActivity {
@@ -23,7 +22,6 @@ public class CalendarSelectActivity extends BaseToolBarActivity {
     private static final String TAG = "SignHistoryAct=====";
     private MaterialCalendarView myCalendar;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();//今天
-    private List<String> list = new ArrayList<>();
     private TextView tv_ok;
 
     @Override

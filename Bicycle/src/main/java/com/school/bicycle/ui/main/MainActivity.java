@@ -41,7 +41,7 @@ import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
-import com.school.bicycle.ui.Calendar.CalendarSelectActivity;
+import com.school.bicycle.ui.calendar.CalendarSelectActivity;
 import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;

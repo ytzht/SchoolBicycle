@@ -78,9 +78,9 @@ public class MainActivity extends BaseActivity implements IMainView,
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-//    @BindView(R.id.iv_pull)
+    //    @BindView(R.id.iv_pull)
     private ImageView iv_pull;
-//    @BindView(R.id.ll_detail)
+    //    @BindView(R.id.ll_detail)
     private LinearLayout ll_detail;
     private RelativeLayout useing_biycle_lay;
 
@@ -156,7 +156,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         DEVICE_ID = tm.getDeviceId();
         String url = getResources().getString(R.string.baseurl) +
                 "user/validateUser?device_id="
-                + DEVICE_ID ;
+                + DEVICE_ID;
 
         OkHttpUtils.get()
                 .url(url)
@@ -169,8 +169,8 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     @Override
                     public void onResponse(String response, int id) {
-                        ValidateUser v = gson.fromJson(response,ValidateUser.class);
-                        if (v.getCode()==1){
+                        ValidateUser v = gson.fromJson(response, ValidateUser.class);
+                        if (v.getCode() == 1) {
                             // TODO: 2017/7/18 验证登录后更新界面 
                         }
                     }
@@ -236,6 +236,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void onError(Call call, Exception e, int id) {
                         showShort("no");
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("GetBikeMapList=", response);
@@ -275,7 +276,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
 
-
     //点击事件
     private void initClickListener() {
 
@@ -307,9 +307,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         iv_pull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ll_detail.getVisibility() == View.GONE){
+                if (ll_detail.getVisibility() == View.GONE) {
                     ll_detail.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     ll_detail.setVisibility(View.GONE);
                 }
             }
@@ -396,9 +396,10 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_tel) {
             startActivity(RealnameActivity.class);
         } else if (id == R.id.my_news) {
-startActivity(CalendarSelectActivity.class);
+            startActivity(LongTimeLeaseActivity.class);
         } else if (id == R.id.my_set) {
-startActivity(ZxingActivity.class);
+            startActivity(ZxingActivity.class);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -510,7 +511,7 @@ startActivity(ZxingActivity.class);
     //mark点击事件
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Log.d("mark dian","true");
+        Log.d("mark dian", "true");
         marker.showInfoWindow();
         return true;
     }
@@ -530,7 +531,7 @@ startActivity(ZxingActivity.class);
     @Override
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         LatLng target = cameraPosition.target;
-        Log.d("onCameraChange",target.latitude + "jinjin------" + target.longitude);
+        Log.d("onCameraChange", target.latitude + "jinjin------" + target.longitude);
         lon = target.longitude;
         lat = target.latitude;
         initgetBikeMapList();

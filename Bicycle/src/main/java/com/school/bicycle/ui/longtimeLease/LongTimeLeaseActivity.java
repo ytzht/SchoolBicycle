@@ -8,11 +8,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
+import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 public class LongTimeLeaseActivity extends BaseToolBarActivity {
 
@@ -33,10 +37,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
     ImageView zfbIcon;
     @BindView(R.id.cb_zfb)
     CheckBox cbZfb;
-    @BindView(R.id.wallet_icon)
-    ImageView walletIcon;
-    @BindView(R.id.cb_wallet)
-    CheckBox cbWallet;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +45,39 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
         setContentView(R.layout.custom_alert);
         ButterKnife.bind(this);
         setToolbarText("长租");
+        initlongtimeprice();
     }
 
-    @OnClick({ R.id.month1, R.id.month3, R.id.month6, R.id.month12, R.id.wx_icon, R.id.cb_wx, R.id.zfb_icon, R.id.wallet_icon, R.id.cb_wallet})
+    private void initlongtimeprice() {
+
+        String url = getResources().getString(R.string.baseurl) + "order/getLongLeaseInfo";
+        OkHttpUtils
+                .get()
+                .url(url)
+                .build()
+                .execute(new StringCallback() {
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        GetLongLeaseInfo g = gson.fromJson(response,GetLongLeaseInfo.class);
+                        if (g.getCode()==1){
+                            month1.setText("月租："+g.getLonglease_info().get(0).get月租());
+                            month3.setText("季租："+g.getLonglease_info().get(1).get季租());
+                            month6.setText("半年租："+g.getLonglease_info().get(2).get半年租());
+                            month12.setText("年租："+g.getLonglease_info().get(3).get年租());
+                        }else {
+
+                        }
+                    }
+                });
+    }
+
+    @OnClick({R.id.month1, R.id.month3, R.id.month6, R.id.month12, R.id.wx_icon, R.id.cb_wx, R.id.zfb_icon})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.month1:
@@ -63,10 +94,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                 break;
             case R.id.zfb_icon:
                 break;
-            case R.id.wallet_icon:
-                break;
-            case R.id.cb_wallet:
-                break;
+
         }
     }
 }

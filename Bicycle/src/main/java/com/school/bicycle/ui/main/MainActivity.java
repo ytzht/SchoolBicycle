@@ -1,6 +1,7 @@
 package com.school.bicycle.ui.main;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +38,7 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.GetBikeMapList;
+import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.Calendar.CalendarSelectActivity;
@@ -97,6 +100,8 @@ public class MainActivity extends BaseActivity implements IMainView,
     AlertDialog.Builder paydialog;
     Dialog dialog;
     View pay_lay;
+    TelephonyManager tm;
+    String DEVICE_ID;
 
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
 
@@ -143,6 +148,34 @@ public class MainActivity extends BaseActivity implements IMainView,
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
         initClickListener();
         initmap();
+        initvalidateUser();
+    }
+
+    private void initvalidateUser() {
+        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        DEVICE_ID = tm.getDeviceId();
+        String url = getResources().getString(R.string.baseurl) +
+                "user/validateUser?device_id="
+                + DEVICE_ID ;
+
+        OkHttpUtils.get()
+                .url(url)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        ValidateUser v = gson.fromJson(response,ValidateUser.class);
+                        if (v.getCode()==1){
+                            // TODO: 2017/7/18 验证登录后更新界面 
+                        }
+                    }
+                });
+
     }
 
     //初始化设置地图

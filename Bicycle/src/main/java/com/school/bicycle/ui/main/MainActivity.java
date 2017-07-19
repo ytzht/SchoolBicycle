@@ -41,10 +41,12 @@ import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.calendar.CalendarSelectActivity;
 import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
@@ -392,7 +394,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_invitation) {
             startActivity(SearchActivity.class);
         } else if (id == R.id.my_fault) {
-            startActivity(RegisterActivity.class);
+            startActivity(DetailsActivity.class);
         } else if (id == R.id.my_tel) {
             startActivity(RealnameActivity.class);
         } else if (id == R.id.my_news) {

@@ -138,6 +138,7 @@
         <activity android:name=".ui.ZxingActivity" />
         <activity android:name=".ui.calendar.CalendarSelectActivity" />
         <activity android:name=".ui.OverPayActivity"></activity>
+        <activity android:name=".ui.Details.DetailsActivity"></activity>
     </application>
 
 </manifest>

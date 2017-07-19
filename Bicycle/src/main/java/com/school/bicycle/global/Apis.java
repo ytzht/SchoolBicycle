@@ -10,4 +10,6 @@ public interface Apis {
 
     String queryBikeListByDate = "order/queryBikeListByDate";
 
+    String queryConsumDetails = "order/queryConsumDetails";
+
 }

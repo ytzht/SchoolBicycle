@@ -136,7 +136,8 @@
         <activity android:name=".ui.Ivfriends.IvfriendsActivity" />
         <activity android:name=".ui.cancelusebiycle_activity.Cancellusebiycle_Activity" />
         <activity android:name=".ui.ZxingActivity" />
-        <activity android:name=".ui.calendar.CalendarSelectActivity"></activity>
+        <activity android:name=".ui.calendar.CalendarSelectActivity" />
+        <activity android:name=".ui.OverPayActivity"></activity>
     </application>
 
 </manifest>

@@ -51,6 +51,7 @@ import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
+import com.school.bicycle.ui.mywallet.Mywallet_activity;
 import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.search.SearchActivity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
@@ -399,9 +400,11 @@ public class MainActivity extends BaseActivity implements IMainView,
         if (id == R.id.my_bicycle) {
             startActivity(MyBicycleActivity.class);
         } else if (id == R.id.my_wallet) {
-            new ShareAction(MainActivity.this).withText("hello")
-                    .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA)
-                    .setCallback(umShareListener).open();
+
+            startActivity(Mywallet_activity.class);
+//            new ShareAction(MainActivity.this).withText("hello")
+//                    .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA)
+//                    .setCallback(umShareListener).open();
         } else if (id == R.id.my_invitation) {
             startActivity(SearchActivity.class);
         } else if (id == R.id.my_fault) {

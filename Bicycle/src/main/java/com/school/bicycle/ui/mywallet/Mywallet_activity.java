@@ -10,6 +10,7 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.Wallet;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.ui.Details.DetailsActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -24,11 +25,12 @@ import okhttp3.Call;
 
 public class Mywallet_activity extends BaseToolBarActivity {
 
+
     @BindView(R.id.mywallet_balance)
     TextView mywalletBalance;
     @BindView(R.id.balance_Withdrawals)
     TextView balanceWithdrawals;
-    @BindView(R.id.re_biyclenum_mybiycle)
+    @BindView(R.id.re_detiles_mybiycle)
     RelativeLayout reBiyclenumMybiycle;
     @BindView(R.id.income_Withdrawals)
     TextView incomeWithdrawals;
@@ -66,13 +68,13 @@ public class Mywallet_activity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d("response",response);
-                        Wallet wallet = gson.fromJson(response,Wallet.class);
-                        if (wallet.getCode()==1){
+                        Log.d("response", response);
+                        Wallet wallet = gson.fromJson(response, Wallet.class);
+                        if (wallet.getCode() == 1) {
                             mywalletBalance.setText(wallet.getBalance());
                             mywalletIncome.setText(wallet.getShare_income());
                             depositMoney.setText(wallet.getDeposit_money());
-                        }else {
+                        } else {
                             showShort("网络出现了一点小问题");
                         }
                     }
@@ -81,8 +83,21 @@ public class Mywallet_activity extends BaseToolBarActivity {
 
     }
 
-    @OnClick({R.id.balance_Withdrawals, R.id.re_biyclenum_mybiycle, R.id.income_Withdrawals, R.id.re_Income_mybiycle, R.id.mywallet_Recharge, R.id.mywallet_refund})
-    public void onViewClicked(View view) {
 
+    @OnClick({R.id.mywallet_balance, R.id.balance_Withdrawals, R.id.re_detiles_mybiycle, R.id.income_Withdrawals, R.id.mywallet_income})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.mywallet_balance:
+                break;
+            case R.id.balance_Withdrawals:
+                break;
+            case R.id.re_detiles_mybiycle:
+                startActivity(DetailsActivity.class);
+                break;
+            case R.id.income_Withdrawals:
+                break;
+            case R.id.mywallet_income:
+                break;
+        }
     }
 }

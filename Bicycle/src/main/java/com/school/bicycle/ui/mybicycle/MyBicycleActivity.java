@@ -36,16 +36,22 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.re_biyclenum_mybiycle:
+                //车辆号
                 break;
             case R.id.re_Income_mybiycle:
+                //共享收入
                 break;
             case R.id.re_myTrip_mybiycle:
+                //我的行程
                 break;
             case R.id.re_mystate_mybiycle:
+                //我的预定
                 break;
             case R.id.re_myReservation_mybiycle:
+                //共享设置
                 break;
             case R.id.re_mypolice_mybiycle:
+                //报警
                 break;
         }
     }

@@ -14,4 +14,8 @@ public interface Apis {
 
     String queryShareDetails = "order/queryShareDetails";
 
+    String FailureList = "user/failureList";
+
+    String FailureReporting = "user/failureReporting";
+
 }

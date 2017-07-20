@@ -8,6 +8,7 @@ import com.school.bicycle.http.APIFactory;
 import com.school.bicycle.utils.PreferencesUtils;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.log.LoggerInterceptor;
 
@@ -44,7 +45,7 @@ public class MyApplication extends MultiDexApplication {
         initokhttp();
 
         preferencesUtils = new PreferencesUtils(this);
-
+        ZXingLibrary.initDisplayOpinion(this);
     }
 
     private void initokhttp() {
@@ -67,7 +68,7 @@ public class MyApplication extends MultiDexApplication {
         PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
     }
 
-    //
+//
 //    private void initShare() {
 //        UMShareAPI.get(this);
 //        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
@@ -127,6 +128,8 @@ public class MyApplication extends MultiDexApplication {
 //
 //
 //
+
+
     private void initRetrofit() {
 
         aContext = this;

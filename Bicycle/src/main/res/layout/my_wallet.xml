@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/re_biyclenum_mybiycle"
+            android:id="@+id/re_detiles_mybiycle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -52,7 +52,7 @@
                 android:layout_below="@+id/imageView9"
                 android:layout_marginTop="12dp"
                 android:gravity="center"
-                android:text="提现"
+                android:text="明细"
                 android:textColor="@color/black"
                 android:textSize="17dp" />
         </RelativeLayout>

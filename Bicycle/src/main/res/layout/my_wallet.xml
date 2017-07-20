@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="245dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/re_biyclenum_mybiycle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/shape" />
+
+            <TextView
+                android:id="@+id/mywallet_balance"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="000001"
+                android:textColor="@color/white"
+                android:textSize="22dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mywallet_balance"
+                android:layout_centerHorizontal="true"
+                android:text="账户余额"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/balance_Withdrawals"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_alignLeft="@+id/imageView9"
+                android:layout_alignStart="@+id/imageView9"
+                android:layout_below="@+id/imageView9"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="提现"
+                android:textColor="@color/black"
+                android:textSize="17dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/re_Income_mybiycle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/income_Withdrawals"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_alignLeft="@+id/imageView10"
+                android:layout_alignStart="@+id/imageView10"
+                android:layout_below="@+id/imageView10"
+                android:layout_marginTop="13dp"
+                android:gravity="center"
+                android:text="提现"
+                android:textColor="@color/black"
+                android:textSize="17dp" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/shape" />
+
+            <TextView
+                android:id="@+id/mywallet_income"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="206.53元"
+                android:textColor="@color/white"
+                android:textSize="22dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mywallet_income"
+                android:layout_centerHorizontal="true"
+                android:text="共享收入"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/mywallet_Recharge"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/btn_button"
+        android:gravity="center"
+        android:text="充值"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/deposit_money"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="押金299元"
+            android:textColor="@color/all_textc" />
+
+        <TextView
+            android:layout_width="17dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/mywallet_refund"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="押金退款"
+            android:textColor="@color/chengse" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -123,7 +123,10 @@
             android:paddingRight="12dp"
             android:src="@drawable/mybic_next" />
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -154,10 +157,7 @@
         android:layout_height="1dp"
         android:background="@color/divider" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/divider" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"

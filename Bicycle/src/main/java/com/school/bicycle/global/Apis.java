@@ -18,4 +18,6 @@ public interface Apis {
 
     String FailureReporting = "user/failureReporting";
 
+    String getMyMessage = "user/getMyMessage";
+
 }

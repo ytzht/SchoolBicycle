@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Consumption {
 
+
     /**
      * code : 1
      * msg : 操作成功

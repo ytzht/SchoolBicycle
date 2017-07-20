@@ -43,8 +43,9 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.FaultActivity;
+import com.school.bicycle.ui.Details.DetailsActivity;
+import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.ScanQRCodeActivity;
-import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
@@ -227,7 +228,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     //获取周围单车位置列表
     private void initgetBikeMapList() {
 
-        String url = getResources().getString(R.string.baseurl) +
+        String url = Apis.Base +
                 "order/getBikeMapList?locations="
                 + lon + "," + lat;
         Log.d("经纬度=", lon + "," + lat + "   " + url);
@@ -406,7 +407,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_tel) {
             startActivity(RealnameActivity.class);
         } else if (id == R.id.my_news) {
-            startActivity(LongTimeLeaseActivity.class);
+            startActivity(InformationActivity.class);
         } else if (id == R.id.my_set) {
             startActivity(ZxingActivity.class);
 

@@ -2,6 +2,8 @@
 .gradle
 /local.properties
 .DS_Store
-/build
+Directory:build/
+Directory:app/build/
+Directory:.idea/
+Directory:gradle/
 /gradlew.bat
-/.idea/

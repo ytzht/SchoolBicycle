@@ -104,26 +104,18 @@ public class FaultActivity extends BaseToolBarActivity {
 
                 String s = "";
                 for (int i = 0; i < problems.size(); i++) {
-
-
-                        if ((i + 1) == problems.size()) {
-                            if (problems.get(i).isClick()) {
-                                s = s + problems.get(i).getProblem();
-                            }
-                        } else {
-                            if (problems.get(i).isClick()) {
-                                s = s + problems.get(i).getProblem() + ",";
-                            }
-                        }
+                    if (problems.get(i).isClick()) {
+                        s = s + problems.get(i).getProblem() + ",";
+                    }
 
                 }
 
-                if (s.equals("")){
+                if (s.equals("")) {
                     showShort("请选择出现的问题");
                     return;
                 }
 
-                if (etInput.getText().toString().equals("")){
+                if (etInput.getText().toString().equals("")) {
                     showShort("请输入车辆编号");
                     return;
                 }
@@ -145,10 +137,10 @@ public class FaultActivity extends BaseToolBarActivity {
                     public void onResponse(String response, int id) {
 
                         BaseResult result = (new Gson()).fromJson(response, BaseResult.class);
-                        if (result.getCode() == 1){
+                        if (result.getCode() == 1) {
                             showShort(result.getMsg());
                             finish();
-                        }else {
+                        } else {
                             showShort(result.getMsg());
                         }
 
@@ -161,8 +153,6 @@ public class FaultActivity extends BaseToolBarActivity {
     }
 
     class FaultAdapter extends RecyclerView.Adapter<FaultAdapter.ViewHolder> {
-
-
 
 
         @Override
@@ -194,6 +184,7 @@ public class FaultActivity extends BaseToolBarActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvTxt;
             CheckBox cbFault;
+
             public ViewHolder(View itemView) {
                 super(itemView);
                 tvTxt = (TextView) itemView.findViewById(R.id.tv_txt);

@@ -49,6 +49,12 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_myReservation_mybiycle:
                 //共享设置
+
+
+
+
+
+                
                 break;
             case R.id.re_mypolice_mybiycle:
                 //报警

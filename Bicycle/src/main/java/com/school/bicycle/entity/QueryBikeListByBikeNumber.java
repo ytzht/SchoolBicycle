@@ -8,15 +8,16 @@ import java.util.List;
 
 public class QueryBikeListByBikeNumber {
 
+
     /**
      * code : 1
      * msg : 操作成功
-     * bike_info : [{"log":"121.450685","lat":"37.486472","number":"011130","type":"单人车","start_time":"2017-06-25 00:00:00","color":"yellow","lease_info":{"sz":"2","rz":"30"}},{"log":"121.450685","lat":"37.486472","number":"011130","type":"单人车","start_time":"2017-06-26 00:00:00","color":"yellow","lease_info":{"sz":"2","rz":"30"}}]
+     * bike_info : {"log":"121.450685","lat":"37.486472","number":"011130","type":"单人车","long_lease":1,"valid_time":["2017-06-25"],"color":"yellow","lease_info":{"时租":"2","日租":"30"}}
      */
 
     private int code;
     private String msg;
-    private List<BikeInfoBean> bike_info;
+    private BikeInfoBean bike_info;
 
     public int getCode() {
         return code;
@@ -34,47 +35,48 @@ public class QueryBikeListByBikeNumber {
         this.msg = msg;
     }
 
-    public List<BikeInfoBean> getBike_info() {
+    public BikeInfoBean getBike_info() {
         return bike_info;
     }
 
-    public void setBike_info(List<BikeInfoBean> bike_info) {
+    public void setBike_info(BikeInfoBean bike_info) {
         this.bike_info = bike_info;
     }
 
     public static class BikeInfoBean {
-
         /**
          * log : 121.450685
          * lat : 37.486472
          * number : 011130
          * type : 单人车
-         * start_time : 2017-06-25 00:00:00
+         * long_lease : 1
+         * valid_time : ["2017-06-25"]
          * color : yellow
-         * lease_info : {"sz":"2","rz":"30"}
+         * lease_info : {"时租":"2","日租":"30"}
          */
 
-        private String log;
-        private String lat;
+        private double log;
+        private double lat;
         private String number;
         private String type;
-        private String start_time;
+        private int long_lease;
         private String color;
         private LeaseInfoBean lease_info;
+        private List<String> valid_time;
 
-        public String getLog() {
+        public double getLog() {
             return log;
         }
 
-        public void setLog(String log) {
+        public void setLog(double log) {
             this.log = log;
         }
 
-        public String getLat() {
+        public double getLat() {
             return lat;
         }
 
-        public void setLat(String lat) {
+        public void setLat(double lat) {
             this.lat = lat;
         }
 
@@ -94,12 +96,12 @@ public class QueryBikeListByBikeNumber {
             this.type = type;
         }
 
-        public String getStart_time() {
-            return start_time;
+        public int getLong_lease() {
+            return long_lease;
         }
 
-        public void setStart_time(String start_time) {
-            this.start_time = start_time;
+        public void setLong_lease(int long_lease) {
+            this.long_lease = long_lease;
         }
 
         public String getColor() {
@@ -118,31 +120,38 @@ public class QueryBikeListByBikeNumber {
             this.lease_info = lease_info;
         }
 
+        public List<String> getValid_time() {
+            return valid_time;
+        }
+
+        public void setValid_time(List<String> valid_time) {
+            this.valid_time = valid_time;
+        }
+
         public static class LeaseInfoBean {
             /**
-             * sz : 2
-             * rz : 30
+             * 时租 : 2
+             * 日租 : 30
              */
 
-            private String hour;
-            private String day;
+            private String 时租;
+            private String 日租;
 
-            public String getHour() {
-                return hour;
+            public String get时租() {
+                return 时租;
             }
 
-            public void setHour(String hour) {
-                this.hour = hour;
+            public void set时租(String 时租) {
+                this.时租 = 时租;
             }
 
-            public String getDay() {
-                return day;
+            public String get日租() {
+                return 日租;
             }
 
-            public void setDay(String day) {
-                this.day = day;
+            public void set日租(String 日租) {
+                this.日租 = 日租;
             }
         }
     }
-
 }

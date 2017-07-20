@@ -3,21 +3,21 @@ package com.school.bicycle.entity;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/7/4.
+ * Created by Administrator on 2017/7/20.
  */
 
-public class GetBikeMapList {
+public class QueryBikeListByDate {
 
 
     /**
      * code : 1
      * msg : 操作成功
-     * body : [{"mybike":0,"gd_id":13,"log":"121.450111","lat":"37.486985","number":"011151","distance":"147","address":"山东省烟台市莱山区黄海路街道莱山区黄海路街道工商学院工作站山东工商学院","long_lease":0,"valid_time":[],"color":"green","type":"单人车","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"}},{"mybike":0,"gd_id":14,"log":"121.450397","lat":"37.486531","number":"011154","distance":"202","address":"山东省烟台市莱山区黄海路街道清泉路山东工商学院","long_lease":0,"valid_time":[],"color":"green","type":"单人车","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"}},{"mybike":0,"gd_id":4,"log":"121.450685","lat":"37.486472","number":"011130","distance":"223","address":"山东省烟台市莱山区黄海路街道清泉路山东工商学院","long_lease":1,"valid_time":["2017-06-25"],"color":"yellow","type":"单人车","lease_info":{"时租":"2","日租":"30"}}]
+     * bike_info : [{"log":"121.450111","lat":"37.486985","number":"011151","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.450397","lat":"37.486531","number":"011154","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.442166","lat":"37.477763","number":"011140","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.442166","lat":"37.477763","number":"01184","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.450685","lat":"37.486472","number":"011130","type":"单人车","color":"yellow","valid_time":["2017-06-25"],"lease_info":{"时租":"2","日租":"30"}}]
      */
 
     private int code;
     private String msg;
-    private List<BodyBean> body;
+    private List<BikeInfoBean> bike_info;
 
     public int getCode() {
         return code;
@@ -35,58 +35,32 @@ public class GetBikeMapList {
         this.msg = msg;
     }
 
-    public List<BodyBean> getBody() {
-        return body;
+    public List<BikeInfoBean> getBike_info() {
+        return bike_info;
     }
 
-    public void setBody(List<BodyBean> body) {
-        this.body = body;
+    public void setBike_info(List<BikeInfoBean> bike_info) {
+        this.bike_info = bike_info;
     }
 
-    public static class BodyBean {
+    public static class BikeInfoBean {
         /**
-         * mybike : 0
-         * gd_id : 13
          * log : 121.450111
          * lat : 37.486985
          * number : 011151
-         * distance : 147
-         * address : 山东省烟台市莱山区黄海路街道莱山区黄海路街道工商学院工作站山东工商学院
-         * long_lease : 0
-         * valid_time : []
-         * color : green
          * type : 单人车
+         * color : green
          * lease_info : {"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"}
+         * valid_time : ALL
          */
 
-        private int mybike;
-        private int gd_id;
         private double log;
         private double lat;
         private String number;
-        private String distance;
-        private String address;
-        private int long_lease;
-        private String color;
         private String type;
+        private String color;
         private LeaseInfoBean lease_info;
-        private List<?> valid_time;
-
-        public int getMybike() {
-            return mybike;
-        }
-
-        public void setMybike(int mybike) {
-            this.mybike = mybike;
-        }
-
-        public int getGd_id() {
-            return gd_id;
-        }
-
-        public void setGd_id(int gd_id) {
-            this.gd_id = gd_id;
-        }
+        private String valid_time;
 
         public double getLog() {
             return log;
@@ -112,28 +86,12 @@ public class GetBikeMapList {
             this.number = number;
         }
 
-        public String getDistance() {
-            return distance;
+        public String getType() {
+            return type;
         }
 
-        public void setDistance(String distance) {
-            this.distance = distance;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public int getLong_lease() {
-            return long_lease;
-        }
-
-        public void setLong_lease(int long_lease) {
-            this.long_lease = long_lease;
+        public void setType(String type) {
+            this.type = type;
         }
 
         public String getColor() {
@@ -144,14 +102,6 @@ public class GetBikeMapList {
             this.color = color;
         }
 
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
         public LeaseInfoBean getLease_info() {
             return lease_info;
         }
@@ -160,11 +110,11 @@ public class GetBikeMapList {
             this.lease_info = lease_info;
         }
 
-        public List<?> getValid_time() {
+        public String getValid_time() {
             return valid_time;
         }
 
-        public void setValid_time(List<?> valid_time) {
+        public void setValid_time(String valid_time) {
             this.valid_time = valid_time;
         }
 

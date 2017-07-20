@@ -12,4 +12,6 @@ public interface Apis {
 
     String queryConsumDetails = "order/queryConsumDetails";
 
+    String queryShareDetails = "order/queryShareDetails";
+
 }

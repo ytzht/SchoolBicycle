@@ -29,7 +29,7 @@ public class Consumption_fragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_layout,null);
         initView(view);
         return view;
     }
@@ -52,8 +52,7 @@ public class Consumption_fragment extends BaseFragment {
                         Log.d("re",response);
                         Gson gson  = new Gson();
                         Consumption consumption = gson.fromJson(response,Consumption.class);
-                        Consumption_adapter c =
-                                new Consumption_adapter(getActivity(),consumption.getConsumer_details());
+                        Consumption_adapter c = new Consumption_adapter(getActivity(),consumption.getConsumer_details());
                         consumption_listview.setAdapter(c);
                     }
                 });

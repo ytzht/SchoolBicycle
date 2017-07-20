@@ -35,7 +35,7 @@ public class Share_fragment extends BaseFragment {
 
     private void initView(View view) {
         consumption_listview = (ListView) view.findViewById(R.id.consumption_listview);
-        String url = Apis.Base + Apis.queryConsumDetails;
+        String url = Apis.Base + Apis.queryShareDetails;
 
         OkHttpUtils.get()
                 .url(url)
@@ -49,7 +49,7 @@ public class Share_fragment extends BaseFragment {
                     @Override
                     public void onResponse(String response, int id) {
                         Gson gson  = new Gson();
-                        Consumption consumption = gson.fromJson(response,Consumption.class);
+//                        Consumption consumption = gson.fromJson(response,Consumption.class);
 
                     }
                 });

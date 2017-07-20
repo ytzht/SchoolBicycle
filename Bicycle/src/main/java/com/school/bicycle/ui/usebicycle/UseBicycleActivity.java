@@ -18,8 +18,10 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
+import com.school.bicycle.adapter.QuerytBikeListByDate_adapter;
 import com.school.bicycle.adapter.Usebicycle_adapter;
 import com.school.bicycle.entity.QueryBikeListByBikeNumber;
+import com.school.bicycle.entity.QueryBikeListByDate;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
@@ -81,12 +83,13 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
+                                    Log.d("response",response);
                                     QueryBikeListByBikeNumber queryBikeListByBikeNumber = gson.fromJson(response, QueryBikeListByBikeNumber.class);
                                     if (queryBikeListByBikeNumber.getCode() == 0) {
-                                        showLong(queryBikeListByBikeNumber.getMsg());
+                                        showShort(queryBikeListByBikeNumber.getMsg());
                                     } else {
-                                        Usebicycle_adapter usebicycle_adapter = new Usebicycle_adapter(getBaseContext(), queryBikeListByBikeNumber.getBike_info());
-                                        lvShowUsebicycle.setAdapter(usebicycle_adapter);
+//                                        Usebicycle_adapter usebicycle_adapter = new Usebicycle_adapter(getBaseContext(), queryBikeListByBikeNumber.getBike_info());
+//                                        lvShowUsebicycle.setAdapter(usebicycle_adapter);
                                     }
 
                                 }
@@ -146,15 +149,11 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                     for (int i = 0; i < selectedDates.size(); i++) {
                         String format = new SimpleDateFormat("yyyy-MM-dd").format(selectedDates.get(i).getDate());
                         Log.d(TAG, "onClick: " + format);
-
-
                         if (selectedDates.size() == i + 1) {
                             s = s + format;
                         } else {
                             s = s + format + ",";
                         }
-
-
                     }
 
                     Log.d(TAG, s);
@@ -163,7 +162,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                     OkHttpUtils
                             .post()
                             .url(url)
-                            .addParams("date", s)
+                            .addParams("dates", s)
                             .addParams("pageNumber", 1 + "")
                             .build()
                             .execute(new StringCallback() {
@@ -174,12 +173,14 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    QueryBikeListByBikeNumber queryBikeListByBikeNumber = gson.fromJson(response, QueryBikeListByBikeNumber.class);
-                                    if (queryBikeListByBikeNumber.getCode() == 0) {
-                                        showLong(queryBikeListByBikeNumber.getMsg());
+                                    Log.d("response",response);
+                                    QueryBikeListByDate queryBikeListByDate =gson.fromJson(response, QueryBikeListByDate.class);
+                                    if (queryBikeListByDate.getCode() == 0) {
+                                        showShort(queryBikeListByDate.getMsg());
                                     } else {
-                                        Usebicycle_adapter usebicycle_adapter = new Usebicycle_adapter(getBaseContext(), queryBikeListByBikeNumber.getBike_info());
-                                        lvShowUsebicycle.setAdapter(usebicycle_adapter);
+                                        QuerytBikeListByDate_adapter querytBikeListByDate_adapter = new QuerytBikeListByDate_adapter(getBaseContext(), queryBikeListByDate.getBike_info());
+                                        lvShowUsebicycle.setAdapter(querytBikeListByDate_adapter);
+                                        dialog.dismiss();
                                     }
 
                                 }

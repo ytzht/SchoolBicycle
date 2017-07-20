@@ -162,6 +162,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                                 @Override
                                 public void onResponse(String response, int id) {
                                     Login login = gson.fromJson(response, Login.class);
+
                                 }
                             });
                 }else {

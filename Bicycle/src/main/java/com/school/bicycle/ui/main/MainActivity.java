@@ -39,6 +39,7 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.ValidateUser;
+import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.Details.DetailsActivity;
@@ -104,6 +105,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     View pay_lay;
     TelephonyManager tm;
     String DEVICE_ID;
+    ValidateUser v;
 
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
 
@@ -156,7 +158,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void initvalidateUser() {
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
-        String url = getResources().getString(R.string.baseurl) +
+        String url = Apis.Base +
                 "user/validateUser?device_id="
                 + DEVICE_ID;
 
@@ -166,14 +168,18 @@ public class MainActivity extends BaseActivity implements IMainView,
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-
+                        Log.d("onError", e.toString());
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        ValidateUser v = gson.fromJson(response, ValidateUser.class);
+                        Log.d("response", response.toString());
+                        v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
-                            // TODO: 2017/7/18 验证登录后更新界面 
+                            // TODO: 2017/7/18 验证登录后更新界面
+                            showShort(v.getMsg());
+                        } else {
+                            showShort(v.getMsg());
                         }
                     }
                 });
@@ -184,7 +190,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void initmap() {
         if (aMap == null) {
             aMap = mMapView.getMap();
-
         }
         iMainPresenter = new MainPresenterCompl(getBaseContext(), this);
         iMainPresenter.initLocation(aMap);
@@ -287,8 +292,13 @@ public class MainActivity extends BaseActivity implements IMainView,
         useing_biycle_lay.setVisibility(View.GONE);
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(UseBicycleActivity.class);
+            public void onClick(View view) {
+                if (v.getCode() == 1) {
+                    startActivity(UseBicycleActivity.class);
+                } else {
+                    startActivity(RegisterActivity.class);
+                }
+
             }
         });
 
@@ -472,10 +482,16 @@ public class MainActivity extends BaseActivity implements IMainView,
         GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
         tv_bicyclenum_info.setText("车牌号：" + data.getNumber());
         tv_distance_info.setText("距离：" + data.getDistance() + "m");
-//        tv_time_info.setText("在租时段"+data.getValid_time());
-        tv_timerent_info.setText("时租：" + data.getLease_info().getHour());
-        tv_dayrent_info.setText("日租：" + data.getLease_info().getDay());
-        tv_longrent_info.setText("长租：" + data.getLease_info().getLongX());
+        tv_time_info.setText("在租时段"+data.getValid_time());
+        tv_timerent_info.setText("时租：" + data.getLease_info().get时租() + "元");
+        tv_dayrent_info.setText("日租：" + data.getLease_info().get日租() + "元");
+        if (data.getColor().equals("yellow")){
+
+        }else {
+            tv_longrent_info.setText("长租：" + data.getLease_info().get月租() + "元/月 " + data.getLease_info().get季租()
+                    + "元/3个月 \n" + data.getLease_info().get半年租() + "元/半年 " + data.getLease_info().get年租() + "元/一年");
+        }
+
         tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

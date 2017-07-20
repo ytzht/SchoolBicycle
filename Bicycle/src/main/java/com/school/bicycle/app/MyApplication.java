@@ -5,6 +5,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.school.bicycle.http.APIFactory;
+import com.school.bicycle.utils.PreferencesUtils;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -22,7 +23,7 @@ import okhttp3.OkHttpClient;
 public class MyApplication extends MultiDexApplication {
 
     public static Context aContext;
-
+    public PreferencesUtils preferencesUtils;
 
     @Override
     public void onCreate() {
@@ -41,6 +42,8 @@ public class MyApplication extends MultiDexApplication {
         initShare();
 
         initokhttp();
+
+        preferencesUtils = new PreferencesUtils(this);
 
     }
 

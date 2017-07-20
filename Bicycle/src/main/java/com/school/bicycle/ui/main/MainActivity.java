@@ -45,8 +45,11 @@ import com.school.bicycle.global.L;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.InformationActivity;
+import com.school.bicycle.ui.calendar.CalendarSelectActivity;
 import com.school.bicycle.ui.ScanQRCodeActivity;
+import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
@@ -311,7 +314,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         fabQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ScanQRCodeActivity.class);
+                startActivity(ZxingActivity.class);
             }
         });
 
@@ -409,7 +412,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_news) {
             startActivity(InformationActivity.class);
         } else if (id == R.id.my_set) {
-            startActivity(ZxingActivity.class);
 
         }
 

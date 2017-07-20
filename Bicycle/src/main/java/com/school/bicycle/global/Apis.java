@@ -18,6 +18,8 @@ public interface Apis {
 
     String FailureReporting = "user/failureReporting";
 
+    String wallet = "order/wallet";
+
     String getMyMessage = "user/getMyMessage";
 
 }

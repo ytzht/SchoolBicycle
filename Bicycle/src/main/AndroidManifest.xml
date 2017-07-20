@@ -135,10 +135,10 @@
         <activity android:name=".ui.lockclose.LockcloseActivity" />
         <activity android:name=".ui.Ivfriends.IvfriendsActivity" />
         <activity android:name=".ui.cancelusebiycle_activity.Cancellusebiycle_Activity" />
-        <activity android:name=".ui.ZxingActivity" />
         <activity android:name=".ui.calendar.CalendarSelectActivity" />
-        <activity android:name=".ui.OverPayActivity"></activity>
-        <activity android:name=".ui.Details.DetailsActivity"></activity>
+        <activity android:name=".ui.OverPayActivity" />
+        <activity android:name=".ui.Details.DetailsActivity" />
+        <activity android:name=".ui.InformationActivity"></activity>
     </application>
 
 </manifest>

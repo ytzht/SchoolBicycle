@@ -14,4 +14,6 @@ public interface Apis {
 
     String queryShareDetails = "order/queryShareDetails";
 
+    String getMyMessage = "user/getMyMessage";
+
 }

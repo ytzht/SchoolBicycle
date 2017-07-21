@@ -19,6 +19,7 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.ui.MyRoute.MyRoute_Activity;
 import com.school.bicycle.ui.Myeserve.MyReserveActivity;
 import com.school.bicycle.utils.MySelectorDecorators;
 import com.school.bicycle.utils.SelectDecorator;
@@ -75,6 +76,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_myTrip_mybiycle:
                 //我的行程
+                startActivity(MyRoute_Activity.class);
                 break;
             case R.id.re_mystate_mybiycle:
                 startActivity(MyReserveActivity.class);

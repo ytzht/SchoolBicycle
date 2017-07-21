@@ -6,14 +6,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import com.school.bicycle.R;
+import com.school.bicycle.adapter.MyTableViewAdapter;
 import com.school.bicycle.fragment.Consumption_fragment;
 import com.school.bicycle.fragment.Share_fragment;
 import com.school.bicycle.global.BaseToolBarActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailsActivity extends BaseToolBarActivity {
-
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
     @BindView(R.id.viewPager)

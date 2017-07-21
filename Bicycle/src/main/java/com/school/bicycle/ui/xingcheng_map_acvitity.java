@@ -3,24 +3,15 @@ package com.school.bicycle.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
@@ -41,44 +32,45 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/7/21.
  */
 
-public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMainView{
+public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMainView {
 
-    @BindView(R.id.map)
+
+    AMap aMap;
+    @BindView(R.id.map_map)
     MapView mMapView;
-    @BindView(R.id.imageView16)
-    ImageView imageView16;
-    @BindView(R.id.fab_refresh)
-    ImageView fabRefresh;
-    @BindView(R.id.btn_use)
-    Button btnUse;
-    @BindView(R.id.fab_qr)
-    ImageView fabQr;
-    @BindView(R.id.iv_pull)
-    ImageView ivPull;
-    @BindView(R.id.tv_use)
-    TextView tvUse;
-    @BindView(R.id.use_no)
-    TextView useNo;
+    @BindView(R.id.map_bike_number)
+    TextView mapBikeNumber;
+    @BindView(R.id.map_distance)
+    TextView mapDistance;
+    @BindView(R.id.map_total_fee)
+    TextView mapTotalFee;
     @BindView(R.id.view_divider)
     View viewDivider;
+    @BindView(R.id.map_calories)
+    TextView mapCalories;
+    @BindView(R.id.map_carbon_saved)
+    TextView mapCarbonSaved;
+    @BindView(R.id.map_start_time)
+    TextView mapStartTime;
     @BindView(R.id.ll_detail)
     LinearLayout llDetail;
     @BindView(R.id.useing_biycle_lay)
     RelativeLayout useingBiycleLay;
 
-    AMap aMap;
     private IMainPresenter iMainPresenter;
     Intent it;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
+        setToolbarText("我的行程");
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         initmap();
 
     }
+
 
     //初始化设置地图
     private void initmap() {
@@ -105,13 +97,21 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
         GetMyRoute getMyRoute = (GetMyRoute) it.getSerializableExtra("getMyRoute");
         String position = it.getStringExtra("position");
         int i = Integer.parseInt(position);
+        mapBikeNumber.setText("车 牌 号"+getMyRoute.getBody().get(i).getBike_number());
+        mapDistance.setText("骑行距离："+getMyRoute.getBody().get(i).getDistance()+"KM");
+        mapTotalFee.setText("骑行消费："+getMyRoute.getBody().get(i).getTotal_fee()+"元");
+        mapCalories.setText(getMyRoute.getBody().get(i).getCalories()+"卡");
+        mapCarbonSaved.setText(getMyRoute.getBody().get(i).getCarbon_saved()+"g");
+        String str=getMyRoute.getBody().get(i).getStart_time().substring(2,10);
+        mapStartTime.setText(str);
+
         List<LatLng> latLngs = new ArrayList<LatLng>();
-        for (int a = 0;a<getMyRoute.getBody().get(i).getLines().size();a++){
+        for (int a = 0; a < getMyRoute.getBody().get(i).getLines().size(); a++) {
             latLngs.add(new LatLng(getMyRoute.getBody().get(i).getLines().get(a).getLat()
-                    ,getMyRoute.getBody().get(i).getLines().get(a).getLog()));
+                    , getMyRoute.getBody().get(i).getLines().get(a).getLog()));
         }
 
-        Polyline polyline =aMap.addPolyline(new PolylineOptions().
+        Polyline polyline = aMap.addPolyline(new PolylineOptions().
                 addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
     }
 

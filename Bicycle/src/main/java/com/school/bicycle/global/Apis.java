@@ -24,4 +24,6 @@ public interface Apis {
 
     String getMyMessage = "user/getMyMessage";
 
+    String StartShareMyBike = "order/startShareMyBike";
+
 }

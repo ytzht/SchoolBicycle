@@ -2,6 +2,7 @@ package com.school.bicycle.ui.main;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -36,6 +37,10 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.ValidateUser;
@@ -43,26 +48,25 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.ui.FaultActivity;
-import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
-import com.school.bicycle.ui.calendar.CalendarSelectActivity;
-import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
-import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.mywallet.Mywallet_activity;
 import com.school.bicycle.ui.register.RegisterActivity;
-import com.school.bicycle.ui.search.SearchActivity;
-import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
-import com.umeng.socialize.ShareAction;
+import com.school.bicycle.utils.HighlightWeekendsDecorator;
+import com.school.bicycle.utils.MySelectorDecorator;
+import com.school.bicycle.utils.OneDayDecorator;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -298,7 +302,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             @Override
             public void onClick(View view) {
                 if (v.getCode() == 1) {
-                    startActivity(UseBicycleActivity.class);
+                    startActivity(MainActivity.class);
                 } else {
                     startActivity(RegisterActivity.class);
                 }
@@ -486,12 +490,12 @@ public class MainActivity extends BaseActivity implements IMainView,
         GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
         tv_bicyclenum_info.setText("车牌号：" + data.getNumber());
         tv_distance_info.setText("距离：" + data.getDistance() + "m");
-        tv_time_info.setText("在租时段"+data.getValid_time());
+        tv_time_info.setText("在租时段" + data.getValid_time());
         tv_timerent_info.setText("时租：" + data.getLease_info().get时租() + "元");
         tv_dayrent_info.setText("日租：" + data.getLease_info().get日租() + "元");
-        if (data.getColor().equals("yellow")){
+        if (data.getColor().equals("yellow")) {
 
-        }else {
+        } else {
             tv_longrent_info.setText("长租：" + data.getLease_info().get月租() + "元/月 " + data.getLease_info().get季租()
                     + "元/3个月 \n" + data.getLease_info().get半年租() + "元/半年 " + data.getLease_info().get年租() + "元/一年");
         }
@@ -513,7 +517,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(SearchActivity.class);
+                showAlert();
             }
         });
 
@@ -558,5 +562,123 @@ public class MainActivity extends BaseActivity implements IMainView,
         lat = target.latitude;
         initgetBikeMapList();
 
+    }
+
+
+    private static final String TAG = "=====";
+    List<CalendarDay> selectedDates;
+    private void showAlert() {
+
+        View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.useday_calendar, null, false);
+        dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
+        tv_ok = (TextView) view.findViewById(R.id.tv_ok);
+        tv_dates = (TextView) view.findViewById(R.id.tv_dates);
+        dialog.setCancelable(true);
+        myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
+        myCalendarInit();//初始化日历
+        tv_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                selectedDates = myCalendar.getSelectedDates();
+
+                String s = "";
+                if (selectedDates.size() > 0) {
+                    for (int i = 0; i < selectedDates.size(); i++) {
+                        String format = new SimpleDateFormat("yyyy-MM-dd").format(selectedDates.get(i).getDate());
+                        Log.d(TAG, "onClick: " + format);
+                        if (selectedDates.size() == i + 1) {
+                            s = s + format;
+                        } else {
+                            s = s + format + ",";
+                        }
+                    }
+
+                    Log.d(TAG, s);
+                    // TODO: 2017/7/21 提交日租订单 没接口
+//                    String url = Apis.Base + Apis.queryBikeListByDate;
+//                    OkHttpUtils
+//                            .post()
+//                            .url(url)
+//                            .addParams("dates", s)
+//                            .addParams("pageNumber", 1 + "")
+//                            .build()
+//                            .execut
+                } else {
+                    showShort("请选择日期");
+                }
+            }
+        });
+
+
+    }
+
+    private MaterialCalendarView myCalendar;
+    private TextView tv_ok, tv_dates;
+
+    public void myCalendarInit() {
+        myCalendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
+        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Large);
+        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+        myCalendar.setSelected(false);
+        myCalendar.setEnabled(false);
+        myCalendar.setClickable(false);
+        myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
+//        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
+        myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+//                signDataInit(date.getYear(), date.getMonth() + 1);
+            }
+        });
+        myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
+
+                selectedDates = myCalendar.getSelectedDates();
+                if (selectedDates.size() > 0) {
+                    String s = "";
+                    for (int i = 0; i < selectedDates.size(); i++) {
+                        String format = new SimpleDateFormat("yyyy-MM-dd").format(selectedDates.get(i).getDate());
+                        Log.d(TAG, "onClick: " + format);
+                        if (selectedDates.size() == i + 1) {
+                            s = s + format;
+                        } else {
+                            s = s + format + ",";
+                        }
+                    }
+
+                    Log.d(TAG, "onDateSelected: " + s);
+                    tv_dates.setText(s);
+
+                }
+                if (widget.getSelectedDates().size() > 5) {
+
+                    new AlertDialog.Builder(MainActivity.this).setTitle("提示").setMessage("天数选择超限")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                    myCalendar.setDateSelected(date, false);
+
+                } else {
+
+                    if (selected) {
+                        myCalendar.setDateSelected(date, true);
+                    } else {
+                        myCalendar.setDateSelected(date, false);
+                    }
+                }
+//                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
+
+            }
+        });
+        OneDayDecorator oneDayDecorator = new OneDayDecorator();//今天
+        myCalendar.addDecorators(new MySelectorDecorator(this), new HighlightWeekendsDecorator(this), oneDayDecorator);
+
+//        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1);
     }
 }

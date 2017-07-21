@@ -14,6 +14,8 @@ public interface Apis {
 
     String queryShareDetails = "order/queryShareDetails";
 
+    String getMyAppoint = "order/getMyAppoint";
+
     String FailureList = "user/failureList";
 
     String FailureReporting = "user/failureReporting";

@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.ui.Myeserve.MyReserveActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,6 +47,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 //我的行程
                 break;
             case R.id.re_mystate_mybiycle:
+                startActivity(MyReserveActivity.class);
                 //我的预定
                 break;
             case R.id.re_myReservation_mybiycle:

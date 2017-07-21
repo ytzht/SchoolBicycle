@@ -83,7 +83,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("response",response);
+                                    Log.d("response", response);
                                     QueryBikeListByBikeNumber queryBikeListByBikeNumber = gson.fromJson(response, QueryBikeListByBikeNumber.class);
                                     if (queryBikeListByBikeNumber.getCode() == 0) {
                                         showShort(queryBikeListByBikeNumber.getMsg());
@@ -113,10 +113,9 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                 llSearchBicyclenum.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_date_use:
-
+                //按日期搜索
                 showAlert();
 
-                //按日期搜索
                 break;
 
             case R.id.ll_search_bicyclenum_sure:
@@ -173,8 +172,8 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("response",response);
-                                    QueryBikeListByDate queryBikeListByDate =gson.fromJson(response, QueryBikeListByDate.class);
+                                    Log.d("response", response);
+                                    QueryBikeListByDate queryBikeListByDate = gson.fromJson(response, QueryBikeListByDate.class);
                                     if (queryBikeListByDate.getCode() == 0) {
                                         showShort(queryBikeListByDate.getMsg());
                                     } else {

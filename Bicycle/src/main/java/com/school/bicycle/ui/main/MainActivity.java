@@ -45,6 +45,7 @@ import com.school.bicycle.global.L;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.InformationActivity;
+import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
 import com.school.bicycle.ui.calendar.CalendarSelectActivity;
 import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.ZxingActivity;
@@ -176,13 +177,13 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d("response", response.toString());
+                        Log.d("response", response);
                         v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
                             // TODO: 2017/7/18 验证登录后更新界面
                             showShort(v.getMsg());
                         } else {
-                            showShort(v.getMsg());
+                            startActivity(RegisterActivity.class);
                         }
                     }
                 });
@@ -401,13 +402,12 @@ public class MainActivity extends BaseActivity implements IMainView,
         if (id == R.id.my_bicycle) {
             startActivity(MyBicycleActivity.class);
         } else if (id == R.id.my_wallet) {
-
             startActivity(Mywallet_activity.class);
 //            new ShareAction(MainActivity.this).withText("hello")
 //                    .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA)
 //                    .setCallback(umShareListener).open();
         } else if (id == R.id.my_invitation) {
-            startActivity(SearchActivity.class);
+            startActivity(IvfriendsActivity.class);
         } else if (id == R.id.my_fault) {
             startActivity(FaultActivity.class);
         } else if (id == R.id.my_tel) {

@@ -140,10 +140,11 @@
         <activity android:name=".ui.OverPayActivity" />
         <activity android:name=".ui.mywallet.Mywallet_activity" />
         <activity android:name=".ui.Details.DetailsActivity" />
-        <activity android:name=".ui.FaultActivity"></activity>
+        <activity android:name=".ui.FaultActivity" />
         <activity android:name=".ui.OverPayActivity" />
         <activity android:name=".ui.Details.DetailsActivity" />
-        <activity android:name=".ui.InformationActivity"></activity>
+        <activity android:name=".ui.InformationActivity" />
+        <activity android:name=".setup.Setup_Activity"></activity>
     </application>
 
 </manifest>

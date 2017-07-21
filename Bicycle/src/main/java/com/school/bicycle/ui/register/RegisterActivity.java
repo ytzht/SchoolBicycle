@@ -15,6 +15,9 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Login;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.eposit.DepositActivity;
+import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.utils.Forms;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -162,6 +165,19 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                                 @Override
                                 public void onResponse(String response, int id) {
                                     Login login = gson.fromJson(response, Login.class);
+                                    if (login.getCode()==1){
+                                        if (login.getVerify_status()==1){
+                                            if (login.getDeposit_status()==1){
+                                                finish();
+                                            }else {
+                                                startActivity(DepositActivity.class);
+                                            }
+                                        }else {
+                                            startActivity(RealnameActivity.class);
+                                        }
+                                    }else {
+                                        showShort(login.getMsg());
+                                    }
 
                                 }
                             });

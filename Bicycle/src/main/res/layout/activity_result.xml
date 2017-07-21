@@ -5,37 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.school.bicycle.ui.result.ResultActivity">
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@color/actionbar"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="5dp"
-            android:paddingLeft="12dp"
-            android:id="@+id/iv_res_back"
-            android:src="@drawable/btn_arrow" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:id="@+id/te_reg_back"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </RelativeLayout>
     
     <ImageView
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:src="@drawable/ico_success"
-        android:layout_below="@+id/relativeLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
         android:id="@+id/iv_res_result"/>

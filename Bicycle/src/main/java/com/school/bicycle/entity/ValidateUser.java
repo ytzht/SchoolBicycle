@@ -1,10 +1,12 @@
 package com.school.bicycle.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/7/18.
  */
 
-public class ValidateUser {
+public class ValidateUser implements Serializable{
 
 
     /**
@@ -41,7 +43,7 @@ public class ValidateUser {
         this.body = body;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable {
         /**
          * user_id : 用户编号
          * phone : 手机号

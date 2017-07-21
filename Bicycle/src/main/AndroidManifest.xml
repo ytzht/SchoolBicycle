@@ -144,7 +144,8 @@
         <activity android:name=".ui.InformationActivity" />
         <activity android:name=".ui.setup.Setup_Activity" />
         <activity android:name=".ui.xingcheng_map_acvitity" />
-        <activity android:name=".ui.MyRoute.MyRoute_Activity"></activity>
+        <activity android:name=".ui.MyRoute.MyRoute_Activity" />
+        <activity android:name=".ui.User_Activity"></activity>
     </application>
 
 </manifest>

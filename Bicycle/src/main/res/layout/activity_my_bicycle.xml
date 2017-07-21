@@ -98,21 +98,21 @@
 
 
     <RelativeLayout
+        android:id="@+id/re_myTrip_mybiycle"
         android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:id="@+id/re_myTrip_mybiycle">
+        android:layout_height="39dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:gravity="center"
             android:paddingLeft="12dp"
             android:text="我的行程"
             android:textColor="@color/black"
-            android:textSize="17dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:textSize="17dp" />
 
         <ImageView
             android:layout_width="20dp"
@@ -123,6 +123,7 @@
             android:paddingRight="12dp"
             android:src="@drawable/mybic_next" />
     </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"

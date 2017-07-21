@@ -22,6 +22,8 @@ public interface Apis {
 
     String FailureReporting = "user/failureReporting";
 
+    String userLogout = "user/userLogout";
+
     String wallet = "order/wallet";
 
     String getMyMessage = "user/getMyMessage";

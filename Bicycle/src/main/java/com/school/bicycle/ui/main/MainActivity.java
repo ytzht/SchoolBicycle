@@ -47,6 +47,8 @@ import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
@@ -117,6 +119,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     TelephonyManager tm;
     String DEVICE_ID;
     ValidateUser v;
+    UserService userService = new UserService(MainActivity.this);
 
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
 
@@ -163,6 +166,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
         initClickListener();
         initmap();
+        initvalidateUser();
     }
 
     private void initvalidateUser() {
@@ -186,14 +190,15 @@ public class MainActivity extends BaseActivity implements IMainView,
                         Log.d("response", response);
                         v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
-                            // TODO: 2017/7/18 验证登录后更新界面
-                            name.setText(v.getBody().getPhone());
-                            if(v.getBody().getStatus()==1){
-                                score.setText("手机已认证");
-                            }else {
-                                score.setText("手机已认证");
-                            }
 
+                            userService.setValidateUser(response);
+
+                            name.setText(v.getBody().getPhone());
+                            if (v.getBody().getStatus() == 1) {
+                                score.setText("手机已认证");
+                            } else {
+                                score.setText("手机未认证");
+                            }
                         } else {
                             startActivity(RegisterActivity.class);
                         }
@@ -299,12 +304,19 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     @Override
     public void onStart() {
-        initvalidateUser();
+        if (userService.getValidateUser().isEmpty()){
+            name.setText("未登录");
+            score.setText("");
+        }else {
+
+        }
+
         super.onStart();
     }
 
     //点击事件
     private void initClickListener() {
+
 
         iv_pull = (ImageView) findViewById(R.id.iv_pull);
         ll_detail = (LinearLayout) findViewById(R.id.ll_detail);
@@ -318,6 +330,16 @@ public class MainActivity extends BaseActivity implements IMainView,
                 } else {
                     startActivity(RegisterActivity.class);
                 }
+
+            }
+        });
+
+        headImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(MainActivity.this, User_Activity.class);
+                it.putExtra("user", v);
+                startActivity(it);
 
             }
         });
@@ -520,7 +542,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(ZxingActivity.class);
             }
         });
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {

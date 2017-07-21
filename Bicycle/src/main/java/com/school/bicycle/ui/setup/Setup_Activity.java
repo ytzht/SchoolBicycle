@@ -1,4 +1,4 @@
-package com.school.bicycle.setup;
+package com.school.bicycle.ui.setup;
 
 import android.os.Bundle;
 import android.view.View;

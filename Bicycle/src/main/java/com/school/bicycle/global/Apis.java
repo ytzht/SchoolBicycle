@@ -16,6 +16,8 @@ public interface Apis {
 
     String getMyAppoint = "order/getMyAppoint";
 
+    String getMyRoute = "order/getMyRoute";
+
     String FailureList = "user/failureList";
 
     String FailureReporting = "user/failureReporting";

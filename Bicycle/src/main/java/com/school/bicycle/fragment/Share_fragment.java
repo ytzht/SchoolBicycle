@@ -1,6 +1,7 @@
 package com.school.bicycle.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,10 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.school.bicycle.R;
+import com.school.bicycle.adapter.Consumption_adapter;
+import com.school.bicycle.adapter.ShareDetails_adapter;
 import com.school.bicycle.entity.Consumption;
+import com.school.bicycle.entity.QueryShareDetails;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseFragment;
 import com.umeng.qq.tencent.BaseApi;
@@ -48,8 +52,12 @@ public class Share_fragment extends BaseFragment {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.d("re",response);
                         Gson gson  = new Gson();
-//                        Consumption consumption = gson.fromJson(response,Consumption.class);
+                        QueryShareDetails queryShareDetails = gson.fromJson(response,QueryShareDetails.class);
+                        ShareDetails_adapter c =
+                                new ShareDetails_adapter(getActivity(),queryShareDetails.getShare_details());
+                        consumption_listview.setAdapter(c);
 
                     }
                 });

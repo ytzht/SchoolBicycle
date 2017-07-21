@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.school.bicycle.setup.Setup_Activity">
+    tools:context=".ui.setup.Setup_Activity">
 
 
     <RelativeLayout

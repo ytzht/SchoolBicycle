@@ -1,12 +1,13 @@
 package com.school.bicycle.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/7/18.
  */
 
-public class GetMyRoute {
+public class GetMyRoute implements Serializable {
 
     /**
      * code : 1
@@ -42,7 +43,7 @@ public class GetMyRoute {
         this.body = body;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable {
         /**
          * rid : 1
          * user_id : 12
@@ -177,7 +178,7 @@ public class GetMyRoute {
             this.lines = lines;
         }
 
-        public static class LinesBean {
+        public static class LinesBean implements Serializable{
             /**
              * lid : 1
              * user_id : 12

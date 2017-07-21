@@ -42,22 +42,18 @@ import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
-import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
-import com.school.bicycle.ui.calendar.CalendarSelectActivity;
-import com.school.bicycle.ui.ScanQRCodeActivity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
-import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.mywallet.Mywallet_activity;
 import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.search.SearchActivity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -156,7 +152,6 @@ public class MainActivity extends BaseActivity implements IMainView,
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
         initClickListener();
         initmap();
-        initvalidateUser();
     }
 
     private void initvalidateUser() {
@@ -181,7 +176,13 @@ public class MainActivity extends BaseActivity implements IMainView,
                         v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
                             // TODO: 2017/7/18 验证登录后更新界面
-                            showShort(v.getMsg());
+                            name.setText(v.getBody().getPhone());
+                            if(v.getBody().getStatus()==1){
+                                score.setText("手机已认证");
+                            }else {
+                                score.setText("手机已认证");
+                            }
+
                         } else {
                             startActivity(RegisterActivity.class);
                         }
@@ -237,7 +238,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                 "order/getBikeMapList?locations="
                 + lon + "," + lat;
         Log.d("经纬度=", lon + "," + lat + "   " + url);
-//        String urlbug = "http://pos.xvo2o.com/xyxapi/order/getBikeMapList?locations=121.450397,37.486531";
 
         OkHttpUtils.get()
                 .url(url)
@@ -286,6 +286,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                 });
     }
 
+    @Override
+    public void onStart() {
+        initvalidateUser();
+        super.onStart();
+    }
 
     //点击事件
     private void initClickListener() {
@@ -403,9 +408,6 @@ public class MainActivity extends BaseActivity implements IMainView,
             startActivity(MyBicycleActivity.class);
         } else if (id == R.id.my_wallet) {
             startActivity(Mywallet_activity.class);
-//            new ShareAction(MainActivity.this).withText("hello")
-//                    .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA)
-//                    .setCallback(umShareListener).open();
         } else if (id == R.id.my_invitation) {
             startActivity(IvfriendsActivity.class);
         } else if (id == R.id.my_fault) {
@@ -415,7 +417,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_news) {
             startActivity(InformationActivity.class);
         } else if (id == R.id.my_set) {
-
+            startActivity(Setup_Activity.class);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -3,6 +3,7 @@ package com.school.bicycle.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -105,6 +106,7 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
         String str=getMyRoute.getBody().get(i).getStart_time().substring(2,10);
         mapStartTime.setText(str);
 
+        Log.d("getMyRoute",getMyRoute.getBody().get(i).toString());
         List<LatLng> latLngs = new ArrayList<LatLng>();
         for (int a = 0; a < getMyRoute.getBody().get(i).getLines().size(); a++) {
             latLngs.add(new LatLng(getMyRoute.getBody().get(i).getLines().get(a).getLat()

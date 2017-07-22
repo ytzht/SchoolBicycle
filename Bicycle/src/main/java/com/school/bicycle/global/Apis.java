@@ -28,6 +28,8 @@ public interface Apis {
 
     String getMyMessage = "user/getMyMessage";
 
+    String validateUser = "user/validateUser?device_id=";
+
     String StartShareMyBike = "order/startShareMyBike";
 
 }

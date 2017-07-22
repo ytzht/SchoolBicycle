@@ -173,7 +173,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
         String url = Apis.Base +
-                "user/validateUser?device_id="
+                Apis.validateUser
                 + DEVICE_ID;
 
         OkHttpUtils.get()
@@ -190,9 +190,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         Log.d("response", response);
                         v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
-
                             userService.setValidateUser(response);
-
                             name.setText(v.getBody().getPhone());
                             if (v.getBody().getStatus() == 1) {
                                 score.setText("手机已认证");
@@ -304,10 +302,10 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     @Override
     public void onStart() {
-        if (userService.getValidateUser().isEmpty()){
+        if (userService.getValidateUser().isEmpty()) {
             name.setText("未登录");
             score.setText("");
-        }else {
+        } else {
 
         }
 
@@ -325,11 +323,16 @@ public class MainActivity extends BaseActivity implements IMainView,
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (v.getCode() == 1) {
-                    startActivity(MainActivity.class);
-                } else {
+                if (v!=null){
+                    if (v.getCode() == 1) {
+                        startActivity(UseBicycleActivity.class);
+                    } else {
+                        startActivity(RegisterActivity.class);
+                    }
+                }else {
                     startActivity(RegisterActivity.class);
                 }
+
 
             }
         });
@@ -598,6 +601,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     private static final String TAG = "=====";
     List<CalendarDay> selectedDates;
+
     private void showAlert() {
 
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.useday_calendar, null, false);

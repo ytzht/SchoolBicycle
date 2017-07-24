@@ -26,6 +26,8 @@ public interface Apis {
 
     String wallet = "order/wallet";
 
+    String myBike = "order/myBike";
+
     String getMyMessage = "user/getMyMessage";
 
     String validateUser = "user/validateUser?device_id=";

@@ -17,6 +17,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
+import com.school.bicycle.entity.Mybiycle;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.ui.MyRoute.MyRoute_Activity;
@@ -53,6 +54,10 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     RelativeLayout reMyReservationMybiycle;
     @BindView(R.id.re_mypolice_mybiycle)
     RelativeLayout reMypoliceMybiycle;
+    @BindView(R.id.bike_number)
+    TextView bikeNumber;
+    @BindView(R.id.share_income)
+    TextView shareIncome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +65,40 @@ public class MyBicycleActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_my_bicycle);
         ButterKnife.bind(this);
         setToolbarText("我的车辆");
+        initview();
+    }
+
+    private void initview() {
+
+        String url = Apis.Base +
+                Apis.myBike;
+        OkHttpUtils.get()
+                .url(url)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d("response", response);
+                        Mybiycle m = gson.fromJson(response, Mybiycle.class);
+                        if (m.getCode() == 1) {
+                            bikeNumber.setText(m.getBike_number());
+                            shareIncome.setText(m.getShare_income());
+                        } else {
+                            showShort(m.getMsg());
+                        }
+                    }
+                });
+
     }
 
     private AlertDialog dialog;
-    
-    
+
+
     @OnClick({R.id.re_biyclenum_mybiycle, R.id.re_Income_mybiycle, R.id.re_myTrip_mybiycle, R.id.re_mystate_mybiycle, R.id.re_myReservation_mybiycle, R.id.re_mypolice_mybiycle})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -84,13 +118,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_myReservation_mybiycle:
                 //共享设置
-
-
                 showAlert();
-
-
-
-                
                 break;
             case R.id.re_mypolice_mybiycle:
                 //报警
@@ -99,14 +127,12 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     }
 
 
-
-
-
     private static final String TAG = "=====";
     private MaterialCalendarView myCalendar;
     private TextView tv_ok, tv_cancel;
 
     private CheckBox cal_cb;
+
     private void showAlert() {
 
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.mybiycle_calendar, null, false);
@@ -121,7 +147,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if (cal_cb.isChecked()){
+                if (cal_cb.isChecked()) {
                     List<CalendarDay> selectedDates = myCalendar.getSelectedDates();
 
                     String s = "";
@@ -152,12 +178,12 @@ public class MyBicycleActivity extends BaseToolBarActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Log.d(TAG, "onResponse: "+response);
+                                Log.d(TAG, "onResponse: " + response);
                                 BaseResult result = (new Gson()).fromJson(response, BaseResult.class);
-                                if (result.getCode() == 1){
+                                if (result.getCode() == 1) {
                                     showShort(result.getMsg());
                                     if (dialog.isShowing()) dialog.dismiss();
-                                }else {
+                                } else {
                                     showShort(result.getMsg());
                                 }
                             }
@@ -165,7 +191,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                     } else {
                         showShort("请选择日期");
                     }
-                }else {
+                } else {
                     new AlertDialog.Builder(MyBicycleActivity.this).setTitle("提示").setMessage("请仔细阅读共享协议，如果同意请勾选以继续")
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
@@ -174,7 +200,6 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                                 }
                             }).show();
                 }
-
 
 
             }
@@ -217,11 +242,11 @@ public class MyBicycleActivity extends BaseToolBarActivity {
 //
 //                } else {
 
-                    if (selected) {
-                        myCalendar.setDateSelected(date, true);
-                    } else {
-                        myCalendar.setDateSelected(date, false);
-                    }
+                if (selected) {
+                    myCalendar.setDateSelected(date, true);
+                } else {
+                    myCalendar.setDateSelected(date, false);
+                }
 //                }
 //                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
 
@@ -255,6 +280,6 @@ public class MyBicycleActivity extends BaseToolBarActivity {
 //        myCalendar.setDateSelected(date1, true);
 //        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1);
     }
-    
-    
+
+
 }

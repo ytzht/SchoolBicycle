@@ -34,6 +34,7 @@
                 android:layout_centerVertical="true"
                 android:gravity="center"
                 android:text="000001"
+                android:id="@+id/bike_number"
                 android:textColor="@color/white"
                 android:textSize="22dp" />
 
@@ -83,6 +84,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:gravity="center"
+                android:id="@+id/share_income"
                 android:text="206.53元"
                 android:textColor="@color/white"
                 android:textSize="22dp" />

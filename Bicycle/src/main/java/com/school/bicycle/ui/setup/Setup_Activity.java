@@ -54,7 +54,6 @@ public class Setup_Activity extends BaseToolBarActivity {
             case R.id.setup_aboutus:
                 break;
             case R.id.setup_userLogout:
-
                 break;
         }
     }

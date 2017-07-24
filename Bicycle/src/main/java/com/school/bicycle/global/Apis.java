@@ -26,6 +26,8 @@ public interface Apis {
 
     String wallet = "order/wallet";
 
+    String cancelMyAppoint = "order/cancelMyAppoint";
+
     String myBike = "order/myBike";
 
     String getMyMessage = "user/getMyMessage";

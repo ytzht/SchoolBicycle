@@ -1,11 +1,15 @@
 package com.school.bicycle.ui.Myeserve;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.adapter.Myreserve_adapter;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.MyAppoint;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
@@ -16,10 +20,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 
-public class MyReserveActivity extends BaseToolBarActivity {
+public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_adapter.Callback {
 
     @BindView(R.id.myreserve_list)
     ListView myreserveList;
+
+    MyAppoint myAppoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +37,7 @@ public class MyReserveActivity extends BaseToolBarActivity {
     }
 
     private void initview() {
-        String url = Apis.Base +
-                Apis.getMyAppoint;
+        String url = Apis.Base + Apis.getMyAppoint;
 
         OkHttpUtils.get()
                 .url(url)
@@ -46,16 +51,65 @@ public class MyReserveActivity extends BaseToolBarActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response", response);
-                        MyAppoint myAppoint = gson.fromJson(response, MyAppoint.class);
+                        myAppoint = gson.fromJson(response, MyAppoint.class);
                         if (myAppoint.getCode() == 1) {
-                            Myreserve_adapter myreserve_adapter = new Myreserve_adapter(MyReserveActivity.this,myAppoint.getMy_appoint());
+                            Myreserve_adapter myreserve_adapter = new Myreserve_adapter(MyReserveActivity.this, myAppoint.getMy_appoint(), MyReserveActivity.this);
                             myreserveList.setAdapter(myreserve_adapter);
                         } else {
                             showShort(myAppoint.getMsg());
                         }
-
                     }
                 });
+    }
+
+    @Override
+    public void ondetialClick(View v) {
+
+
+    }
+
+    @Override
+    public void oncancleClick(final View view) {
+        Log.d("AlertDialog","AlertDialog");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("据用车时间少于24h，\n取消将扣除10%手续费，是否取消");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String url = Apis.Base + Apis.cancelMyAppoint;
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addParams("aid", String.valueOf(myAppoint.getMy_appoint().get((Integer) view.getTag()).getAid()))
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+                                if (baseResult.getCode()==1){
+                                    showShort(baseResult.getMsg());
+                                    initview();
+                                    myreserveList.refreshDrawableState();
+                                }else {
+                                    showShort("取消失败");
+                                }
+                            }
+                        });
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
 
 
     }

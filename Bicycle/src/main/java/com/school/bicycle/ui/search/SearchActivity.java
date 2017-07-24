@@ -19,8 +19,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.R.id.list;
-
 public class SearchActivity extends BaseToolBarActivity {
 
 
@@ -43,12 +41,17 @@ public class SearchActivity extends BaseToolBarActivity {
 
     private void myCalendarInit() {
         myCalendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
-        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Large);
-        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Small);
         myCalendar.setSelected(false);
         myCalendar.setEnabled(false);
         myCalendar.setClickable(false);
+        CalendarDay today = CalendarDay.today();
+        myCalendar.state().edit()
+                .setMinimumDate(CalendarDay.today())
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
         init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
         myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {

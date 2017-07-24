@@ -19,7 +19,6 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
 import com.school.bicycle.adapter.QuerytBikeListByDate_adapter;
-import com.school.bicycle.adapter.Usebicycle_adapter;
 import com.school.bicycle.entity.QueryBikeListByBikeNumber;
 import com.school.bicycle.entity.QueryBikeListByDate;
 import com.school.bicycle.global.Apis;
@@ -196,12 +195,17 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
     public void myCalendarInit() {
         myCalendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
-        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Large);
-        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Small);
         myCalendar.setSelected(false);
         myCalendar.setEnabled(false);
         myCalendar.setClickable(false);
+        CalendarDay today = CalendarDay.today();
+        myCalendar.state().edit()
+                .setMinimumDate(CalendarDay.today())
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
 //        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
         myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {

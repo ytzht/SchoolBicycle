@@ -2,6 +2,7 @@ package com.school.bicycle.ui.MyRoute;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,8 +16,6 @@ import com.school.bicycle.ui.xingcheng_map_acvitity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.Serializable;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
@@ -24,6 +23,7 @@ import okhttp3.Call;
 public class MyRoute_Activity extends BaseToolBarActivity {
 
 
+    private static final String TAG = "MyRouteAct=====";
     @BindView(R.id.getMyRoute_list)
     ListView getMyRouteList;
 
@@ -53,6 +53,7 @@ public class MyRoute_Activity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        Log.d(TAG, "onResponse: "+response);
                         getMyRoute = gson.fromJson(response, GetMyRoute.class);
                         GetMyRoute_adapter getMyRouteAdapter = new GetMyRoute_adapter(MyRoute_Activity.this, getMyRoute.getBody());
                         getMyRouteList.setAdapter(getMyRouteAdapter);

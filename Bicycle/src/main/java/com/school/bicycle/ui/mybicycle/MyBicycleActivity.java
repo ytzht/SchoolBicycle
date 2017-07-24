@@ -218,12 +218,17 @@ public class MyBicycleActivity extends BaseToolBarActivity {
 
     public void myCalendarInit() {
         myCalendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
-        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Small);
         myCalendar.setSelected(false);
         myCalendar.setEnabled(false);
         myCalendar.setClickable(false);
+        CalendarDay today = CalendarDay.today();
+        myCalendar.state().edit()
+                .setMinimumDate(CalendarDay.today())
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
 //        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
         myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {

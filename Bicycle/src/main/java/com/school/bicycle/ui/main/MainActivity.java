@@ -48,18 +48,17 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.User_Activity;
-import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
+import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.mywallet.Mywallet_activity;
 import com.school.bicycle.ui.register.RegisterActivity;
-import com.school.bicycle.ui.search.SearchActivity;
+import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
 import com.school.bicycle.utils.MySelectorDecorator;
@@ -653,12 +652,17 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     public void myCalendarInit() {
         myCalendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
-        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Large);
-        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+        myCalendar.setHeaderTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setDateTextAppearance(R.style.TextAppearance_AppCompat_Small);
+        myCalendar.setWeekDayTextAppearance(R.style.TextAppearance_AppCompat_Small);
         myCalendar.setSelected(false);
         myCalendar.setEnabled(false);
         myCalendar.setClickable(false);
+        CalendarDay today = CalendarDay.today();
+        myCalendar.state().edit()
+                .setMinimumDate(CalendarDay.today())
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
 //        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
         myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {
@@ -672,22 +676,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
 
                 selectedDates = myCalendar.getSelectedDates();
-                if (selectedDates.size() > 0) {
-                    String s = "";
-                    for (int i = 0; i < selectedDates.size(); i++) {
-                        String format = new SimpleDateFormat("yyyy-MM-dd").format(selectedDates.get(i).getDate());
-                        Log.d(TAG, "onClick: " + format);
-                        if (selectedDates.size() == i + 1) {
-                            s = s + format;
-                        } else {
-                            s = s + format + ",";
-                        }
-                    }
 
-                    Log.d(TAG, "onDateSelected: " + s);
-                    tv_dates.setText(s);
-
-                }
                 if (widget.getSelectedDates().size() > 5) {
 
                     new AlertDialog.Builder(MainActivity.this).setTitle("提示").setMessage("天数选择超限")
@@ -705,6 +694,24 @@ public class MainActivity extends BaseActivity implements IMainView,
                         myCalendar.setDateSelected(date, true);
                     } else {
                         myCalendar.setDateSelected(date, false);
+                    }
+
+
+                    if (selectedDates.size() > 0) {
+                        String s = "";
+                        for (int i = 0; i < selectedDates.size(); i++) {
+                            String format = new SimpleDateFormat("yyyy-MM-dd").format(selectedDates.get(i).getDate());
+                            Log.d(TAG, "onClick: " + format);
+                            if (selectedDates.size() == i + 1) {
+                                s = s + format;
+                            } else {
+                                s = s + format + ",";
+                            }
+                        }
+
+                        Log.d(TAG, "onDateSelected: " + s);
+                        tv_dates.setText(s);
+
                     }
                 }
 //                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);

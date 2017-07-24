@@ -37,12 +37,14 @@
         android:layout_width="75dp"
         android:layout_height="25dp"
         android:gravity="center"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="10dp"
         android:text="结束用车"
-        android:layout_alignParentRight="true"
+        android:id="@+id/finish_usecar"
         android:textColor="@color/white"
-        android:background="@drawable/bg_org"/>
+        android:background="@drawable/bg_org"
+        android:layout_alignBaseline="@+id/use_no"
+        android:layout_alignBottom="@+id/use_no"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <View
         android:id="@+id/view_divider"

@@ -34,4 +34,12 @@ public class PreferencesUtils {
     }
 
 
+    public String getState() {
+        return mSharedPreferences.getString("State", "");
+    }
+
+    public void setState(String user) {
+        mEditor.putString("State", user).commit();
+    }
+
 }

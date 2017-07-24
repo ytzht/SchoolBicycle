@@ -46,8 +46,11 @@ import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
+import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.User_Activity;
+import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
@@ -98,11 +101,10 @@ public class MainActivity extends BaseActivity implements IMainView,
     //    @BindView(R.id.ll_detail)
     private LinearLayout ll_detail;
     private RelativeLayout useing_biycle_lay;
-
-
+    private RelativeLayout state_0;
     private IMainPresenter iMainPresenter;
     private ImageView headImg;
-    private TextView name, score;
+    private TextView name, score,finish_usecar;
     double lat;//获取纬度
     double lon;//获取经度
     AMapLocation aMapLocation;
@@ -118,7 +120,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     TelephonyManager tm;
     String DEVICE_ID;
     ValidateUser v;
-    UserService userService = new UserService(MainActivity.this);
+
 
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
 
@@ -163,9 +165,34 @@ public class MainActivity extends BaseActivity implements IMainView,
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
+        initview();
         initClickListener();
         initmap();
         initvalidateUser();
+
+    }
+
+    private void initview() {
+
+        iv_pull = (ImageView) findViewById(R.id.iv_pull);
+        ll_detail = (LinearLayout) findViewById(R.id.ll_detail);
+        state_0 = (RelativeLayout) findViewById(R.id.state_0);
+        finish_usecar = (TextView) findViewById(R.id.finish_usecar);
+        useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
+        if (new UserService(MainActivity.this).getState().equals("1")) {
+            state_0.setVisibility(View.GONE);
+            useing_biycle_lay.setVisibility(View.VISIBLE);
+            // TODO: 2017/7/24 用车中
+            toolbar.setTitle("用车中");
+
+        } else if (new UserService(MainActivity.this).getState().equals("0")) {
+            state_0.setVisibility(View.VISIBLE);
+            useing_biycle_lay.setVisibility(View.GONE);
+            // TODO: 2017/7/24 未用车
+            toolbar.setTitle("首页");
+        }
+
+
     }
 
     private void initvalidateUser() {
@@ -189,7 +216,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         Log.d("response", response);
                         v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
-                            userService.setValidateUser(response);
+                            new UserService(MainActivity.this).setValidateUser(response);
                             name.setText(v.getBody().getPhone());
                             if (v.getBody().getStatus() == 1) {
                                 score.setText("手机已认证");
@@ -301,12 +328,13 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     @Override
     public void onStart() {
-        if (userService.getValidateUser().isEmpty()) {
+        if (new UserService(MainActivity.this).getValidateUser().isEmpty()) {
             name.setText("未登录");
             score.setText("");
         } else {
 
         }
+
 
         super.onStart();
     }
@@ -315,24 +343,28 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void initClickListener() {
 
 
-        iv_pull = (ImageView) findViewById(R.id.iv_pull);
-        ll_detail = (LinearLayout) findViewById(R.id.ll_detail);
-        useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
-        useing_biycle_lay.setVisibility(View.GONE);
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (v!=null){
+                if (v != null) {
                     if (v.getCode() == 1) {
                         startActivity(UseBicycleActivity.class);
                     } else {
                         startActivity(RegisterActivity.class);
                     }
-                }else {
+                } else {
                     startActivity(RegisterActivity.class);
                 }
 
 
+            }
+        });
+
+        finish_usecar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UserService(MainActivity.this).setState("0");
+                initview();
             }
         });
 
@@ -385,6 +417,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
+        initview();
     }
 
     @Override
@@ -544,7 +577,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(ZxingActivity.class);
+                startActivity(ResultActivity.class, "type", "time");
             }
         });
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {

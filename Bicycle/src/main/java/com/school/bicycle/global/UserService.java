@@ -14,6 +14,7 @@ public class UserService {
     private static final String ACCOUNT = "_account_";
     private static final String PWD = "_pwd_";
     private static final String ValidateUser = "_ValidateUser_";
+    private static final String State = "state";
 
     public UserService(Context context) {
         this.context = context;
@@ -58,6 +59,20 @@ public class UserService {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 USER_PREFS, Context.MODE_PRIVATE);
         return memberPrefs.getString(ValidateUser, "");
+
+    }
+
+    public void setState(String state) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(State, state).apply();
+    }
+
+
+    public String getState() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        return memberPrefs.getString(State, "0");
 
     }
 

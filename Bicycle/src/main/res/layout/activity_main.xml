@@ -25,34 +25,46 @@
         android:layout_centerVertical="true"
         android:src="@drawable/ico_pin" />
 
-    <ImageView
-        android:id="@+id/fab_refresh"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/state_0"
         android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
-        android:src="@drawable/btn_refresh" />
+        android:layout_marginBottom="35dp"
+        >
 
-    <Button
-        android:id="@+id/btn_use"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="25dp"
-        android:background="@drawable/btn_button"
-        android:text="立即用车"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        <ImageView
+            android:id="@+id/fab_refresh"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:src="@drawable/btn_refresh" />
 
-    <ImageView
-        android:id="@+id/fab_qr"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="20dp"
-        android:src="@drawable/btn_scan" />
+        <Button
+            android:id="@+id/btn_use"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="25dp"
+            android:background="@drawable/btn_button"
+            android:text="立即用车"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/fab_qr"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"
+            android:src="@drawable/btn_scan" />
+
+    </RelativeLayout>
+
+
 
     <RelativeLayout
         android:layout_alignParentBottom="true"

@@ -125,7 +125,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <TextView
@@ -138,7 +138,7 @@
             android:textColor="@color/all_textc" />
 
         <TextView
-            android:layout_width="17dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content" />
 
         <TextView

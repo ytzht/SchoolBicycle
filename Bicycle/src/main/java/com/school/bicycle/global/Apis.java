@@ -20,11 +20,17 @@ public interface Apis {
 
     String FailureList = "user/failureList";
 
+    String depositRefund = "user/depositRefund";
+
+    String withdraw = "user/withdraw";
+
     String FailureReporting = "user/failureReporting";
 
     String userLogout = "user/userLogout";
 
-    String wallet = "order/wallet";
+    String getUserInfo = "user/getUserInfo";
+
+    String wallet = "user/wallet";
 
     String cancelMyAppoint = "order/cancelMyAppoint";
 

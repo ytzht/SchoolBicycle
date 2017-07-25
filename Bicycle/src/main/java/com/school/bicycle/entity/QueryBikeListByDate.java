@@ -12,7 +12,7 @@ public class QueryBikeListByDate {
     /**
      * code : 1
      * msg : 操作成功
-     * bike_info : [{"log":"121.450111","lat":"37.486985","number":"011151","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.450397","lat":"37.486531","number":"011154","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.442166","lat":"37.477763","number":"011140","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.442166","lat":"37.477763","number":"01184","type":"单人车","color":"green","lease_info":{"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"},"valid_time":"ALL"},{"log":"121.450685","lat":"37.486472","number":"011130","type":"单人车","color":"yellow","valid_time":["2017-06-25"],"lease_info":{"时租":"2","日租":"30"}}]
+     * bike_info : [{"log":"121.450685","lat":"37.486472","number":"011001","type":"1","color":"green","valid_time":[]}]
      */
 
     private int code;
@@ -45,13 +45,12 @@ public class QueryBikeListByDate {
 
     public static class BikeInfoBean {
         /**
-         * log : 121.450111
-         * lat : 37.486985
-         * number : 011151
-         * type : 单人车
+         * log : 121.450685
+         * lat : 37.486472
+         * number : 011001
+         * type : 1
          * color : green
-         * lease_info : {"时租":"2","日租":"30","月租":"100","季租":"180","半年租":"300","年租":"500"}
-         * valid_time : ALL
+         * valid_time : []
          */
 
         private double log;
@@ -59,8 +58,17 @@ public class QueryBikeListByDate {
         private String number;
         private String type;
         private String color;
+        private String address;
+        private List<?> valid_time;
         private LeaseInfoBean lease_info;
-        private String valid_time;
+
+        public String getAdress() {
+            return address;
+        }
+
+        public void setAdress(String adress) {
+            this.address = adress;
+        }
 
         public double getLog() {
             return log;
@@ -102,20 +110,20 @@ public class QueryBikeListByDate {
             this.color = color;
         }
 
+        public List<?> getValid_time() {
+            return valid_time;
+        }
+
+        public void setValid_time(List<?> valid_time) {
+            this.valid_time = valid_time;
+        }
+
         public LeaseInfoBean getLease_info() {
             return lease_info;
         }
 
         public void setLease_info(LeaseInfoBean lease_info) {
             this.lease_info = lease_info;
-        }
-
-        public String getValid_time() {
-            return valid_time;
-        }
-
-        public void setValid_time(String valid_time) {
-            this.valid_time = valid_time;
         }
 
         public static class LeaseInfoBean {

@@ -3,12 +3,14 @@ package com.school.bicycle.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
+import com.school.bicycle.entity.User;
 import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
@@ -44,15 +46,34 @@ public class User_Activity extends BaseToolBarActivity {
     }
 
     private void initview() {
-        Intent it = getIntent();
-        ValidateUser v = (ValidateUser) it.getSerializableExtra("user");
-        userName.setText(v.getBody().getUser_id());
-        userPhone.setText(v.getBody().getPhone());
+
+        final String url = Apis.Base + Apis.getUserInfo;
+        OkHttpUtils.get()
+                .url(url)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d("response",response);
+                        User user = gson.fromJson(response, User.class);
+                        if (user.getCode() == 1) {
+                            userName.setText(user.getName());
+                            userPhone.setText(user.getPhone());
+                        }
+                    }
+                });
+
+
         Signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String url = Apis.Base +Apis.userLogout ;
+                String url = Apis.Base + Apis.userLogout;
                 OkHttpUtils.get()
                         .url(url)
                         .build()
@@ -64,13 +85,13 @@ public class User_Activity extends BaseToolBarActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                BaseResult b = gson.fromJson(response,BaseResult.class);
-                                if (b.getCode()==1){
+                                BaseResult b = gson.fromJson(response, BaseResult.class);
+                                if (b.getCode() == 1) {
                                     showShort(b.getMsg());
                                     UserService userService = new UserService(User_Activity.this);
                                     userService.setValidateUser("");
                                     finish();
-                                }else {
+                                } else {
                                     showShort(b.getMsg());
                                 }
                             }

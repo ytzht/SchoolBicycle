@@ -50,7 +50,27 @@ public class ResultActivity extends BaseToolBarActivity {
                     finish();
                 }
             });
-        } else {
+        } else if (type.equals("yajin")){
+            teResResult.setText("押金将在2个工作日内转入到\n您的押金支付账户内");
+            btResNext.setText("返回主界面");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }else if (type.equals("tixian")){
+            teResResult.setText("提现金额将在2个工作日内转入到\n您的押金支付账户内");
+            btResNext.setText("返回主界面");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new UserService(ResultActivity.this).settixian("1");
+                    finish();
+                }
+            });
+
+        }else {
             // TODO: 2017/7/24 用于设置各个界面跳转到当前界面 该界面的显示
         }
     }

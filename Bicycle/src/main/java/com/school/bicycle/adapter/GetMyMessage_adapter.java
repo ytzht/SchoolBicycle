@@ -59,7 +59,6 @@ public class GetMyMessage_adapter extends BaseAdapter {
         }
 
         viewHolde.mymessageTitle.setText( data.get(i).getTitle());
-        viewHolde.mymessageContent.setText(data.get(i).getContent());
 
         return view;
     }
@@ -68,8 +67,6 @@ public class GetMyMessage_adapter extends BaseAdapter {
     static class ViewHolder {
         @BindView(R.id.mymessage_title)
         TextView mymessageTitle;
-        @BindView(R.id.mymessage_content)
-        TextView mymessageContent;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

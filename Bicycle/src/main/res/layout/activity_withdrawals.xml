@@ -25,10 +25,11 @@
         android:layout_height="30dp"
         android:orientation="horizontal"
         android:background="@drawable/txshape"
+        android:layout_marginTop="13dp"
+        android:id="@+id/linearLayout4"
         android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:id="@+id/linearLayout4">
+        android:layout_alignRight="@+id/textView6"
+        android:layout_alignEnd="@+id/textView6">
         <ImageView
             android:layout_width="21dp"
             android:layout_height="20dp"
@@ -40,6 +41,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/edit_Withdrawals"
+            android:inputType="number"
             android:background="@null"/>
         
     </LinearLayout>
@@ -52,13 +55,13 @@
         android:layout_below="@+id/linearLayout4"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:id="@+id/textView5" />
+        android:id="@+id/getShare_income_Withdrawals" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="提现金额将在2个工作日内退回到"
-        android:layout_below="@+id/textView5"
+        android:layout_below="@+id/getShare_income_Withdrawals"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:textSize="15dp"
@@ -83,6 +86,7 @@
         android:text="确认提现"
         android:textColor="@color/white"
         android:gravity="center"
+        android:id="@+id/ok_Withdrawals"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="31dp" />

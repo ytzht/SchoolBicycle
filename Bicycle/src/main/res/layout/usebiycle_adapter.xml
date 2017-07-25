@@ -24,7 +24,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="车牌号:" />
+                android:textColor="@color/all_textc" />
 
             <TextView
                 android:id="@+id/tv_Distance_ada"
@@ -32,7 +32,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="距离:" />
+                android:textColor="@color/all_textc" />
 
 
         </LinearLayout>
@@ -51,6 +51,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text="共享时段：" />
+        android:textColor="@color/all_textc" />
 
 </LinearLayout>

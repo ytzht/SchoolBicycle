@@ -51,33 +51,104 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:paddingLeft="5dp"
-            android:background="@drawable/mrshape">
+            android:background="@drawable/mrshape"
+            android:paddingLeft="5dp">
 
             <EditText
+                android:id="@+id/ll_search_bicyclenum_num"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
 
-                android:background="@null"
-                android:id="@+id/ll_search_bicyclenum_num"/>
+                android:layout_weight="1"
+                android:background="@null" />
 
             <TextView
+                android:id="@+id/ll_search_bicyclenum_sure"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="取消"
-                android:id="@+id/ll_search_bicyclenum_sure"/>
+                android:text="取消" />
 
         </LinearLayout>
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/ll_search_bicyclenum"
+        android:id="@+id/usebiycle_bynum"
+        android:padding="20dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/usebiycle_bynum_biyclenum"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/all_textc" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="地点：" />
+
+                    <TextView
+                        android:id="@+id/usebiycle_bynum_biycleaddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/all_textc" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_usebiycle_bynum_biycleaddress"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:src="@drawable/ico_bicycle_yellow" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/usebiycle_bynum_biycletime"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="@color/all_textc" />
+
+    </LinearLayout>
+
     <ListView
+        android:id="@+id/lv_show_usebicycle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_show_usebicycle"
-        android:layout_below="@+id/ll_search_bicyclenum" />
+        android:layout_below="@+id/usebiycle_bynum" />
 
 
 </RelativeLayout>

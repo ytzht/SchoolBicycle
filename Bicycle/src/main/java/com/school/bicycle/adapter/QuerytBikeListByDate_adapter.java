@@ -61,7 +61,7 @@ public class QuerytBikeListByDate_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
         viewHolde.tvBiyclenumAda.setText("车牌号："+ data.get(i).getNumber());
-        viewHolde.tvDistanceAda.setText("地点："+data.get(i).getAdress());
+        viewHolde.tvDistanceAda.setText(data.get(i).getAdress());
         if (data.get(i).getColor().equals("yellow")){
             viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_yellow);
             viewHolde.tvSharingtimeAda.setText("共享时间："+data.get(i).getValid_time());

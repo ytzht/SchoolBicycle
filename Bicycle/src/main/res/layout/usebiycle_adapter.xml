@@ -26,13 +26,23 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/all_textc" />
 
-            <TextView
-                android:id="@+id/tv_Distance_ada"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textColor="@color/all_textc" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地点："/>
+                <TextView
+                    android:id="@+id/tv_Distance_ada"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/all_textc" />
+            </LinearLayout>
+
 
 
         </LinearLayout>
@@ -41,6 +51,7 @@
             android:id="@+id/iv_bicycle_ada"
             android:layout_width="80dp"
             android:layout_height="match_parent"
+            android:padding="5dp"
             android:src="@drawable/ico_bicycle_yellow" />
 
     </LinearLayout>

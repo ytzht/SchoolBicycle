@@ -70,7 +70,7 @@
                 android:layout_below="@+id/tv_time_info"
                 android:layout_marginTop="7dp"
                 android:paddingLeft="7dp"
-                android:text="时租：2元/小时"
+                android:text="日租：2元/小时"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 
@@ -131,7 +131,7 @@
             android:layout_width="70dp"
             android:layout_height="27dp"
 
-            android:text="时租"
+            android:text="日租"
             android:id="@+id/tv_tirentbt_info"
             android:textColor="@color/chengse"
             android:gravity="center"/>

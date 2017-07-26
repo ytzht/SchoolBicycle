@@ -230,11 +230,11 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
                 .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
-//        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
+//        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);
         myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-//                signDataInit(date.getYear(), date.getMonth() + 1);
+//                signDataInit(date.getYear(), date.get月租() + 1);
             }
         });
         myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -253,7 +253,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                     myCalendar.setDateSelected(date, false);
                 }
 //                }
-//                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
+//                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);
 
             }
         });
@@ -283,7 +283,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
         myCalendar.addDecorators(new MySelectorDecorators(this), new SelectDecorator(this, date1));
 
 //        myCalendar.setDateSelected(date1, true);
-//        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1);
+//        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1);
     }
 
 

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -53,6 +54,16 @@ public class UseBicycleActivity extends BaseToolBarActivity {
     LinearLayout llSearchBicyclenum;
     @BindView(R.id.lv_show_usebicycle)
     ListView lvShowUsebicycle;
+    @BindView(R.id.usebiycle_bynum_biyclenum)
+    TextView usebiycleBynumBiyclenum;
+    @BindView(R.id.usebiycle_bynum_biycleaddress)
+    TextView usebiycleBynumBiycleaddress;
+    @BindView(R.id.usebiycle_bynum_biycletime)
+    TextView usebiycleBynumBiycletime;
+    @BindView(R.id.usebiycle_bynum)
+    LinearLayout usebiycleBynum;
+    @BindView(R.id.iv_usebiycle_bynum_biycleaddress)
+    ImageView ivUsebiycleBynumBiycleaddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +71,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_use_bicycle);
         ButterKnife.bind(this);
         setToolbarText("用车列表");
+        usebiycleBynum.setVisibility(View.GONE);
         llSearchBicyclenum.setVisibility(View.GONE);
         llSearchBicyclenumNum.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         //软键盘搜索
@@ -87,8 +99,18 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                     if (queryBikeListByBikeNumber.getCode() == 0) {
                                         showShort(queryBikeListByBikeNumber.getMsg());
                                     } else {
-//                                        Usebicycle_adapter usebicycle_adapter = new Usebicycle_adapter(getBaseContext(), queryBikeListByBikeNumber.getBike_info());
-//                                        lvShowUsebicycle.setAdapter(usebicycle_adapter);
+                                        usebiycleBynum.setVisibility(View.VISIBLE);
+                                        lvShowUsebicycle.setVisibility(View.GONE);
+                                        usebiycleBynumBiyclenum.setText("车牌号："+queryBikeListByBikeNumber.getBike_info().getNumber());
+                                        usebiycleBynumBiycleaddress.setText(queryBikeListByBikeNumber.getBike_info().getAddress());
+
+                                        if (queryBikeListByBikeNumber.getBike_info().getColor().equals("yellow")) {
+                                            ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_yellow);
+                                            usebiycleBynumBiycletime.setText("共享时间：" +queryBikeListByBikeNumber.getBike_info().getValid_time());
+                                        } else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("green")) {
+                                            ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_green);
+                                            usebiycleBynumBiycletime.setText("随时可用");
+                                        }
                                     }
 
                                 }
@@ -155,7 +177,6 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                     }
 
                     Log.d(TAG, s);
-                    // TODO: 2017/7/18 接口25
                     String url = Apis.Base + Apis.queryBikeListByDate;
                     OkHttpUtils
                             .post()
@@ -171,6 +192,8 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
+                                    usebiycleBynum.setVisibility(View.GONE);
+                                    lvShowUsebicycle.setVisibility(View.VISIBLE);
                                     Log.d("response", response);
                                     QueryBikeListByDate queryBikeListByDate = gson.fromJson(response, QueryBikeListByDate.class);
                                     if (queryBikeListByDate.getCode() == 0) {
@@ -180,7 +203,6 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                         lvShowUsebicycle.setAdapter(querytBikeListByDate_adapter);
                                         dialog.dismiss();
                                     }
-
                                 }
                             });
                 } else {
@@ -207,11 +229,11 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                 .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
                 .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
-//        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
+//        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);
         myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-//                signDataInit(date.getYear(), date.getMonth() + 1);
+//                signDataInit(date.getYear(), date.get月租() + 1);
             }
         });
         myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -237,13 +259,13 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                         myCalendar.setDateSelected(date, false);
                     }
                 }
-//                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);
+//                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);
 
             }
         });
         OneDayDecorator oneDayDecorator = new OneDayDecorator();//今天
         myCalendar.addDecorators(new MySelectorDecorator(this), new HighlightWeekendsDecorator(this), oneDayDecorator);
 
-//        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1);
+//        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1);
     }
 }

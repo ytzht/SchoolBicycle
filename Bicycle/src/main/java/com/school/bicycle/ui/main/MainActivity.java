@@ -448,7 +448,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.drawer, menu);
+        // getMenuInflater().inflate(R.menu.drawer, menu);
         return true;
     }
 
@@ -554,7 +554,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
         tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
         tv_lorentbt_info = (TextView) view.findViewById(R.id.tv_lorentbt_info);
-        GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
+        final GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
         tv_bicyclenum_info.setText("车牌号：" + data.getNumber());
         tv_distance_info.setText("距离：" + data.getDistance() + "m");
         tv_time_info.setText("在租时段" + data.getValid_time());
@@ -571,7 +571,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             @Override
             public void onClick(View view) {
 
-                startActivity(LongTimeLeaseActivity.class);
+                startActivity(LongTimeLeaseActivity.class,"biyclenum",data.getNumber());
 
             }
         });

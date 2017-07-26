@@ -16,6 +16,8 @@ public interface Apis {
 
     String getMyAppoint = "order/getMyAppoint";
 
+    String longLeaseOrder = "order/longLeaseOrder";
+
     String getMyRoute = "order/getMyRoute";
 
     String FailureList = "user/failureList";

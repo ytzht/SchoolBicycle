@@ -3,24 +3,35 @@ package com.school.bicycle.ui.longtimeLease;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.GetLongLeaseInfo;
+import com.school.bicycle.entity.PayInfo;
+import com.school.bicycle.entity.PayResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.mayubao.pay_library.AliPayReq2;
+import io.github.mayubao.pay_library.PayAPI;
 import okhttp3.Call;
 
 public class LongTimeLeaseActivity extends BaseToolBarActivity {
@@ -121,7 +132,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                     }
                 });
     }
-
+    String info;
     @OnClick({R.id.month1, R.id.month3, R.id.month6, R.id.month12, R.id.wx_icon, R.id.tv_okpay, R.id.zfb_icon})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -167,6 +178,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                             pay_type = "wx";
                         }
                         String url = Apis.Base +Apis.longLeaseOrder;
+                        Log.d("=====", lease_type + " " + bike_number + " " + price + " " +pay_type);
                         OkHttpUtils
                                 .post()
                                 .url(url)
@@ -184,6 +196,13 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                                     @Override
                                     public void onResponse(String response, int id) {
                                         Log.d("response", response);
+
+                                        PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
+
+                                        info = response;
+                                        AliPay(payInfo);
+
+
                                     }
                                 });
 
@@ -198,5 +217,73 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
         }
     }
 
+    private void AliPay(PayInfo info) {
+        //1.创建支付宝支付订单的信息
+        String rawAliOrderInfo = new AliPayReq2.AliOrderInfo()
+                .setPartner("2088721345232205") //商户PID || 签约合作者身份ID
+                .setSeller("viplecheng@163.com")  // 商户收款账号 || 签约卖家支付宝账号
+                .setOutTradeNo(info.getOrder_no()) //设置唯一订单号
+                .setSubject("充值订单支付"+info.getOrder_no()) //设置订单标题
+                .setBody("充值订单支付") //设置订单内容
+                .setPrice(price) //设置订单价格
+                .setCallbackUrl("http://106.14.192.87/xyxapi/pay/alipay/order/notify") //设置回调链接
+                .createOrderInfo(); //创建支付宝支付订单信息
+
+
+        //2.签名  支付宝支付订单的信息 ===>>>  商户私钥签名之后的订单信息
+        //TODO 这里需要从服务器获取用商户私钥签名之后的订单信息
+        String signAliOrderInfo = info.getPay_info();
+
+        //3.发送支付宝支付请求
+        AliPayReq2 aliPayReq = new AliPayReq2.Builder()
+                .with(LongTimeLeaseActivity.this)//Activity实例
+                .setRawAliPayOrderInfo(rawAliOrderInfo)//支付宝支付订单信息
+                .setSignedAliPayOrderInfo(signAliOrderInfo) //设置 商户私钥RSA加密后的支付宝支付订单信息
+                .create()//
+                .setOnAliPayListener(null);//
+        PayAPI.getInstance().sendPayRequest(aliPayReq);
+
+        //关于支付宝支付的回调
+        aliPayReq.setOnAliPayListener(new AliPayReq2.OnAliPayListener() {
+            @Override
+            public void onPaySuccess(String resultInfo) {
+                L.d("onPaySuccess "+resultInfo);
+            }
+
+            @Override
+            public void onPayFailure(String resultInfo) {
+                L.d("resultInfo "+resultInfo);
+            }
+
+            @Override
+            public void onPayConfirmimg(String resultInfo) {
+                L.d("resultInfo " + resultInfo);
+            }
+
+            @Override
+            public void onPayCheck(String status) {
+                L.d("status "+status);
+            }
+        });
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+            /**
+             对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+             */
+            String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+            String resultStatus = payResult.getResultStatus();
+            // 判断resultStatus 为9000则代表支付成功
+            if (TextUtils.equals(resultStatus, "9000")) {
+                // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                Toast.makeText(LongTimeLeaseActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+            } else {
+                // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                Toast.makeText(LongTimeLeaseActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
 }

@@ -3,10 +3,10 @@
     android:exitFadeDuration="@android:integer/config_shortAnimTime">
 
     <item android:state_checked="true"
-        android:drawable="@drawable/bg_org" />
+        android:drawable="@drawable/select_ori" />
 
     <item android:state_pressed="true"
-        android:drawable="@drawable/bg_org" />
+        android:drawable="@drawable/select_ori" />
 
     <item android:drawable="@android:color/transparent" />
 

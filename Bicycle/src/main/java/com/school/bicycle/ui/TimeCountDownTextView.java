@@ -15,7 +15,7 @@ import com.school.bicycle.R;
  */
 
 public class TimeCountDownTextView  extends TextView {
-    private static final long MAX_COUNTDOWN_TIME = 1000 * 60 * 30; // 30 minutes
+    private static final long MAX_COUNTDOWN_TIME = 1000 * 60 * 10; // 10 minutes
     private CountDownTimer mTimer = null;
     private String mCss;
     private long mCountDownTime;

@@ -126,6 +126,16 @@ public class ResultActivity extends BaseToolBarActivity {
                 }
             });
 
+        }else if(type.equals("returnbiycle")) {
+            teResResult.setText("还 车 成 功");
+            btResNext.setText("返回主界面");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new UserService(ResultActivity.this).settixian("0");
+                    finish();
+                }
+            });
         }else {
             // TODO: 2017/7/24 用于设置各个界面跳转到当前界面 该界面的显示
         }

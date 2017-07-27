@@ -309,6 +309,31 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ico_wallet" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="支付宝支付" />
+
+                <CheckBox
+                    android:id="@+id/cb_wallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/confirm"
                 android:layout_width="100dp"

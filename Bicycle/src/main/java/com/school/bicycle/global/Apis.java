@@ -20,6 +20,8 @@ public interface Apis {
 
     String getMyRoute = "order/getMyRoute";
 
+    String uploadLocation = "order/uploadLocation";
+
     String checkJumpStatus = "order/checkJumpStatus";
 
     String unlocking = "order/unlocking";

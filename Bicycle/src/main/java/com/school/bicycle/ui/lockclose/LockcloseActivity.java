@@ -14,10 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.school.bicycle.R;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.main.MainActivity;
+import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -95,9 +97,14 @@ public class LockcloseActivity extends BaseToolBarActivity {
                         @Override
                         public void onResponse(String response, int id) {
                             Log.d("response",response);
-                            
-                            new UserService(LockcloseActivity.this).setState("0");
-                            finish();
+                            BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+                            if (baseResult.getCode()==1){
+                                startActivity(ResultActivity.class,"type","returnbiycle");
+                                finish();
+                            }else {
+                                showShort(baseResult.getMsg());
+                            }
+
                         }
                     });
 

@@ -21,16 +21,13 @@ import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
-import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
 import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

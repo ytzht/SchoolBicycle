@@ -1,24 +1,20 @@
 package com.school.bicycle.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
-import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
 
 public class OverPayActivity extends BaseToolBarActivity {
+
 
     @BindView(R.id.by_time)
     TextView byTime;
@@ -40,6 +36,8 @@ public class OverPayActivity extends BaseToolBarActivity {
     CheckBox cbWe;
     @BindView(R.id.cb_zfb)
     CheckBox cbZfb;
+    @BindView(R.id.cb_wallet)
+    CheckBox cbWallet;
     @BindView(R.id.confirm)
     Button confirm;
 
@@ -49,22 +47,33 @@ public class OverPayActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_over_pay);
         ButterKnife.bind(this);
         setToolbarText("付款");
-
-
-
     }
 
 
 
-    @OnClick({R.id.cb_we, R.id.cb_zfb, R.id.confirm})
+    @OnClick({R.id.cb_we, R.id.cb_zfb, R.id.cb_wallet, R.id.confirm})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.cb_we:
+                initview();
+                cbWe.setChecked(true);
                 break;
             case R.id.cb_zfb:
+                initview();
+                cbZfb.setChecked(true);
+                break;
+            case R.id.cb_wallet:
+                initview();
+                cbWallet.setChecked(true);
                 break;
             case R.id.confirm:
                 break;
         }
+    }
+
+    private void initview() {
+        cbWallet.setChecked(false);
+        cbWe.setChecked(false);
+        cbZfb.setChecked(false);
     }
 }

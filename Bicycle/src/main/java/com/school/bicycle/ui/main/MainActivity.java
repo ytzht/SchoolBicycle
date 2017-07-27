@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -126,6 +128,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     TelephonyManager tm;
     String DEVICE_ID;
     ValidateUser v;
+    private Timer mTimer;
 
 
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
@@ -171,13 +174,14 @@ public class MainActivity extends BaseActivity implements IMainView,
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
-        initview();
+//        initview();
         initClickListener();
         initmap();
         initvalidateUser();
 
 
     }
+
     int recLen = 0;
     TimeCountDownTextView countDownView;
     long mMinute, mSecond;
@@ -195,6 +199,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         countDownView.start();//开始倒计时
     }
 
+    //用车计时
     private void initTime() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -209,16 +214,16 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void run() {
 
                         String min;
-                        if (mMinute<10){
-                            min = "0"+mMinute;
-                        }else {
-                            min = mMinute+"";
+                        if (mMinute < 10) {
+                            min = "0" + mMinute;
+                        } else {
+                            min = mMinute + "";
                         }
 
                         String sec;
-                        if (mSecond<10){
-                            sec = "0"+mSecond;
-                        }else {
+                        if (mSecond < 10) {
+                            sec = "0" + mSecond;
+                        } else {
                             sec = "" + mSecond;
                         }
 
@@ -246,6 +251,10 @@ public class MainActivity extends BaseActivity implements IMainView,
             state_0.setVisibility(View.GONE);
             useing_biycle_lay.setVisibility(View.VISIBLE);
             toolbar.setTitle("用车中");
+            // init timer
+            mTimer = new Timer();
+            // start timer task
+            setTimerTask();
             initTimeDown();
         } else if (new UserService(MainActivity.this).getState().equals("0")) {
             state_0.setVisibility(View.VISIBLE);
@@ -268,11 +277,54 @@ public class MainActivity extends BaseActivity implements IMainView,
                 name.setText("未登录");
                 score.setText("");
             }
-
         }
-
-
     }
+
+    //定时上传位置
+    private void setTimerTask() {
+        mTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Message message = new Message();
+                message.what = 1;
+                doActionHandler.sendMessage(message);
+            }
+        }, 1000, 1000/* 表示1000毫秒之後，每隔1000毫秒執行一次 */);
+    }
+
+
+    /**
+     * 实时上传位置
+     */
+    private Handler doActionHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int msgId = msg.what;
+            switch (msgId) {
+                case 1:
+                    String url = Apis.Base + Apis.uploadLocation;
+                    OkHttpUtils
+                            .get()
+                            .url(url)
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+
+                                }
+                            });
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     //验证跳过登录
     private void initvalidateUser() {
@@ -450,6 +502,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 }else {
                     //已经勾过不再提示，直接跳
                     startActivity(LockcloseActivity.class);
+                    mTimer.cancel();
                 }
 
 
@@ -496,6 +549,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     }
 
+    //
     private void showTips() {
         View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.msg_alert, null, false);
         final Dialog dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
@@ -532,6 +586,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                     new UserService(MainActivity.this).setAlert("1");
                 }
                 startActivity(LockcloseActivity.class);
+                mTimer.cancel();
             }
         });
     }
@@ -541,15 +596,18 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+        mTimer.cancel();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-        initview();
         checkJumpStatus();
+        initview();
+
     }
+
     //跳转状态
     private void checkJumpStatus() {
 

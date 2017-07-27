@@ -114,6 +114,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:gravity="center"
+            android:id="@+id/saoma"
             android:layout_height="match_parent">
 
             <ImageView
@@ -124,7 +125,7 @@
 
             <TextView
                 android:gravity="center"
-                android:text="运动燃烧"
+                android:text="扫码开锁"
                 android:textSize="16sp"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"

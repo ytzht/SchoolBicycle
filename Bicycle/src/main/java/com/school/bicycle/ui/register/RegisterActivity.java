@@ -164,6 +164,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
 
                                 @Override
                                 public void onResponse(String response, int id) {
+                                    Log.d("response",response);
                                     Login login = gson.fromJson(response, Login.class);
                                     if (login.getCode()==1){
                                         if (login.getVerify_status()==1){

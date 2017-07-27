@@ -59,7 +59,7 @@ public class UserService {
     public String getValidateUser() {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 USER_PREFS, Context.MODE_PRIVATE);
-        return memberPrefs.getString(ValidateUser, "");
+        return memberPrefs.getString(ValidateUser, "0");
 
     }
 

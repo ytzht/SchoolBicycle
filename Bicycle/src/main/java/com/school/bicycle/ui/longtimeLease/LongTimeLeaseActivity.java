@@ -14,14 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
+import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -132,7 +137,9 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                     }
                 });
     }
+
     String info;
+
     @OnClick({R.id.month1, R.id.month3, R.id.month6, R.id.month12, R.id.wx_icon, R.id.tv_okpay, R.id.zfb_icon})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -177,8 +184,8 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                         } else {
                             pay_type = "wx";
                         }
-                        String url = Apis.Base +Apis.longLeaseOrder;
-                        Log.d("=====", lease_type + " " + bike_number + " " + price + " " +pay_type);
+                        String url = Apis.Base + Apis.longLeaseOrder;
+                        Log.d("=====", lease_type + " " + bike_number + " " + price + " " + pay_type);
                         OkHttpUtils
                                 .post()
                                 .url(url)
@@ -197,10 +204,24 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                                     public void onResponse(String response, int id) {
                                         Log.d("response", response);
 
-                                        PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
-
-                                        info = response;
-                                        AliPay(payInfo);
+                                        if (pay_type.equals("wx")) {
+                                            Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
+                                            final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
+                                            msgApi.registerApp("wx71fd0a9986ec271f");
+                                            PayReq request = new PayReq();
+                                            request.appId = "wx71fd0a9986ec271f";
+                                            request.partnerId = "1486493792";
+                                            request.prepayId = "wx20170727154142ef2d5632d00326279373";
+                                            request.packageValue = "Sign=WXPay";
+                                            request.nonceStr = "Q88yplU21l5Bi6Es";
+                                            request.timeStamp = "1501141302";
+                                            request.sign = "D6BBCB9A4634CBF8A5B732C54D57AC0E";
+                                            msgApi.sendReq(request);
+                                        } else {
+                                            PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
+                                            info = response;
+                                            AliPay(payInfo);
+                                        }
 
 
                                     }
@@ -223,7 +244,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                 .setPartner("2088721345232205") //商户PID || 签约合作者身份ID
                 .setSeller("viplecheng@163.com")  // 商户收款账号 || 签约卖家支付宝账号
                 .setOutTradeNo(info.getOrder_no()) //设置唯一订单号
-                .setSubject("充值订单支付"+info.getOrder_no()) //设置订单标题
+                .setSubject("充值订单支付" + info.getOrder_no()) //设置订单标题
                 .setBody("充值订单支付") //设置订单内容
                 .setPrice(price) //设置订单价格
                 .setCallbackUrl("http://106.14.192.87/xyxapi/pay/alipay/order/notify") //设置回调链接
@@ -247,12 +268,12 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
         aliPayReq.setOnAliPayListener(new AliPayReq2.OnAliPayListener() {
             @Override
             public void onPaySuccess(String resultInfo) {
-                L.d("onPaySuccess "+resultInfo);
+                L.d("onPaySuccess " + resultInfo);
             }
 
             @Override
             public void onPayFailure(String resultInfo) {
-                L.d("resultInfo "+resultInfo);
+                L.d("resultInfo " + resultInfo);
             }
 
             @Override
@@ -262,7 +283,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
 
             @Override
             public void onPayCheck(String status) {
-                L.d("status "+status);
+                L.d("status " + status);
             }
         });
     }

@@ -50,6 +50,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.User_Activity;
+import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
@@ -102,10 +103,11 @@ public class MainActivity extends BaseActivity implements IMainView,
     //    @BindView(R.id.ll_detail)
     private LinearLayout ll_detail;
     private RelativeLayout useing_biycle_lay;
+    private LinearLayout saoma;
     private RelativeLayout state_0;
     private IMainPresenter iMainPresenter;
     private ImageView headImg;
-    private TextView name, score,finish_usecar;
+    private TextView name, score, finish_usecar;
     double lat;//获取纬度
     double lon;//获取经度
     AMapLocation aMapLocation;
@@ -180,22 +182,22 @@ public class MainActivity extends BaseActivity implements IMainView,
         state_0 = (RelativeLayout) findViewById(R.id.state_0);
         finish_usecar = (TextView) findViewById(R.id.finish_usecar);
         useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
+        saoma = (LinearLayout) findViewById(R.id.saoma);
+
         if (new UserService(MainActivity.this).getState().equals("1")) {
             state_0.setVisibility(View.GONE);
             useing_biycle_lay.setVisibility(View.VISIBLE);
-            // TODO: 2017/7/24 用车中
             toolbar.setTitle("用车中");
-
         } else if (new UserService(MainActivity.this).getState().equals("0")) {
             state_0.setVisibility(View.VISIBLE);
             useing_biycle_lay.setVisibility(View.GONE);
-            // TODO: 2017/7/24 未用车
             toolbar.setTitle("首页");
         }
 
 
     }
 
+    //验证跳过登录
     private void initvalidateUser() {
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
@@ -217,7 +219,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         Log.d("response", response);
                         v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
-                            new UserService(MainActivity.this).setValidateUser(response);
+                            new UserService(MainActivity.this).setValidateUser("1");
                             name.setText(v.getBody().getPhone());
                             if (v.getBody().getStatus() == 1) {
                                 score.setText("手机已认证");
@@ -329,14 +331,6 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     @Override
     public void onStart() {
-        if (new UserService(MainActivity.this).getValidateUser().isEmpty()) {
-            name.setText("未登录");
-            score.setText("");
-        } else {
-
-        }
-
-
         super.onStart();
     }
 
@@ -348,7 +342,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             @Override
             public void onClick(View view) {
                 if (v != null) {
-                    if (v.getCode() == 1) {
+                    if (new UserService(MainActivity.this).getValidateUser().equals("1")) {
                         startActivity(UseBicycleActivity.class);
                     } else {
                         startActivity(RegisterActivity.class);
@@ -361,11 +355,18 @@ public class MainActivity extends BaseActivity implements IMainView,
             }
         });
 
+        saoma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ZxingActivity.class);
+            }
+        });
+
         finish_usecar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new UserService(MainActivity.this).setState("0");
-                initview();
+                startActivity(LockcloseActivity.class);
+
             }
         });
 
@@ -418,6 +419,25 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
+
+        if (new UserService(MainActivity.this).getValidateUser().equals("0")) {
+            name.setText("未登录");
+            score.setText("");
+        } else {
+            if(v!=null){
+                name.setText(v.getBody().getPhone());
+                if (v.getBody().getStatus() == 1) {
+                    score.setText("手机已认证");
+                } else {
+                    score.setText("手机未认证");
+                }
+            }else {
+                name.setText("未登录");
+                score.setText("");
+            }
+
+        }
+
         initview();
     }
 
@@ -571,14 +591,14 @@ public class MainActivity extends BaseActivity implements IMainView,
             @Override
             public void onClick(View view) {
 
-                startActivity(LongTimeLeaseActivity.class,"biyclenum",data.getNumber());
+                startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
 
             }
         });
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(ResultActivity.class, "type", "time");
+                startActivity(ResultActivity.class, "type", "time", "bike_number", data.getNumber());
             }
         });
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {

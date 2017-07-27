@@ -20,6 +20,12 @@ public interface Apis {
 
     String getMyRoute = "order/getMyRoute";
 
+    String unlocking = "order/unlocking";
+
+    String leaseBicycle = "order/leaseBicycle";
+
+    String overUseBike = "order/overUseBike";
+
     String FailureList = "user/failureList";
 
     String depositRefund = "user/depositRefund";

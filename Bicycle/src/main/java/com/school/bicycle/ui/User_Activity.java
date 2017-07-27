@@ -15,6 +15,7 @@ import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -88,8 +89,7 @@ public class User_Activity extends BaseToolBarActivity {
                                 BaseResult b = gson.fromJson(response, BaseResult.class);
                                 if (b.getCode() == 1) {
                                     showShort(b.getMsg());
-                                    UserService userService = new UserService(User_Activity.this);
-                                    userService.setValidateUser("");
+                                    new UserService(User_Activity.this).setValidateUser("0");
                                     finish();
                                 } else {
                                     showShort(b.getMsg());

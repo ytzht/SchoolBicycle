@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="为了车辆安全，方便维护人员对您的车辆的后期维护，请尽量把您的车辆放回固定停车点"
+        android:text="请确认您已将车放回固定停车点，如系统检测到您未将车放回固定停车点，系统将继续计费，直到您将车放回固定停车点系统结束计费"
         android:paddingLeft="45dp"
         android:paddingRight="45dp"
         android:textSize="17dp"
@@ -32,21 +32,31 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="18dp" />
     
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="30dp"
+        android:id="@+id/linearLayout6">
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/btn_refresh"
+                android:id="@+id/lock_refresh"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                />
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/lock_no"
                 android:layout_width="130dp"
                 android:layout_height="40dp"
                 android:text="未放回停车点"
@@ -54,22 +64,32 @@
                 android:gravity="center"
                 android:textSize="15dp"
                 android:background="@drawable/pay_bac"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/lock_kefu"
+                android:src="@drawable/btn_kefu_nor"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                />
             <TextView
                 android:layout_width="130dp"
                 android:layout_height="40dp"
-                android:text="下次不再提示"
+                android:text="已放回/确认停车"
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:textSize="15dp"
+                android:id="@+id/lock_ok"
                 android:background="@drawable/pay_bac"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
 

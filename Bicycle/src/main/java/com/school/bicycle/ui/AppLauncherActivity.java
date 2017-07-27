@@ -80,16 +80,6 @@ public class AppLauncherActivity extends BaseActivity {
                     superFinish();
                 }
             }, time);
-            //引导页
-//            ViewPager viewpager = (ViewPager) findViewById(R.id.viewpager);
-//            CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
-//            viewpager.setAdapter(new SamplePagerAdapter(this));
-//            indicator.setViewPager(viewpager);
-//
-//            SharedPreferences.Editor editor = preferences.edit();
-//            String fir = "no";
-//            editor.putString("first", fir);
-//            editor.apply();
         }
 
     }
@@ -104,58 +94,4 @@ public class AppLauncherActivity extends BaseActivity {
     public void finish() {
     }
 
-
-//    private class SamplePagerAdapter extends PagerAdapter {
-//        private int mSize;
-//        private Context context;
-//
-//        public SamplePagerAdapter(Context context) {
-//            this.context = context;
-//            mSize = 2;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return mSize;
-//        }
-//
-//        @Override
-//        public boolean isViewFromObject(View view, Object object) {
-//            return view == object;
-//        }
-//
-//        @Override
-//        public void destroyItem(ViewGroup view, int position, Object object) {
-//            view.removeView((View) object);
-//        }
-//
-//        @Override
-//        public Object instantiateItem(ViewGroup view, int position) {
-//            ImageView imageView = new ImageView(view.getContext());
-//            if (position == 0) {
-//                imageView.setImageResource(R.drawable.launcher_01);
-//            } else if (position == 1) {
-//                imageView.setImageResource(R.drawable.launcher_02);
-//            }
-//
-//            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-//
-//            if (position == 1) {
-//                imageView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(view.getContext(), MainActivity.class);
-//                        view.getContext().startActivity(intent);
-//                        context.getApplicationContext();
-//                        superFinish();
-//                    }
-//                });
-//            }
-//            view.addView(imageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams
-//                    .MATCH_PARENT);
-//            return imageView;
-//        }
-//
-//    }
 }

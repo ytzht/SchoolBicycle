@@ -6,22 +6,27 @@ import android.os.CountDownTimer;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by ytzht on 2017/07/24 下午10:08
  */
 
-public class TimeCountDownTextView  extends TextView {
-    private static final long MAX_COUNTDOWN_TIME = 1000 * 60 * 10; // 10 minutes
+public class TimeCountDownTextView extends TextView {
+    private static final long MAX_COUNTDOWN_TIME = 1000 * 6000 * 10; // 1000 minutes
     private CountDownTimer mTimer = null;
     private String mCss;
     private long mCountDownTime;
     private long mSecond;
     private long mMinute;
     private onCountDownFinishListener mOnCountDownFinishListener;
+    private onCountFinishListener onCountFinishListener;
 
     public TimeCountDownTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,7 +42,10 @@ public class TimeCountDownTextView  extends TextView {
         super(context);
     }
 
+    private Context context;
+
     private void initCountDownTime(Context context, AttributeSet attrs) {
+        this.context = context;
         TypedArray attribute = context.obtainStyledAttributes(attrs, R.styleable.TimeCountDownView);
         mCountDownTime = (long) attribute.getFloat(R.styleable.TimeCountDownView_countDownTime, 0);
         mCss = attribute.getString(R.styleable.TimeCountDownView_count_down_format);
@@ -79,7 +87,7 @@ public class TimeCountDownTextView  extends TextView {
 
                 @Override
                 public void onFinish() {
-                    if(mOnCountDownFinishListener != null){
+                    if (mOnCountDownFinishListener != null) {
                         mOnCountDownFinishListener.onFinish();
                     }
                 }
@@ -88,11 +96,20 @@ public class TimeCountDownTextView  extends TextView {
         mTimer.start();
     }
 
+
+
     public void setOnCountDownFinishListener(onCountDownFinishListener onCountDownFinishListener) {
         this.mOnCountDownFinishListener = onCountDownFinishListener;
+    }
+    public void setOnCountFinishListener(onCountFinishListener onCountFinishListener) {
+        this.onCountFinishListener = onCountFinishListener;
     }
 
     public interface onCountDownFinishListener {
         void onFinish();
+    }
+
+    public interface onCountFinishListener {
+        void onTime(int ms);
     }
 }

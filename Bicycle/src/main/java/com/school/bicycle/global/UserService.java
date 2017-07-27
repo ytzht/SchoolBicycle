@@ -16,6 +16,7 @@ public class UserService {
     private static final String ValidateUser = "_ValidateUser_";
     private static final String State = "state";
     private static final String tixian = "tixian";
+    private static final String alert = "alert";
 
     public UserService(Context context) {
         this.context = context;
@@ -92,5 +93,17 @@ public class UserService {
     }
 
 
+    public void setAlert(String s) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(alert, s).apply();
+    }
+
+    public String getAlert() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        return memberPrefs.getString(alert, "0");
+
+    }
 
 }

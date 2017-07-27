@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -49,12 +50,6 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.OverPayActivity;
-import com.school.bicycle.ui.User_Activity;
-import com.school.bicycle.ui.lockclose.LockcloseActivity;
-import com.school.bicycle.ui.pay.PayActivity;
-import com.school.bicycle.ui.result.ResultActivity;
-import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
@@ -66,6 +61,7 @@ import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.mywallet.Mywallet_activity;
+import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.school.bicycle.ui.setup.Setup_Activity;
@@ -76,7 +72,6 @@ import com.school.bicycle.utils.OneDayDecorator;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.IWeiboHandler;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -447,7 +442,18 @@ public class MainActivity extends BaseActivity implements IMainView,
         finish_usecar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(LockcloseActivity.class);
+
+                UserService s = new UserService(MainActivity.this);
+                if (s.getAlert().equals("0")){
+                    //出弹窗吧
+                    showTips();
+                }else {
+                    //已经勾过不再提示，直接跳
+                    startActivity(LockcloseActivity.class);
+                }
+
+
+
 
             }
         });
@@ -488,6 +494,46 @@ public class MainActivity extends BaseActivity implements IMainView,
         });
 
 
+    }
+
+    private void showTips() {
+        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.msg_alert, null, false);
+        final Dialog dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
+
+
+        LinearLayout ll_msg = (LinearLayout) view.findViewById(R.id.ll_msg);
+        ll_msg.setVisibility(View.VISIBLE);
+
+        TextView msg_txt = (TextView) view.findViewById(R.id.msg_txt);
+        msg_txt.setText("车辆归回原处才可结束用车，由用户不当操作造成的财产损失将追究法律责任。");
+
+        TextView msg_btn_r = (TextView) view.findViewById(R.id.msg_btn_r);
+        msg_btn_r.setText("确定");
+
+        TextView msg_btn_l = (TextView) view.findViewById(R.id.msg_btn_l);
+        msg_btn_l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dialog.isShowing()) dialog.dismiss();
+            }
+        });
+
+        final CheckBox box = (CheckBox) view.findViewById(R.id.cb_msg);
+
+
+
+        msg_btn_r.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //点击确定
+                //判断checkbox
+                if (dialog.isShowing()) dialog.dismiss();
+                if (box.isChecked()){
+                    new UserService(MainActivity.this).setAlert("1");
+                }
+                startActivity(LockcloseActivity.class);
+            }
+        });
     }
 
 

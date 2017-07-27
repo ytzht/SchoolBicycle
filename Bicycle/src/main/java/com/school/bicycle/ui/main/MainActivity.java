@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,7 +47,6 @@ import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
-import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.OverPayActivity;
@@ -58,13 +58,16 @@ import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
+import com.school.bicycle.ui.TimeCountDownTextView;
 import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.mywallet.Mywallet_activity;
 import com.school.bicycle.ui.register.RegisterActivity;
+import com.school.bicycle.ui.result.ResultActivity;
 import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
@@ -79,6 +82,8 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,6 +181,60 @@ public class MainActivity extends BaseActivity implements IMainView,
         initmap();
         initvalidateUser();
 
+
+    }
+    int recLen = 0;
+    TimeCountDownTextView countDownView;
+    long mMinute, mSecond;
+
+    private void initTimeDown() {
+        countDownView = (TimeCountDownTextView) findViewById(R.id.countdown);
+        countDownView.setCountDownTimes(600000);//10min
+        countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
+            @Override
+            public void onFinish() {
+                //倒计时结束
+                initTime();//开始正计时
+            }
+        });
+        countDownView.start();//开始倒计时
+    }
+
+    private void initTime() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                recLen = recLen + 1000;
+                mMinute = recLen / (1000 * 60);
+                mSecond = (recLen % (1000 * 60)) / 1000;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        String min;
+                        if (mMinute<10){
+                            min = "0"+mMinute;
+                        }else {
+                            min = mMinute+"";
+                        }
+
+                        String sec;
+                        if (mSecond<10){
+                            sec = "0"+mSecond;
+                        }else {
+                            sec = "" + mSecond;
+                        }
+
+                        countDownView.setText(Html.fromHtml(String.format("%1$s:%2$s", min, sec)));
+                        L.d(countDownView.getText().toString());
+                    }
+                });
+
+            }
+        }, 1000, 1000);       // timeTask
+
     }
 
     //更新界面
@@ -192,6 +251,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             state_0.setVisibility(View.GONE);
             useing_biycle_lay.setVisibility(View.VISIBLE);
             toolbar.setTitle("用车中");
+            initTimeDown();
         } else if (new UserService(MainActivity.this).getState().equals("0")) {
             state_0.setVisibility(View.VISIBLE);
             useing_biycle_lay.setVisibility(View.GONE);

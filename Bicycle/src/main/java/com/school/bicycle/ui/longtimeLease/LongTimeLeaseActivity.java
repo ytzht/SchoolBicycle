@@ -1,12 +1,15 @@
 package com.school.bicycle.ui.longtimeLease;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -24,7 +27,6 @@ import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
-import com.school.bicycle.global.L;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -173,7 +175,6 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
             case R.id.wx_icon:
                 break;
             case R.id.tv_okpay:
-                // TODO: 2017/7/26 长租提交订单
                 if (month == 0) {
                     showShort("请选择长租时间");
                 } else {
@@ -220,6 +221,24 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                                             // TODO: 2017/7/27 未跳转到微信支付 
                                         } else {
                                         final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
+
+                                        if (payInfo.getCode() == 1) {
+                                            info = response;
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    PayTask payTask = new PayTask(LongTimeLeaseActivity.this);
+                                                    Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
+                                                    Message message = mHandler.obtainMessage();
+                                                    message.what = 200;
+                                                    message.obj = result;
+                                                    mHandler.sendMessage(message);
+                                                }
+                                            }.start();
+                                        }else {
+                                            showShort(payInfo.getMsg());
+                                        }
                                         info = response;
                                         new Thread() {
                                             @Override
@@ -267,4 +286,36 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
         }
     };
 
+
+
+
+
+
+
+
+    Dialog dialog;
+    private void msgAlert(){
+        View view = LayoutInflater.from(this).inflate(R.layout.msg_alert, null, false);
+        dialog = new AlertDialog.Builder(this).setView(view).setCancelable(false).show();
+
+        TextView msg_txt = (TextView) view.findViewById(R.id.msg_txt);
+        TextView msg_btn_l = (TextView) view.findViewById(R.id.msg_btn_l);
+        TextView msg_btn_r = (TextView) view.findViewById(R.id.msg_btn_r);
+
+        msg_btn_l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+        msg_btn_r.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+    }
 }

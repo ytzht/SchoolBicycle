@@ -70,4 +70,15 @@ public class Wxpayinfo {
     public void setPay_info(String pay_info) {
         this.pay_info = pay_info;
     }
+
+    public static class pay_info {
+        public String appid;
+        public String noncestr;
+
+        public String partnerid;
+        public String prepayid;
+        public String timestamp;
+        public String sign;
+
+    }
 }

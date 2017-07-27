@@ -20,6 +20,7 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
+import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
@@ -202,8 +203,22 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                                     public void onResponse(String response, int id) {
                                         Log.d("response", response);
 
+                                        if (pay_type.equals("wx")) {
+                                            Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
+                                            WxPayParams wxPayParams =gson.fromJson(wxpayinfo.getPay_info(),WxPayParams.class);
+                                            final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
+                                            msgApi.registerApp(wxPayParams.appid);
+                                            PayReq request = new PayReq();
+                                            request.appId =wxPayParams.appid;
+                                            request.partnerId = wxPayParams.partnerid;
+                                            request.prepayId = wxPayParams.prepayid;
+                                            request.packageValue = "Sign=WXPay";
+                                            request.nonceStr = wxPayParams.noncestr;
+                                            request.timeStamp = wxPayParams.timestamp;
+                                            request.sign = wxPayParams.sign;
+                                            msgApi.sendReq(request);
+                                        } else {
                                         final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
-
                                         info = response;
                                         new Thread() {
                                             @Override
@@ -218,7 +233,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                                             }
                                         }.start();
 
-                                    }
+                                    }}
                                 });
 
                     } else {

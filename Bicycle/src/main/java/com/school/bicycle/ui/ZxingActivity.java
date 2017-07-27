@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.school.bicycle.R;
+import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.ui.lockopen.LockOpenActivity;
 import com.uuzuche.lib_zxing.activity.CaptureFragment;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
-public class ZxingActivity extends AppCompatActivity {
+public class ZxingActivity extends BaseToolBarActivity {
 
 
     private CaptureFragment captureFragment;
@@ -30,6 +33,7 @@ public class ZxingActivity extends AppCompatActivity {
 
         initView();
     }
+
     public static boolean isOpen = false;
 
     private void initView() {
@@ -56,13 +60,18 @@ public class ZxingActivity extends AppCompatActivity {
     CodeUtils.AnalyzeCallback analyzeCallback = new CodeUtils.AnalyzeCallback() {
         @Override
         public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-            Intent resultIntent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
-            bundle.putString(CodeUtils.RESULT_STRING, result);
-            resultIntent.putExtras(bundle);
-            ZxingActivity.this.setResult(RESULT_OK, resultIntent);
-            ZxingActivity.this.finish();
+//            Intent resultIntent = new Intent();
+//            Bundle bundle = new Bundle();
+//            bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
+//            bundle.putString(CodeUtils.RESULT_STRING, result);
+//            resultIntent.putExtras(bundle);
+//            ZxingActivity.this.setResult(RESULT_OK, resultIntent);
+//            ZxingActivity.this.finish();
+            Log.d("result", result);
+            String num = result.substring(result.indexOf("#") + 1);
+            Log.d("num", num);
+            startActivity(LockOpenActivity.class,"lock_code",num);
+
         }
 
         @Override

@@ -3,6 +3,9 @@ package com.school.bicycle.ui.authentication;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,11 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CampusCardImage;
 import com.school.bicycle.entity.GetLongLeaseInfo;
+import com.school.bicycle.entity.User;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UTFXMLString;
 import com.school.bicycle.utils.CheckCardID;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -26,11 +32,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.sql.ResultSet;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
+import okhttp3.MediaType;
 
 import static me.iwf.photopicker.PhotoPicker.REQUEST_CODE;
 
@@ -208,8 +217,30 @@ public class RealnameActivity extends BaseToolBarActivity {
         }
     }
 
+
+
+    //把AnimationDrawable中的图片资源逐个回收
+    private void tryRecycleAnimationDrawable(
+            AnimationDrawable animationDrawables) {
+        if (animationDrawables != null) {
+            animationDrawables.stop();
+            for (int i = 0; i < animationDrawables.getNumberOfFrames(); i++) {
+                Drawable frame = animationDrawables.getFrame(i);
+                if (frame instanceof BitmapDrawable) {
+                    Bitmap bitmap = ((BitmapDrawable) frame).getBitmap();
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                frame.setCallback(null);
+            }
+
+            animationDrawables.setCallback(null);
+
+        }
+    }
+
     @OnClick({R.id.shangchuan, R.id.rn_photo})
-    public void onViewClicked(View view) {
+    public void onViewClicked(View view)  {
         switch (view.getId()) {
             case R.id.shangchuan:
                 String url = getResources().getString(R.string.baseurl) + "user/profile";
@@ -227,10 +258,12 @@ public class RealnameActivity extends BaseToolBarActivity {
                             }else if (!CheckCardID.isIDCard(rnIdnumber.getText().toString())){
                                 showShort("请输入正确的身份证号");
                             }else {
+                                Log.d("name", UTFXMLString.getUTF8XMLString(rnName.getText().toString()));
+
                                 OkHttpUtils
                                         .post()
                                         .url(url)
-                                        .addParams("name", rnName.getText().toString())
+                                        .addParams("name",  UTFXMLString.getUTF8XMLString(rnName.getText().toString()))
                                         .addParams("id_number", rnIdnumber.getText().toString())
                                         .addParams("campus_card_number", rnIdstudent.getText().toString())
                                         .build()

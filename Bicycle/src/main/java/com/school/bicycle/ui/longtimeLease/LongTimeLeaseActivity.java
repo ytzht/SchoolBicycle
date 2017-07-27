@@ -20,8 +20,13 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
+import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -130,7 +135,9 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                     }
                 });
     }
+
     String info;
+
     @OnClick({R.id.month1, R.id.month3, R.id.month6, R.id.month12, R.id.wx_icon, R.id.tv_okpay, R.id.zfb_icon})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -175,8 +182,8 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                         } else {
                             pay_type = "wx";
                         }
-                        String url = Apis.Base +Apis.longLeaseOrder;
-                        Log.d("=====", lease_type + " " + bike_number + " " + price + " " +pay_type);
+                        String url = Apis.Base + Apis.longLeaseOrder;
+                        Log.d("=====", lease_type + " " + bike_number + " " + price + " " + pay_type);
                         OkHttpUtils
                                 .post()
                                 .url(url)

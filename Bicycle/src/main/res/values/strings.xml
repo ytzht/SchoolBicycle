@@ -18,4 +18,9 @@
     <string name="user_confirm_countdown"><![CDATA[自定义倒计时样式：<font size=\"3\" color=\"red\">%1$s </font>分<font size=\"3\" color=\"red\">%2$s</font> 秒]]></string>
 
 
+    <!-- WXPayEntryActivity -->
+    <string name="pay_result_tip">这个界面用于显示第三方app通过微信支付的结果</string>
+    <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
+    <string name="app_tip">提示</string>
+
 </resources>

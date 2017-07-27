@@ -2,19 +2,24 @@ package com.school.bicycle.ui.result;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
+import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.main.MainActivity;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 public class ResultActivity extends BaseToolBarActivity {
 
@@ -39,12 +44,33 @@ public class ResultActivity extends BaseToolBarActivity {
         Intent it = getIntent();
         String type = it.getStringExtra("type");
         if (type.endsWith("time")) {
+
             teResResult.setText("点击确定后预定该车，进入用车界\n面十分钟后或扫码" +
                     "开锁后开始计费\n,\n还车请归还到原车位，否则系统将\n无法结束计费");
             btResNext.setText("确定");
+
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String bike_number = getIntent().getStringExtra("bike_number");
+                    String url = Apis.Base + Apis.leaseBicycle;
+                    OkHttpUtils
+                            .post()
+                            .url(url)
+                            .addParams("bike_number", bike_number)
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    Log.d("response",response);
+                                }
+                            });
+
                     //0表示不再用车中1表示用车中
                     new UserService(ResultActivity.this).setState("1");
                     finish();

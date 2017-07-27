@@ -10,6 +10,8 @@ import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.cookie.CookieJarImpl;
+import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
 import com.zhy.http.okhttp.log.LoggerInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -49,14 +51,18 @@ public class MyApplication extends MultiDexApplication {
     }
 
     private void initokhttp() {
-
+        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new LoggerInterceptor("TAG"))
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .readTimeout(10000L, TimeUnit.MILLISECONDS)
                 .addInterceptor(new LoggerInterceptor("TAG"))
+                .cookieJar(cookieJar)
                 //其他配置
                 .build();
+
+
+        OkHttpUtils.initClient(okHttpClient);
 
         OkHttpUtils.initClient(okHttpClient);
     }
@@ -168,8 +174,6 @@ public class MyApplication extends MultiDexApplication {
 //
 //    }
 //
-
-
 
 
     @Override

@@ -7,7 +7,7 @@
 
     <color name="baseColor">#56d177</color>
     <color name="baseOrange">#f79f0a</color>
-    
+    <color name="navpage">#FFE1E8EB</color>
     <color name="blackTopic">#343434</color>
     <color name="blackModule">#6f6f6f</color>
     <color name="blackSec">#8e8e8e</color>

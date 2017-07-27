@@ -130,8 +130,7 @@
         <TextView
             android:layout_width="70dp"
             android:layout_height="27dp"
-
-            android:text="日租"
+            android:text="时租"
             android:id="@+id/tv_tirentbt_info"
             android:textColor="@color/chengse"
             android:gravity="center"/>

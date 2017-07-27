@@ -48,7 +48,6 @@ public class ResultActivity extends BaseToolBarActivity {
             teResResult.setText("点击确定后预定该车，进入用车界\n面十分钟后或扫码" +
                     "开锁后开始计费\n,\n还车请归还到原车位，否则系统将\n无法结束计费");
             btResNext.setText("确定");
-
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -92,6 +91,37 @@ public class ResultActivity extends BaseToolBarActivity {
                 @Override
                 public void onClick(View v) {
                     new UserService(ResultActivity.this).settixian("1");
+                    finish();
+                }
+            });
+
+        }else if(type.equals("date")){
+            teResResult.setText("用车结束需归还至原停车位才可技术用车。\n点击主界面扫码开锁按钮解锁车辆，结束\n用车前您可多次上锁开锁");
+            btResNext.setText("确定");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    String bike_number = getIntent().getStringExtra("bike_number");
+//                    String url = Apis.Base + Apis.leaseBicycle;
+//                    OkHttpUtils
+//                            .post()
+//                            .url(url)
+//                            .addParams("bike_number", bike_number)
+//                            .build()
+//                            .execute(new StringCallback() {
+//                                @Override
+//                                public void onError(Call call, Exception e, int id) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onResponse(String response, int id) {
+//                                    Log.d("response",response);
+//                                }
+//                            });
+
+                    //0表示不再用车中1表示用车中
+                    new UserService(ResultActivity.this).setState("1");
                     finish();
                 }
             });

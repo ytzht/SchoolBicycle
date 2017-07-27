@@ -14,7 +14,7 @@ import android.os.Bundle;
 
 public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEventHandler {
 
-    private static final String TAG = "MicroMsg.SDKSample.WXPayEntryActivity";
+    private static final String TAG = "com.Schoolbiycle.WXPayEntryActivity";
 
     private IWXAPI api;
 
@@ -22,7 +22,6 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_result);
-
         api = WXAPIFactory.createWXAPI(this, "wx71fd0a9986ec271f");
         api.handleIntent(getIntent(), this);
     }
@@ -44,10 +43,11 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (resp.errCode == 0) {
                 showShort("支付成功");
+
             } else {
                 showShort("支付失败，请重试");
             }
-            finish();
+//            finish();
         }
     }
 }

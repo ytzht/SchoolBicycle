@@ -49,8 +49,10 @@ import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.ui.lockclose.LockcloseActivity;
+import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.FaultActivity;
@@ -71,6 +73,7 @@ import com.school.bicycle.utils.OneDayDecorator;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.IWeiboHandler;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -175,6 +178,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     }
 
+    //更新界面
     private void initview() {
 
         iv_pull = (ImageView) findViewById(R.id.iv_pull);
@@ -192,6 +196,24 @@ public class MainActivity extends BaseActivity implements IMainView,
             state_0.setVisibility(View.VISIBLE);
             useing_biycle_lay.setVisibility(View.GONE);
             toolbar.setTitle("首页");
+        }
+
+        if (new UserService(MainActivity.this).getValidateUser().equals("0")) {
+            name.setText("未登录");
+            score.setText("");
+        } else {
+            if (v != null) {
+                name.setText(v.getBody().getPhone());
+                if (v.getBody().getStatus() == 1) {
+                    score.setText("手机已认证");
+                } else {
+                    score.setText("手机未认证");
+                }
+            } else {
+                name.setText("未登录");
+                score.setText("");
+            }
+
         }
 
 
@@ -216,7 +238,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d("response", response);
+                        Log.d("验证跳过登录response", response);
                         v = gson.fromJson(response, ValidateUser.class);
                         if (v.getCode() == 1) {
                             new UserService(MainActivity.this).setValidateUser("1");
@@ -293,7 +315,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d("GetBikeMapList=", response);
+                        Log.d("获取周围单车位置列表response", response);
                         GetBikeMapList g = gson.fromJson(response, GetBikeMapList.class);
                         //清除地图中的mark点
                         AMap aMap = mMapView.getMap();
@@ -419,26 +441,28 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-
-        if (new UserService(MainActivity.this).getValidateUser().equals("0")) {
-            name.setText("未登录");
-            score.setText("");
-        } else {
-            if(v!=null){
-                name.setText(v.getBody().getPhone());
-                if (v.getBody().getStatus() == 1) {
-                    score.setText("手机已认证");
-                } else {
-                    score.setText("手机未认证");
-                }
-            }else {
-                name.setText("未登录");
-                score.setText("");
-            }
-
-        }
-
         initview();
+        checkJumpStatus();
+    }
+    //跳转状态
+    private void checkJumpStatus() {
+
+        String url = Apis.Base + Apis.checkJumpStatus;
+        OkHttpUtils
+                .get()
+                .url(url)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d("response跳转状态", response);
+                    }
+                });
     }
 
     @Override
@@ -604,7 +628,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAlert();
+                showAlert(data.getNumber());
             }
         });
 
@@ -655,8 +679,8 @@ public class MainActivity extends BaseActivity implements IMainView,
     private static final String TAG = "=====";
     List<CalendarDay> selectedDates;
 
-    private void showAlert() {
-
+    private void showAlert(final String i) {
+        final String bike_number = i;
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.useday_calendar, null, false);
         dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
         tv_ok = (TextView) view.findViewById(R.id.tv_ok);
@@ -682,16 +706,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                         }
                     }
 
+                    startActivity(PayActivity.class, "dates", s, "bike_number", bike_number);
                     Log.d(TAG, s);
-                    // TODO: 2017/7/21 提交日租订单 没接口
-//                    String url = Apis.Base + Apis.queryBikeListByDate;
-//                    OkHttpUtils
-//                            .post()
-//                            .url(url)
-//                            .addParams("dates", s)
-//                            .addParams("pageNumber", 1 + "")
-//                            .build()
-//                            .execut
+                    if (dialog.isShowing())
+                        dialog.dismiss();
+
                 } else {
                     showShort("请选择日期");
                 }

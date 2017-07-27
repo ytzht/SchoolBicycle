@@ -81,10 +81,11 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                 if (i == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     String url = getResources().getString(R.string.baseurl) + "order/queryBikeListByBikeNumber";
+
                     OkHttpUtils
                             .post()
                             .url(url)
-                            .addParams("bike_number", "011130")
+                            .addParams("bike_number", llSearchBicyclenumNum.getText().toString())
                             .build()
                             .execute(new StringCallback() {
                                 @Override

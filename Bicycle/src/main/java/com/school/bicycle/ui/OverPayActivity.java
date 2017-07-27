@@ -1,17 +1,22 @@
 package com.school.bicycle.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
+import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 public class OverPayActivity extends BaseToolBarActivity {
 
@@ -46,7 +51,10 @@ public class OverPayActivity extends BaseToolBarActivity {
         setToolbarText("付款");
 
 
+
     }
+
+
 
     @OnClick({R.id.cb_we, R.id.cb_zfb, R.id.confirm})
     public void onViewClicked(View view) {

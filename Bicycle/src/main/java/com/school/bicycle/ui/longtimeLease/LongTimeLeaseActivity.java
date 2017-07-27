@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.GetLongLeaseInfo;
@@ -21,7 +22,6 @@ import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
-import com.school.bicycle.global.L;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -30,8 +30,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.github.mayubao.pay_library.AliPayReq2;
-import io.github.mayubao.pay_library.PayAPI;
 import okhttp3.Call;
 
 public class LongTimeLeaseActivity extends BaseToolBarActivity {
@@ -197,11 +195,21 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                                     public void onResponse(String response, int id) {
                                         Log.d("response", response);
 
-                                        PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
+                                        final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
 
                                         info = response;
-                                        AliPay(payInfo);
-
+                                        new Thread() {
+                                            @Override
+                                            public void run() {
+                                                super.run();
+                                                PayTask payTask = new PayTask(LongTimeLeaseActivity.this);
+                                                Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
+                                                Message message = mHandler.obtainMessage();
+                                                message.what = 200;
+                                                message.obj = result;
+                                                mHandler.sendMessage(message);
+                                            }
+                                        }.start();
 
                                     }
                                 });
@@ -215,56 +223,6 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                 break;
 
         }
-    }
-
-    private void AliPay(PayInfo info) {
-        //1.创建支付宝支付订单的信息
-        String rawAliOrderInfo = new AliPayReq2.AliOrderInfo()
-                .setPartner("2088721345232205") //商户PID || 签约合作者身份ID
-                .setSeller("viplecheng@163.com")  // 商户收款账号 || 签约卖家支付宝账号
-                .setOutTradeNo(info.getOrder_no()) //设置唯一订单号
-                .setSubject("充值订单支付"+info.getOrder_no()) //设置订单标题
-                .setBody("充值订单支付") //设置订单内容
-                .setPrice(price) //设置订单价格
-                .setCallbackUrl("http://106.14.192.87/xyxapi/pay/alipay/order/notify") //设置回调链接
-                .createOrderInfo(); //创建支付宝支付订单信息
-
-
-        //2.签名  支付宝支付订单的信息 ===>>>  商户私钥签名之后的订单信息
-        //TODO 这里需要从服务器获取用商户私钥签名之后的订单信息
-        String signAliOrderInfo = info.getPay_info();
-
-        //3.发送支付宝支付请求
-        AliPayReq2 aliPayReq = new AliPayReq2.Builder()
-                .with(LongTimeLeaseActivity.this)//Activity实例
-                .setRawAliPayOrderInfo(rawAliOrderInfo)//支付宝支付订单信息
-                .setSignedAliPayOrderInfo(signAliOrderInfo) //设置 商户私钥RSA加密后的支付宝支付订单信息
-                .create()//
-                .setOnAliPayListener(null);//
-        PayAPI.getInstance().sendPayRequest(aliPayReq);
-
-        //关于支付宝支付的回调
-        aliPayReq.setOnAliPayListener(new AliPayReq2.OnAliPayListener() {
-            @Override
-            public void onPaySuccess(String resultInfo) {
-                L.d("onPaySuccess "+resultInfo);
-            }
-
-            @Override
-            public void onPayFailure(String resultInfo) {
-                L.d("resultInfo "+resultInfo);
-            }
-
-            @Override
-            public void onPayConfirmimg(String resultInfo) {
-                L.d("resultInfo " + resultInfo);
-            }
-
-            @Override
-            public void onPayCheck(String status) {
-                L.d("status "+status);
-            }
-        });
     }
 
     private Handler mHandler = new Handler() {

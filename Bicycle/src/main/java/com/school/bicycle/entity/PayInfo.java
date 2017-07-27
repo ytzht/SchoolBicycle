@@ -6,13 +6,12 @@ package com.school.bicycle.entity;
 
 public class PayInfo {
 
-
     /**
      * code : 1
      * msg : 操作成功
-     * order_no : L20170726211348439001
+     * order_no : L20170727162235436003
      * pay_type : zfb
-     * pay_info : partner="2088721345232205"&seller_id="viplecheng@163.com"&out_trade_no="L20170726211348439001"&subject="充值订单支付L20170726211348439001"&body="充值订单支付"&total_fee="100"&notify_url="http://106.14.192.87/xyxapi/pay/alipay/order/notify"&service="mobile.securitypay.pay"&payment_type="1"&_input_charset="utf-8"&it_b_pay="30m"&sign="bA3Z4H6H1b8OKpgcrqsER2%2FPGvntvcdndanO5AidBJuHUPjf7ZO6Vsk3GSmq1iil6O224b%2BpMBGJAjN56BBkRdh8qLY1aP4QA5seyBinknSI80jNn7m0jBpl4fp8RpPmlp6zb35uUFDQY1T0K1VTCmc%2BLjbDPOaoH9vEqEWtGivj%2FOD%2Bi1CoCkwALaFly73TUaydCdZTnbELF9Yfton0wdOzss%2Fje3VGadLMWrGMZ5e%2B6Xtdvmn4nmrhHYkK3EHHwFmukWvUBu5DLgkUep1NwC5GzfFD4drYJEYnKc3j0p8r5Ydh0goRVPUfeGbCGiA4QeOPUpUeGCFDfVMcV8f0ew%3D%3D"&sign_type="RSA"
+     * pay_info : partner="2088721345232205"&seller_id="viplecheng@163.com"&out_trade_no="L20170727162235436003"&subject="充值订单支付L20170727162235436003"&body="充值订单支付"&total_fee="0.01"&notify_url="http://106.14.192.87/xyxapi/pay/alipay/order/notify"&service="mobile.securitypay.pay"&payment_type="1"&_input_charset="utf-8"&it_b_pay="30m"&sign="mdp7JBgzlgKj7e8oPmL2lTI1X%2Fv0kSrzHK149qGekbBq6N6a63shUDnh9GoH5S58A5v2fLZ9m61afZ0dpT%2B7Lz5MR1JTWa3WsjmnEVH9zfvHQyqnTs30XdKnC8s1UgqwwU8NWZNE0tgsjhK4TmoQtVF4%2FzL6h6XkfTbf%2Bm36eO4P%2B3C3Vux0UM1za6zjssiyB1zjM4Tb4m1z5S%2BIM9qrInDorUyWFQgTRBBkrB%2F1rMgRQzAiJSNnetU1XjeAVGIbe4oc1DZmDC0Mx3K6AT10fhNJmfgTO3Dx2dgMOApJGmRpFY5Thu%2F8PGc7Dm0282GPoyp%2FNsvxyESB8qbaEFF61w%3D%3D"&sign_type="RSA"
      */
 
     private int code;

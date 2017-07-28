@@ -31,7 +31,6 @@
         android:layout_alignTop="@id/tv_use"
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@id/tv_use"
-        android:text="000006"
         android:textColor="#ff6a38" />
 
     <com.school.bicycle.ui.TimeCountDownTextView

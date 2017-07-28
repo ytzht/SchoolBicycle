@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_gray"
             android:gravity="center"
-            android:text="一个月"
+
             android:textColor="#fff" />
 
         <TextView
@@ -42,7 +42,6 @@
             android:layout_weight="1"
             android:background="@drawable/bg_org"
             android:gravity="center"
-            android:text="三个月"
             android:textColor="#fff" />
 
     </LinearLayout>
@@ -60,7 +59,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_gray"
             android:gravity="center"
-            android:text="六个月"
+
             android:textColor="#fff" />
 
         <TextView
@@ -71,7 +70,6 @@
             android:layout_weight="1"
             android:background="@drawable/bg_gray"
             android:gravity="center"
-            android:text="一年"
             android:textColor="#fff" />
 
     </LinearLayout>

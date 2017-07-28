@@ -11,6 +11,8 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.greenrobot.eventbus.EventBus;
+
 
 public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEventHandler {
 
@@ -41,13 +43,20 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
     public void onResp(BaseResp resp) {
 
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
-            if (resp.errCode == 0) {
-                showShort("支付成功");
-
-            } else {
-                showShort("支付失败，请重试");
+            switch (resp.errCode) {
+                case 0:
+                    showShort("支付成功");
+//                    EventBus.getDefault().post(new WxPayEvent(true));
+                    break;
+                case -2:
+                    showShort("取消支付");
+//                    EventBus.getDefault().post(new WxPayEvent(false));
+                    break;
+                default:
+                    showShort("支付失败");
+//                    EventBus.getDefault().post(new WxPayEvent(false));
+                    break;
             }
-//            finish();
         }
     }
 }

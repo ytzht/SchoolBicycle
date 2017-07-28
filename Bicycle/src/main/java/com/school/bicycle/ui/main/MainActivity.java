@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -174,7 +175,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
-//        initview();
+        initview();
         initClickListener();
         initmap();
         initvalidateUser();
@@ -254,8 +255,9 @@ public class MainActivity extends BaseActivity implements IMainView,
             // init timer
             mTimer = new Timer();
             // start timer task
-            setTimerTask();
+//            setTimerTask();
             initTimeDown();
+
         } else if (new UserService(MainActivity.this).getState().equals("0")) {
             state_0.setVisibility(View.VISIBLE);
             useing_biycle_lay.setVisibility(View.GONE);
@@ -305,10 +307,12 @@ public class MainActivity extends BaseActivity implements IMainView,
                 case 1:
                     String url = Apis.Base + Apis.uploadLocation;
                     OkHttpUtils
-                            .get()
-                            .url(url)
-                            .build()
-                            .execute(new StringCallback() {
+                            .get()//请求方式
+                            .addHeader()//添加头
+                            .headers()//头
+                            .url(url)//地址
+                            .build()//创建请求
+                            .execute(new StringCallback() {//回调
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
 
@@ -690,7 +694,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (id == R.id.my_fault) {
             startActivity(FaultActivity.class);
         } else if (id == R.id.my_tel) {
-            startActivity(RealnameActivity.class);
+            call("057187063728");
         } else if (id == R.id.my_news) {
             startActivity(InformationActivity.class);
         } else if (id == R.id.my_set) {
@@ -700,6 +704,16 @@ public class MainActivity extends BaseActivity implements IMainView,
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * 调用拨号界面
+     * @param phone 电话号码
+     */
+    private void call(String phone) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+phone));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private UMShareListener umShareListener = new UMShareListener() {

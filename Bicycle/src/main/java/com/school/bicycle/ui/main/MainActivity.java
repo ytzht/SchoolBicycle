@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -48,6 +49,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -55,6 +57,7 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.GetBikeMapList;
+import com.school.bicycle.entity.UpDate;
 import com.school.bicycle.entity.UploadLocation;
 import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
@@ -88,6 +91,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Timer;
@@ -674,7 +678,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             final String vName = "1.7";
             final String downloadUrl = "http://file.cishan123.org/yst_1.7.apk";
             download(downloadUrl, vName);
-            OkHttpUtils.get().url(Apis.Base + UpDate).build().execute(new StringCallback() {
+            OkHttpUtils.get().url(Apis.Base + Apis.UpDate).build().execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
 

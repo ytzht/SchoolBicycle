@@ -55,7 +55,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_lockclose);
         ButterKnife.bind(this);
         setToolbarText("锁车");
-        new UserService(LockcloseActivity.this).setState("0");
+
 
 
 
@@ -147,8 +147,8 @@ public class LockcloseActivity extends BaseToolBarActivity {
                         .addHeader("cookie",cookie)
                         .addParams("location", location)
                         .addParams("imei", DEVICE_ID)
-                        .addParams("bike_number", bike_number)
                         .addParams("diu", DEVICE_ID)
+                        .addParams("bike_number", bike_number)
                         .build()
                         .execute(new StringCallback() {
                             @Override
@@ -162,7 +162,6 @@ public class LockcloseActivity extends BaseToolBarActivity {
                                 BaseResult baseResult = gson.fromJson(response,BaseResult.class);
                                 if (baseResult.getCode()==1){
                                     startActivity(OverPayActivity.class);
-//                                    startActivity(ResultActivity.class,"type","returnbiycle");
                                     new UserService(LockcloseActivity.this).setState("0");
                                     finish();
                                 }else {

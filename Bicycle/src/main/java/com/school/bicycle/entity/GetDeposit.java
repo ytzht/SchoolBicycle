@@ -10,12 +10,12 @@ public class GetDeposit {
     /**
      * code : 1
      * msg : 操作成功
-     * deposit : 10
+     * deposit : 0.01
      */
 
     private int code;
     private String msg;
-    private int deposit;
+    private String deposit;
 
     public int getCode() {
         return code;
@@ -33,11 +33,11 @@ public class GetDeposit {
         this.msg = msg;
     }
 
-    public int getDeposit() {
+    public String getDeposit() {
         return deposit;
     }
 
-    public void setDeposit(int deposit) {
+    public void setDeposit(String deposit) {
         this.deposit = deposit;
     }
 }

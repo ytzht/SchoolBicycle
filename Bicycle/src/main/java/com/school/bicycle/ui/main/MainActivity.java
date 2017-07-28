@@ -290,12 +290,17 @@ public class MainActivity extends BaseActivity implements IMainView,
             startActivity(RegisterActivity.class);
         } else {
             if (v != null) {
-                name.setText(v.getName());
-                if (v.getBody().getStatus() == 1) {
-                    score.setText("手机已认证");
+                if (v.getCode() == 0) {
+                    showShort(v.getMsg());
                 } else {
-                    score.setText("手机未认证");
+                    name.setText(v.getName());
+                    if (v.getBody().getStatus() == 1) {
+                        score.setText("手机已认证");
+                    } else {
+                        score.setText("手机未认证");
+                    }
                 }
+
             } else {
                 name.setText("未登录");
                 score.setText("");
@@ -313,7 +318,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 message.what = 1;
                 doActionHandler.sendMessage(message);
             }
-        },10000, 10000/* 表示1000毫秒之後，每隔1000毫秒執行一次 */);
+        }, 10000, 10000/* 表示1000毫秒之後，每隔1000毫秒執行一次 */);
     }
 
 
@@ -327,7 +332,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             int msgId = msg.what;
             switch (msgId) {
                 case 1:
-                    String url = Apis.Base + Apis.uploadLocation + lon + "," + lat+"&bike_number="+bike_number;
+                    String url = Apis.Base + Apis.uploadLocation + lon + "," + lat + "&bike_number=" + bike_number;
                     String cookie = new UserService(MainActivity.this).getCookie();
                     OkHttpUtils
                             .get()//请求方式
@@ -345,8 +350,8 @@ public class MainActivity extends BaseActivity implements IMainView,
                                     Log.d("response事实上传位置", response);
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
-                                        kaluli.setText(uploadLocation.getCalories()+"卡");
-                                        lengthBiycile.setText(uploadLocation.getDistance()+"米");
+                                        kaluli.setText(uploadLocation.getCalories() + "卡");
+                                        lengthBiycile.setText(uploadLocation.getDistance() + "米");
                                     }
                                 }
                             });
@@ -414,6 +419,11 @@ public class MainActivity extends BaseActivity implements IMainView,
         aMap.setInfoWindowAdapter(this);
         aMap.setOnCameraChangeListener(this);
         aMap.setOnMarkerClickListener(this);
+        initdingwei();
+
+    }
+
+    private void initdingwei() {
         //初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
@@ -431,7 +441,6 @@ public class MainActivity extends BaseActivity implements IMainView,
          */
         //该方法默认为false，true表示只定位一次
         mLocationOption.setOnceLocation(false);
-
     }
 
 
@@ -541,7 +550,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 } else {
                     //已经勾过不再提示，直接跳
                     mTimer.cancel();
-                    startActivity(LockcloseActivity.class,"bike_number",bike_number,"location",lon+","+lat);
+                    startActivity(LockcloseActivity.class, "bike_number", bike_number, "location", lon + "," + lat);
 
                 }
 
@@ -639,9 +648,10 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
+        initvalidateUser();
         checkJumpStatus();
         initview();
-        initvalidateUser();
+
 
     }
 
@@ -653,7 +663,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         OkHttpUtils
                 .get()
                 .url(url)
-                .addHeader("cookie",cookie)
+                .addHeader("cookie", cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -664,18 +674,15 @@ public class MainActivity extends BaseActivity implements IMainView,
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response跳转状态", response);
-                        CheckJumpStatus checkJumpStatus =gson.fromJson(response,CheckJumpStatus.class);
-                        if (checkJumpStatus.getBike_status()==0){
+                        CheckJumpStatus checkJumpStatus = gson.fromJson(response, CheckJumpStatus.class);
 
-                        }else if (checkJumpStatus.getBike_status()==1){
+                        if (checkJumpStatus.getBike_status() == 0) {
+                            new UserService(MainActivity.this).setState("0");
+                        } else if (checkJumpStatus.getBike_status() == 1) {
                             onemark(checkJumpStatus);
-                            new UserService(MainActivity.this).setState("1");
-                        }else if(checkJumpStatus.getBike_status()==2){
+                        } else if (checkJumpStatus.getBike_status() == 2) {
                             onemark(checkJumpStatus);
-                            AMap aMap = mMapView.getMap();
-                            aMap.clear();
-                            new UserService(MainActivity.this).setState("1");
-                        }else if (checkJumpStatus.getBike_status()==3){
+                        } else if (checkJumpStatus.getBike_status() == 3) {
                             startActivity(OverPayActivity.class);
                         }
                     }
@@ -685,7 +692,10 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void onemark(CheckJumpStatus checkJumpStatus) {
         AMap aMap = mMapView.getMap();
         aMap.clear();
-
+        tvUse.setText("用车中：" + checkJumpStatus.getBody().get(0).getNumber());
+        new UserService(MainActivity.this).setShowOneMark("1");
+        bike_number = checkJumpStatus.getBody().get(0).getNumber();
+        new UserService(MainActivity.this).setState("1");
         LatLng latLng = new LatLng(checkJumpStatus.getBody().get(0).getLat(), checkJumpStatus.getBody().get(0).getLog());
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(latLng);
@@ -697,6 +707,8 @@ public class MainActivity extends BaseActivity implements IMainView,
         } else if (checkJumpStatus.getBody().get(0).getColor().equals("green")) {
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                     .decodeResource(getResources(), R.drawable.ico_green)));
+        } else if (checkJumpStatus.getBody().get(0).getColor().equals("red")) {
+
         }
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
         markerOption.setFlat(true);//设置marker平贴地图效果
@@ -923,9 +935,15 @@ public class MainActivity extends BaseActivity implements IMainView,
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         LatLng target = cameraPosition.target;
         Log.d("onCameraChange", target.latitude + "jinjin------" + target.longitude);
-        lon = target.longitude;
-        lat = target.latitude;
-        initgetBikeMapList();
+        if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
+            initdingwei();
+            checkJumpStatus();
+        } else {
+            lon = target.longitude;
+            lat = target.latitude;
+            initgetBikeMapList();
+        }
+
 
     }
 

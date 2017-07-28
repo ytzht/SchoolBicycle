@@ -14,7 +14,7 @@
         android:layout_width="60dp"
         android:layout_height="17dp"
         android:layout_centerHorizontal="true"
-        android:background="#111" />
+        android:background="@drawable/la" />
 
     <TextView
         android:id="@+id/tv_use"
@@ -45,14 +45,15 @@
         android:id="@+id/finish_usecar"
         android:layout_width="75dp"
         android:layout_height="25dp"
-        android:layout_alignBaseline="@+id/use_no"
-        android:layout_alignBottom="@+id/use_no"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:background="@drawable/bg_org"
         android:gravity="center"
         android:text="结束用车"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:layout_below="@+id/iv_pull"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp" />
 
     <View
         android:id="@+id/view_divider"

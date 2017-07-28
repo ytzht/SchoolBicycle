@@ -38,6 +38,8 @@ public interface Apis {
 
     String overUseBike = "order/overUseBike";
 
+    String submit = "order/submit";
+
     String FailureList = "user/failureList";
 
     String depositRefund = "user/depositRefund";

@@ -18,54 +18,40 @@ public class UserService {
     private static final String tixian = "tixian";
     private static final String alert = "alert";
     private static final String Cookie = "Cookie";
-
-
-
-
     private static final String COOKIE_PREFS = "CookiePrefsFile";
+
+    private static final String ShowOneMark = "ShowOneMark";
 
     public UserService(Context context) {
         this.context = context;
     }
 
-    public void setAccount(String account) {
+
+    public void setShowOneMark(String ShowOneMark1) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        memberPrefs.edit().putString(ACCOUNT, account).apply();
+                ShowOneMark, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(ShowOneMark, ShowOneMark1).apply();
     }
 
 
-    public String getAccount() {
+    public String getShowOneMark() {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        return memberPrefs.getString(ACCOUNT, "");
+                ShowOneMark, Context.MODE_PRIVATE);
+        return memberPrefs.getString(ShowOneMark, "0");
 
     }
 
-    public void setPwd(String pwd) {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        memberPrefs.edit().putString(PWD, pwd).apply();
-    }
-
-
-    public String getPwd() {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        return memberPrefs.getString(PWD, "");
-
-    }
 
     public void setValidateUser(String validateUser) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
+                ValidateUser, Context.MODE_PRIVATE);
         memberPrefs.edit().putString(ValidateUser, validateUser).apply();
     }
 
 
     public String getValidateUser() {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
+                ValidateUser, Context.MODE_PRIVATE);
         return memberPrefs.getString(ValidateUser, "0");
 
     }
@@ -86,14 +72,14 @@ public class UserService {
 
     public void settixian(String state) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
+                tixian, Context.MODE_PRIVATE);
         memberPrefs.edit().putString(tixian, state).apply();
     }
 
 
     public String gettixian() {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
+                tixian, Context.MODE_PRIVATE);
         return memberPrefs.getString(tixian, "0");
 
     }

@@ -10,6 +10,7 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
@@ -65,6 +66,7 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
 
                         @Override
                         public void onResponse(String response, int id) {
+                            L.d(response);
                             BaseResult b = gson.fromJson(response,BaseResult.class);
                             if (b.getCode()==1){
                                 startActivity(ResultActivity.class,"type","tixian");

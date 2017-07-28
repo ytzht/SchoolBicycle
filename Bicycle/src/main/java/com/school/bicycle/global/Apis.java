@@ -64,4 +64,5 @@ public interface Apis {
 
     String StartShareMyBike = "order/startShareMyBike";
 
+    String UpDate = "";
 }

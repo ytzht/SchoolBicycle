@@ -82,7 +82,11 @@ public class TimeCountDownTextView extends TextView {
                 public void onTick(long millisUntilFinished) {
                     mMinute = millisUntilFinished / (1000 * 60);
                     mSecond = (millisUntilFinished % (1000 * 60)) / 1000;
-                    TimeCountDownTextView.this.setText(Html.fromHtml(String.format(mCss, mMinute, mSecond)));
+                    if (mMinute == 0 && mSecond == 0) {
+
+                    } else {
+                        TimeCountDownTextView.this.setText(Html.fromHtml(String.format(mCss, mMinute, mSecond)));
+                    }
                 }
 
                 @Override
@@ -97,10 +101,10 @@ public class TimeCountDownTextView extends TextView {
     }
 
 
-
     public void setOnCountDownFinishListener(onCountDownFinishListener onCountDownFinishListener) {
         this.mOnCountDownFinishListener = onCountDownFinishListener;
     }
+
     public void setOnCountFinishListener(onCountFinishListener onCountFinishListener) {
         this.onCountFinishListener = onCountFinishListener;
     }

@@ -22,6 +22,8 @@ import com.school.bicycle.entity.FailureList;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -63,9 +65,10 @@ public class FaultActivity extends BaseToolBarActivity {
         rlvProblem.setLayoutManager(new LinearLayoutManager(this));
         rlvProblem.setAdapter(adapter);
 
+        String cookie = new UserService(FaultActivity.this).getCookie();
 
         OkHttpUtils.get()
-                .url(Apis.Base + Apis.FailureList)
+                .url(Apis.Base + Apis.FailureList) .addHeader("cookie",cookie)
                 .build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {

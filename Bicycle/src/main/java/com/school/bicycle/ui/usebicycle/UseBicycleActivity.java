@@ -1,6 +1,7 @@
 package com.school.bicycle.ui.usebicycle;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +26,9 @@ import com.school.bicycle.entity.QueryBikeListByBikeNumber;
 import com.school.bicycle.entity.QueryBikeListByDate;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.main.MainActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
 import com.school.bicycle.utils.MySelectorDecorator;
 import com.school.bicycle.utils.OneDayDecorator;
@@ -71,6 +76,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_use_bicycle);
         ButterKnife.bind(this);
         setToolbarText("用车列表");
+        initonclick();
         usebiycleBynum.setVisibility(View.GONE);
         llSearchBicyclenum.setVisibility(View.GONE);
         llSearchBicyclenumNum.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -82,9 +88,11 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                 if (i == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                     String url = getResources().getString(R.string.baseurl) + "order/queryBikeListByBikeNumber";
 
+                    String cookie = new UserService(UseBicycleActivity.this).getCookie();
+
                     OkHttpUtils
                             .post()
-                            .url(url)
+                            .url(url).addHeader("cookie",cookie)
                             .addParams("bike_number", llSearchBicyclenumNum.getText().toString())
                             .build()
                             .execute(new StringCallback() {
@@ -102,12 +110,12 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                     } else {
                                         usebiycleBynum.setVisibility(View.VISIBLE);
                                         lvShowUsebicycle.setVisibility(View.GONE);
-                                        usebiycleBynumBiyclenum.setText("车牌号："+queryBikeListByBikeNumber.getBike_info().getNumber());
+                                        usebiycleBynumBiyclenum.setText("车牌号：" + queryBikeListByBikeNumber.getBike_info().getNumber());
                                         usebiycleBynumBiycleaddress.setText(queryBikeListByBikeNumber.getBike_info().getAddress());
 
                                         if (queryBikeListByBikeNumber.getBike_info().getColor().equals("yellow")) {
                                             ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_yellow);
-                                            usebiycleBynumBiycletime.setText("共享时间：" +queryBikeListByBikeNumber.getBike_info().getValid_time());
+                                            usebiycleBynumBiycletime.setText("共享时间：" + queryBikeListByBikeNumber.getBike_info().getValid_time());
                                         } else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("green")) {
                                             ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_green);
                                             usebiycleBynumBiycletime.setText("随时可用");
@@ -122,6 +130,18 @@ public class UseBicycleActivity extends BaseToolBarActivity {
             }
         });
 
+    }
+
+    private void initonclick() {
+        lvShowUsebicycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
+                it.putExtra("",queryBikeListByDate.getBike_info().get(position));
+//                new UserService(UseBicycleActivity.this).setshowone(queryBikeListByDate.getBike_info().get(position).toString());
+
+            }
+        });
     }
 
     private AlertDialog dialog;
@@ -150,6 +170,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
     private static final String TAG = "=====";
     private MaterialCalendarView myCalendar;
     private TextView tv_ok;
+    QueryBikeListByDate queryBikeListByDate;
 
     private void showAlert() {
 
@@ -196,7 +217,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                     usebiycleBynum.setVisibility(View.GONE);
                                     lvShowUsebicycle.setVisibility(View.VISIBLE);
                                     Log.d("response", response);
-                                    QueryBikeListByDate queryBikeListByDate = gson.fromJson(response, QueryBikeListByDate.class);
+                                    queryBikeListByDate = gson.fromJson(response, QueryBikeListByDate.class);
                                     if (queryBikeListByDate.getCode() == 0) {
                                         showShort(queryBikeListByDate.getMsg());
                                     } else {

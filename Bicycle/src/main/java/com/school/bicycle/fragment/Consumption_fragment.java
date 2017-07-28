@@ -13,6 +13,8 @@ import com.school.bicycle.adapter.Consumption_adapter;
 import com.school.bicycle.entity.Consumption;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseFragment;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -37,9 +39,11 @@ public class Consumption_fragment extends BaseFragment {
     private void initView(View view) {
         consumption_listview = (ListView) view.findViewById(R.id.consumption_listview);
         String url = Apis.Base + Apis.queryConsumDetails;
+        String cookie = new UserService(getActivity()).getCookie();
 
         OkHttpUtils.get()
                 .url(url)
+                .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

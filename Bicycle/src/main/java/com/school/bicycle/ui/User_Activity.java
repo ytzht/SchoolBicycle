@@ -16,6 +16,7 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.main.MainActivity;
+import com.school.bicycle.ui.register.RegisterActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -49,8 +50,10 @@ public class User_Activity extends BaseToolBarActivity {
     private void initview() {
 
         final String url = Apis.Base + Apis.getUserInfo;
+        String cookie = new UserService(User_Activity.this).getCookie();
         OkHttpUtils.get()
                 .url(url)
+                .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

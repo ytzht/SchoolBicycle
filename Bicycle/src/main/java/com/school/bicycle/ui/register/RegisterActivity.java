@@ -12,21 +12,27 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.school.bicycle.R;
+import com.school.bicycle.app.MyApplication;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Login;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.utils.Forms;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
+import okhttp3.Headers;
+import okhttp3.Response;
 
 public class RegisterActivity extends BaseToolBarActivity implements IRegisterView {
 
@@ -147,8 +153,8 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
 
                 iRegisterPresenter.verificationCode(etCode.getText().toString());
                 String url = getResources().getString(R.string.baseurl) + "user/register";
-
-                if (cbRuler.isChecked()){
+                final String[] sid = new String[1];
+                if (cbRuler.isChecked()) {
                     OkHttpUtils
                             .post()
                             .url(url)
@@ -156,33 +162,35 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                             .addParams("code", etCode.getText().toString())
                             .addParams("reg_from", "android")
                             .build()
-                            .execute(new StringCallback() {
+                            .execute(new Callback() {
+                                String s;
+                                @Override
+                                public Object parseNetworkResponse(Response response, int id) throws Exception {
+                                    Headers headers = response.headers();
+                                    Log.d("info_headers", "header " + headers);
+                                    List<String> cookies = headers.values("Set-Cookie");
+                                    String session = cookies.get(0);
+                                    Log.d("info_cookies", "onResponse-size: " + cookies);
+                                    s = session.substring(0, session.indexOf(";"));
+                                    Log.d("info_s", "session is  :" + s);
+
+
+                                    return null;
+                                }
+
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
-                                    showLong("你的网络貌似不太好？");
+                                    Log.d("response", e.toString());
                                 }
 
                                 @Override
-                                public void onResponse(String response, int id) {
-                                    Log.d("response",response);
-                                    Login login = gson.fromJson(response, Login.class);
-                                    if (login.getCode()==1){
-                                        if (login.getVerify_status()==1){
-                                            if (login.getDeposit_status()==1){
-                                                finish();
-                                            }else {
-                                                startActivity(DepositActivity.class);
-                                            }
-                                        }else {
-                                            startActivity(RealnameActivity.class);
-                                        }
-                                    }else {
-                                        showShort(login.getMsg());
-                                    }
-
+                                public void onResponse(Object response, int id) {
+                                    new UserService(RegisterActivity.this).setCookie(s);
+                                    finish();
                                 }
+
                             });
-                }else {
+                } else {
 
                 }
 

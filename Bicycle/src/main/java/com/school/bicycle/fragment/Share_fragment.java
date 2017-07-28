@@ -15,6 +15,8 @@ import com.school.bicycle.entity.Consumption;
 import com.school.bicycle.entity.QueryShareDetails;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseFragment;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.umeng.qq.tencent.BaseApi;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -40,9 +42,10 @@ public class Share_fragment extends BaseFragment {
     private void initView(View view) {
         consumption_listview = (ListView) view.findViewById(R.id.consumption_listview);
         String url = Apis.Base + Apis.queryShareDetails;
+        String cookie = new UserService(getActivity()).getCookie();
 
         OkHttpUtils.get()
-                .url(url)
+                .url(url) .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

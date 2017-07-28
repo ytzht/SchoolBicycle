@@ -9,6 +9,8 @@ import com.school.bicycle.adapter.GetMyMessage_adapter;
 import com.school.bicycle.entity.GetMyMessage;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -33,8 +35,10 @@ public class InformationActivity extends BaseToolBarActivity {
     private void initview() {
 
         String url = Apis.Base + Apis.getMyMessage + "?pageNumber=1";
+        String cookie = new UserService(InformationActivity.this).getCookie();
+
         OkHttpUtils.get()
-                .url(url)
+                .url(url) .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

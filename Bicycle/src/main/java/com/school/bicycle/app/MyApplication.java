@@ -54,7 +54,7 @@ public class MyApplication extends MultiDexApplication {
     }
 
     public static void initokhttp(Context context, String key, String value) {
-        if (!key.equals("a")) new UserService(context).setCookie(key, value);
+        if (!key.equals("a")) new UserService(context).setCookie( value);
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(context));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)

@@ -10,6 +10,8 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -49,8 +51,10 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
             showShort("请输入提现金额");
         } else {
             String url = Apis.Base + Apis.withdraw;
+            String cookie = new UserService(WithdrawalsActivity.this).getCookie();
+
             OkHttpUtils.post()
-                    .url(url)
+                    .url(url) .addHeader("cookie",cookie)
                     .addParams("withdraw_money", editWithdrawals.getText().toString())
                     .build()
                     .execute(new StringCallback() {

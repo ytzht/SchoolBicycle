@@ -16,6 +16,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.Withdrawals.WithdrawalsActivity;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -64,9 +65,11 @@ public class Mywallet_activity extends BaseToolBarActivity {
 
     private void initview() {
         String url = Apis.Base + Apis.wallet;
+        String cookie = new UserService(Mywallet_activity.this).getCookie();
+
 
         OkHttpUtils.get()
-                .url(url)
+                .url(url) .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

@@ -18,6 +18,7 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -53,6 +54,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_lockclose);
         ButterKnife.bind(this);
         setToolbarText("锁车");
+        new UserService(LockcloseActivity.this).setState("0");
 
 
 
@@ -81,9 +83,13 @@ public class LockcloseActivity extends BaseToolBarActivity {
 
             tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             DEVICE_ID = tm.getDeviceId();
+            new UserService(LockcloseActivity.this).setState("0");
+            String cookie = new UserService(LockcloseActivity.this).getCookie();
+
             OkHttpUtils
                     .post()
                     .url(url)
+                    .addHeader("cookie",cookie)
                     .addParams("location", locationstring)
                     .addParams("imei", DEVICE_ID)
                     .addParams("diu", DEVICE_ID)
@@ -104,6 +110,8 @@ public class LockcloseActivity extends BaseToolBarActivity {
                                 finish();
                             }else {
                                 showShort(baseResult.getMsg());
+                                new UserService(LockcloseActivity.this).setState("0");
+                                finish();
                             }
 
                         }

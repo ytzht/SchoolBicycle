@@ -20,8 +20,10 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Mybiycle;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.MyRoute.MyRoute_Activity;
 import com.school.bicycle.ui.Myeserve.MyReserveActivity;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.utils.MySelectorDecorators;
 import com.school.bicycle.utils.SelectDecorator;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -72,8 +74,10 @@ public class MyBicycleActivity extends BaseToolBarActivity {
 
         String url = Apis.Base +
                 Apis.myBike;
+        String cookie = new UserService(MyBicycleActivity.this).getCookie();
+
         OkHttpUtils.get()
-                .url(url)
+                .url(url).addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

@@ -17,6 +17,11 @@ public class UserService {
     private static final String State = "state";
     private static final String tixian = "tixian";
     private static final String alert = "alert";
+    private static final String Cookie = "Cookie";
+
+
+
+
     private static final String COOKIE_PREFS = "CookiePrefsFile";
 
     public UserService(Context context) {
@@ -67,14 +72,14 @@ public class UserService {
 
     public void setState(String state) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
+                State, Context.MODE_PRIVATE);
         memberPrefs.edit().putString(State, state).apply();
     }
 
 
     public String getState() {
         SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
+                State, Context.MODE_PRIVATE);
         return memberPrefs.getString(State, "0");
 
     }
@@ -107,10 +112,17 @@ public class UserService {
 
     }
 
-    public void setCookie(String key, String value) {
+    public void setCookie(String value) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 COOKIE_PREFS, Context.MODE_PRIVATE);
-        memberPrefs.edit().putString(key, value).apply();
+        memberPrefs.edit().putString(Cookie,value).apply();
+    }
+
+    public String getCookie() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                COOKIE_PREFS, Context.MODE_PRIVATE);
+        return memberPrefs.getString(Cookie, "0");
+
     }
 
 }

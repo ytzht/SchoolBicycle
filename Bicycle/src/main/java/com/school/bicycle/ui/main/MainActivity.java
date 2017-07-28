@@ -60,6 +60,7 @@ import com.school.bicycle.ui.TimeCountDownTextView;
 import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.ui.ZxingActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
@@ -262,14 +263,17 @@ public class MainActivity extends BaseActivity implements IMainView,
             state_0.setVisibility(View.VISIBLE);
             useing_biycle_lay.setVisibility(View.GONE);
             toolbar.setTitle("首页");
+        }else if (new UserService(MainActivity.this).getState().equals("2")){
+
         }
 
         if (new UserService(MainActivity.this).getValidateUser().equals("0")) {
             name.setText("未登录");
             score.setText("");
+            startActivity(RegisterActivity.class);
         } else {
             if (v != null) {
-                name.setText(v.getBody().getPhone());
+                name.setText(v.getName());
                 if (v.getBody().getStatus() == 1) {
                     score.setText("手机已认证");
                 } else {
@@ -279,6 +283,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 name.setText("未登录");
                 score.setText("");
             }
+
         }
     }
 
@@ -308,8 +313,8 @@ public class MainActivity extends BaseActivity implements IMainView,
                     String url = Apis.Base + Apis.uploadLocation;
                     OkHttpUtils
                             .get()//请求方式
-                            .addHeader()//添加头
-                            .headers()//头
+//                            .addHeader()//添加头
+//                            .headers()//头
                             .url(url)//地址
                             .build()//创建请求
                             .execute(new StringCallback() {//回调
@@ -340,6 +345,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
         OkHttpUtils.get()
                 .url(url)
+                .addHeader("cookie",new UserService(MainActivity.this).getCookie())
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -469,14 +475,21 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     //点击事件
     private void initClickListener() {
-
-
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (v != null) {
                     if (new UserService(MainActivity.this).getValidateUser().equals("1")) {
-                        startActivity(UseBicycleActivity.class);
+                        if (v.getDeposit_status()==0){
+                            startActivity(DepositActivity.class);
+                        }else {
+                            if (v.getVerify_status()==0){
+                                startActivity(RealnameActivity.class);
+                            }else {
+                                startActivity(UseBicycleActivity.class);
+                            }
+                        }
+
                     } else {
                         startActivity(RegisterActivity.class);
                     }
@@ -518,9 +531,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         headImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(MainActivity.this, User_Activity.class);
-                it.putExtra("user", v);
-                startActivity(it);
+                startActivity(User_Activity.class);
 
             }
         });
@@ -609,6 +620,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         mMapView.onResume();
         checkJumpStatus();
         initview();
+        initvalidateUser();
 
     }
 

@@ -12,6 +12,8 @@ import com.school.bicycle.adapter.GetMyRoute_adapter;
 import com.school.bicycle.entity.GetMyRoute;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.xingcheng_map_acvitity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -41,9 +43,10 @@ public class MyRoute_Activity extends BaseToolBarActivity {
     private void initview() {
 
         String url = Apis.Base + Apis.getMyRoute;
+        String cookie = new UserService(MyRoute_Activity.this).getCookie();
 
         OkHttpUtils.get()
-                .url(url)
+                .url(url) .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

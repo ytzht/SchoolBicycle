@@ -23,6 +23,8 @@ import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.entity.User;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UTFXMLString;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.utils.CheckCardID;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -115,8 +117,9 @@ public class RealnameActivity extends BaseToolBarActivity {
             bos.write(byteArray);
 
             String url = getResources().getString(R.string.baseurl) + "user/campusCardImage";
-
+            String cookie = new UserService(RealnameActivity.this).getCookie();
             OkHttpUtils.post()
+                    .addHeader("cookie", cookie)
                     .addFile("image", "temp.jpg", file)
                     .url(url)
 //                    .params(params)//
@@ -218,7 +221,6 @@ public class RealnameActivity extends BaseToolBarActivity {
     }
 
 
-
     //把AnimationDrawable中的图片资源逐个回收
     private void tryRecycleAnimationDrawable(
             AnimationDrawable animationDrawables) {
@@ -240,30 +242,32 @@ public class RealnameActivity extends BaseToolBarActivity {
     }
 
     @OnClick({R.id.shangchuan, R.id.rn_photo})
-    public void onViewClicked(View view)  {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.shangchuan:
                 String url = getResources().getString(R.string.baseurl) + "user/profile";
-                if ( rnName.getText().toString().isEmpty()){
+                if (rnName.getText().toString().isEmpty()) {
                     showShort("姓名为空");
-                }else {
-                    if ( rnIdnumber.getText().toString().isEmpty()){
+                } else {
+                    if (rnIdnumber.getText().toString().isEmpty()) {
                         showShort("身份证号为空");
-                    }else {
-                        if ( rnIdstudent.getText().toString().isEmpty()){
+                    } else {
+                        if (rnIdstudent.getText().toString().isEmpty()) {
                             showShort("学号为空");
-                        }else {
-                            if(rnIdnumber.getText().toString().length()!=18){
+                        } else {
+                            if (rnIdnumber.getText().toString().length() != 18) {
                                 showShort("请输入正确的身份证号");
-                            }else if (!CheckCardID.isIDCard(rnIdnumber.getText().toString())){
+                            } else if (!CheckCardID.isIDCard(rnIdnumber.getText().toString())) {
                                 showShort("请输入正确的身份证号");
-                            }else {
+                            } else {
                                 Log.d("name", UTFXMLString.getUTF8XMLString(rnName.getText().toString()));
+                                String cookie = new UserService(RealnameActivity.this).getCookie();
 
                                 OkHttpUtils
                                         .post()
                                         .url(url)
-                                        .addParams("name",  UTFXMLString.getUTF8XMLString(rnName.getText().toString()))
+                                        .addHeader("cookie", cookie)
+                                        .addParams("name", UTFXMLString.getUTF8XMLString(rnName.getText().toString()))
                                         .addParams("id_number", rnIdnumber.getText().toString())
                                         .addParams("campus_card_number", rnIdstudent.getText().toString())
                                         .build()

@@ -12,12 +12,18 @@ public class ValidateUser implements Serializable{
     /**
      * code : 1
      * msg : 登陆成功
-     * body : {"user_id":"用户编号","phone":"手机号","wallet":0,"device_id":"设备号","status":"手机验证状态（1：已验证，0：未验证）","reg_from":"注册来源","create_time":"创建时间"}
+     * body : {"user_id":25,"phone":"15553426817","wallet":0,"device_id":"862561039857212","deposit_status":0,"status":1,"alarm_switch":1,"reg_from":"android","create_time":"2017-07-27 13:00:16"}
+     * name : 单宝滨
+     * deposit_status : 1
+     * verify_status : 0
      */
 
     private int code;
     private String msg;
     private BodyBean body;
+    private String name;
+    private int deposit_status;
+    private int verify_status;
 
     public int getCode() {
         return code;
@@ -43,30 +49,58 @@ public class ValidateUser implements Serializable{
         this.body = body;
     }
 
-    public static class BodyBean implements Serializable {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getDeposit_status() {
+        return deposit_status;
+    }
+
+    public void setDeposit_status(int deposit_status) {
+        this.deposit_status = deposit_status;
+    }
+
+    public int getVerify_status() {
+        return verify_status;
+    }
+
+    public void setVerify_status(int verify_status) {
+        this.verify_status = verify_status;
+    }
+
+    public static class BodyBean {
         /**
-         * user_id : 用户编号
-         * phone : 手机号
-         * wallet : 0
-         * device_id : 设备号
-         * status : 手机验证状态（1：已验证，0：未验证）
-         * reg_from : 注册来源
-         * create_time : 创建时间
+         * user_id : 25
+         * phone : 15553426817
+         * wallet : 0.0
+         * device_id : 862561039857212
+         * deposit_status : 0
+         * status : 1
+         * alarm_switch : 1
+         * reg_from : android
+         * create_time : 2017-07-27 13:00:16
          */
 
-        private String user_id;
+        private int user_id;
         private String phone;
-        private int wallet;
+        private double wallet;
         private String device_id;
+        private int deposit_status;
         private int status;
+        private int alarm_switch;
         private String reg_from;
         private String create_time;
 
-        public String getUser_id() {
+        public int getUser_id() {
             return user_id;
         }
 
-        public void setUser_id(String user_id) {
+        public void setUser_id(int user_id) {
             this.user_id = user_id;
         }
 
@@ -78,11 +112,11 @@ public class ValidateUser implements Serializable{
             this.phone = phone;
         }
 
-        public int getWallet() {
+        public double getWallet() {
             return wallet;
         }
 
-        public void setWallet(int wallet) {
+        public void setWallet(double wallet) {
             this.wallet = wallet;
         }
 
@@ -94,12 +128,28 @@ public class ValidateUser implements Serializable{
             this.device_id = device_id;
         }
 
+        public int getDeposit_status() {
+            return deposit_status;
+        }
+
+        public void setDeposit_status(int deposit_status) {
+            this.deposit_status = deposit_status;
+        }
+
         public int getStatus() {
             return status;
         }
 
         public void setStatus(int status) {
             this.status = status;
+        }
+
+        public int getAlarm_switch() {
+            return alarm_switch;
+        }
+
+        public void setAlarm_switch(int alarm_switch) {
+            this.alarm_switch = alarm_switch;
         }
 
         public String getReg_from() {

@@ -1,12 +1,13 @@
 package com.school.bicycle.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/7/20.
  */
 
-public class QueryBikeListByDate {
+public class QueryBikeListByDate implements Serializable{
 
 
     /**
@@ -43,7 +44,7 @@ public class QueryBikeListByDate {
         this.bike_info = bike_info;
     }
 
-    public static class BikeInfoBean {
+    public static class BikeInfoBean implements Serializable {
         /**
          * log : 121.450685
          * lat : 37.486472
@@ -126,7 +127,7 @@ public class QueryBikeListByDate {
             this.lease_info = lease_info;
         }
 
-        public static class LeaseInfoBean {
+        public static class LeaseInfoBean implements Serializable{
             /**
              * 时租 : 2
              * 日租 : 30

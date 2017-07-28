@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.GetDeposit;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -40,9 +42,10 @@ public class DepositActivity extends BaseToolBarActivity implements IDepositView
 
         //获取押金金额
         String url = getResources().getString(R.string.baseurl) + "user/getDeposit";
+        String cookie = new UserService(DepositActivity.this).getCookie();
         OkHttpUtils
                 .get()
-                .url(url)
+                .url(url)  .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

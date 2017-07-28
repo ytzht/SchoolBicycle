@@ -21,6 +21,8 @@ import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -58,9 +60,11 @@ public class PayActivity extends BaseToolBarActivity {
 
     private void initview() {
         String url = Apis.Base + Apis.dayLeaseOrder;
+        String cookie = new UserService(PayActivity.this).getCookie();
+
         OkHttpUtils
                 .post()
-                .url(url)
+                .url(url).addHeader("cookie",cookie)
                 .addParams("dates", getIntent().getStringExtra("dates"))
                 .addParams("bike_number", getIntent().getStringExtra("bike_number"))
                 .build()

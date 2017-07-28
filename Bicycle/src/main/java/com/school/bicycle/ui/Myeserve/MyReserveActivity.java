@@ -13,6 +13,8 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.MyAppoint;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -38,9 +40,10 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
 
     private void initview() {
         String url = Apis.Base + Apis.getMyAppoint;
+        String cookie = new UserService(MyReserveActivity.this).getCookie();
 
         OkHttpUtils.get()
-                .url(url)
+                .url(url).addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

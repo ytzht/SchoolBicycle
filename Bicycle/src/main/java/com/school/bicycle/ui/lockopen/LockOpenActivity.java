@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.school.bicycle.R;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -60,9 +62,11 @@ public class LockOpenActivity extends BaseToolBarActivity {
             String url = Apis.Base + Apis.unlocking;
             Log.d("response",lock_code);
             Log.d("response",locationstring);
+            String cookie = new UserService(LockOpenActivity.this).getCookie();
+
             OkHttpUtils
                     .post()
-                    .url(url)
+                    .url(url)  .addHeader("cookie",cookie)
                     .addParams("lock_code", lock_code)
                     .addParams("location", locationstring)
                     .build()

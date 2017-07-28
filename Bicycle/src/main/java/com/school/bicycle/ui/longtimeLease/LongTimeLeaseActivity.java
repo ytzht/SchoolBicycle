@@ -27,6 +27,8 @@ import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -112,9 +114,12 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
     private void initlongtimeprice() {
 
         String url = getResources().getString(R.string.baseurl) + "order/getLongLeaseInfo";
+        String cookie = new UserService(LongTimeLeaseActivity.this).getCookie();
+
         OkHttpUtils
                 .get()
                 .url(url)
+                .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
 

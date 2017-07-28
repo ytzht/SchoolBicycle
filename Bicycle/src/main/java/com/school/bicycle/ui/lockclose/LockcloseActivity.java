@@ -53,7 +53,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_lockclose);
         ButterKnife.bind(this);
         setToolbarText("锁车");
-        new UserService(LockcloseActivity.this).setState("0");
+
 
 
     }
@@ -100,6 +100,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
                             BaseResult baseResult = gson.fromJson(response,BaseResult.class);
                             if (baseResult.getCode()==1){
                                 startActivity(ResultActivity.class,"type","returnbiycle");
+                                new UserService(LockcloseActivity.this).setState("0");
                                 finish();
                             }else {
                                 showShort(baseResult.getMsg());

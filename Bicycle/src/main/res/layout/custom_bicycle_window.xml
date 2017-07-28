@@ -45,7 +45,6 @@
                 android:layout_below="@+id/xian2"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="7dp"
-                android:text="山地车:011223"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 
@@ -58,7 +57,6 @@
                 android:layout_below="@+id/tv_time_info"
                 android:layout_marginTop="7dp"
                 android:paddingLeft="7dp"
-                android:text="地点：西逸夫楼"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 
@@ -71,7 +69,6 @@
                 android:layout_below="@+id/tv_timerent_info"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="7dp"
-                android:text="共享时段：7.12-7.16"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 
@@ -84,7 +81,6 @@
                 android:layout_below="@+id/tv_dayrent_info"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="7dp"
-                android:text="共享时段：7.12-7.16"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 

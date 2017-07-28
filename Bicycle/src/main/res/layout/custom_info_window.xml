@@ -14,7 +14,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="7dp"
         android:paddingLeft="7dp"
-        android:text="车牌号：0001"
         android:textColor="@color/chengse"
         android:textSize="14dp" />
 
@@ -26,7 +25,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:paddingRight="7dp"
-        android:text="距离：0.02km"
         android:textColor="@color/all_textc"
         android:textSize="11dp" />
 
@@ -57,7 +55,6 @@
                 android:layout_below="@+id/xian2"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="7dp"
-                android:text="在租时段：06/01"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 
@@ -70,7 +67,6 @@
                 android:layout_below="@+id/tv_time_info"
                 android:layout_marginTop="7dp"
                 android:paddingLeft="7dp"
-                android:text="日租：2元/小时"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 
@@ -83,7 +79,6 @@
                 android:layout_below="@+id/tv_timerent_info"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="7dp"
-                android:text="日租：20元/小时"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 
@@ -96,7 +91,6 @@
                 android:layout_below="@+id/tv_dayrent_info"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="7dp"
-                android:text="长租：100元/小时；159元/三个月\n199元/六个月；299元/一年"
                 android:textColor="@color/all_textc"
                 android:textSize="11dp" />
 

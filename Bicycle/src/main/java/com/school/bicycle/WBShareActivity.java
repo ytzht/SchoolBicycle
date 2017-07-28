@@ -1,7 +1,5 @@
 package com.school.bicycle;
 
-//import com.umeng.socialize.media.WBShareCallBackActivity;
-
 import com.umeng.socialize.media.WBShareCallBackActivity;
 
 /**

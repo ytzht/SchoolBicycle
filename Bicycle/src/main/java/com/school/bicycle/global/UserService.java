@@ -17,6 +17,7 @@ public class UserService {
     private static final String State = "state";
     private static final String tixian = "tixian";
     private static final String alert = "alert";
+    private static final String COOKIE_PREFS = "CookiePrefsFile";
 
     public UserService(Context context) {
         this.context = context;
@@ -104,6 +105,12 @@ public class UserService {
                 USER_PREFS, Context.MODE_PRIVATE);
         return memberPrefs.getString(alert, "0");
 
+    }
+
+    public void setCookie(String key, String value) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                COOKIE_PREFS, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(key, value).apply();
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.school.bicycle.global.UserService;
 import com.school.bicycle.http.APIFactory;
 import com.school.bicycle.utils.PreferencesUtils;
 import com.umeng.socialize.PlatformConfig;
@@ -44,19 +45,20 @@ public class MyApplication extends MultiDexApplication {
 //
         initShare();
 
-        initokhttp();
+        initokhttp(getApplicationContext(), "a", "a");
 
         preferencesUtils = new PreferencesUtils(this);
         ZXingLibrary.initDisplayOpinion(this);
     }
 
-    private void initokhttp() {
-        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
+    public static void initokhttp(Context context, String key, String value) {
+        if (!key.equals("a")) new UserService(context).setCookie(key, value);
+        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(context));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new LoggerInterceptor("TAG"))
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .readTimeout(10000L, TimeUnit.MILLISECONDS)
-                .addInterceptor(new LoggerInterceptor("TAG"))
+                .addInterceptor(new LoggerInterceptor("TAG====="))
                 .cookieJar(cookieJar)
                 //其他配置
                 .build();

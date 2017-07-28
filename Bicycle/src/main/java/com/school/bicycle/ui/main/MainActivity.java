@@ -1,12 +1,18 @@
 package com.school.bicycle.ui.main;
 
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
@@ -28,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -42,6 +49,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -49,6 +57,7 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.GetBikeMapList;
+import com.school.bicycle.entity.UpDate;
 import com.school.bicycle.entity.UploadLocation;
 import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
@@ -82,6 +91,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Timer;
@@ -90,6 +100,8 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
+
+import static com.school.bicycle.global.Apis.UpDate;
 
 public class MainActivity extends BaseActivity implements IMainView,
         NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter,
@@ -642,9 +654,109 @@ public class MainActivity extends BaseActivity implements IMainView,
         checkJumpStatus();
         initview();
         initvalidateUser();
+//        UpdateInfo();
+    }
+    boolean isWifi = false;
+    private DownloadManager downloadManager;
 
+    private void UpdateInfo() {
+        downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        isWifi = NetworkInfo.State.CONNECTED == ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        try {
+            // getPackageName()是你当前类的包名，0代表是获取版本信息
+            PackageInfo packInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String url = "https://api.cishan123.org/v2.2/api/AutoUpdate/UpdateInfoNew?type=yst&version=1.2";
+            //获取到versionNum 用vName接收, downloadUrl = http://file.cishan123.org/yst_1.7.apk
+            final String vName = "1.7";
+            final String downloadUrl = "http://file.cishan123.org/yst_1.7.apk";
+            download(downloadUrl, vName);
+            OkHttpUtils.get().url(Apis.Base + UpDate).build().execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                    UpDate upDate = (new Gson()).fromJson(response, UpDate.class);
+                    if (upDate.getCode() == 1){
+
+                    }else {
+                        showShort(upDate.getMsg());
+                    }
+
+
+                }
+            });
+
+//            packInfo.versionName;
+            //下面执行网络操作访问接口的目前最新版apk版本信息，如我这里https://api.cishan123.org/v2.2/api/AutoUpdate/UpdateInfoNew?type=yst&version=1.2
+
+
+
+
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
+    public void download(String downloadUrl, String vName){
+        if (isWifi) {
+            //wifi下自动下载最新版本，检测目录下是否已经下载好
+            String SDPATH = Environment.getExternalStorageDirectory().getPath() + "/xyx/校易行" + vName + ".apk";//重命名，用来判断下载过没
+            if (new File(SDPATH).exists()) {
+                //安装SDPATH的文件
+                InatallDialog(SDPATH);
+            } else {
+                Toast.makeText(this, "正在后台下载，请稍后...", Toast.LENGTH_SHORT).show();
+                DownLoadAPK.downloadAPK(downloadManager, downloadUrl, "校易行" + vName, "");
+            }
+        } else {
+            myDialog(downloadManager, downloadUrl, vName);
+        }
+    }
+    public void InatallDialog(final String SDPATH) {
+        new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
+                .setMessage("已下载完成最新版本，是否现在安装？")//对话框提示正文
+                .setIcon(R.mipmap.ic_launcher)//对话框标题上的图片
+                .setNegativeButton("暂不升级", new DialogInterface.OnClickListener() {
+                    @Override//取消按钮
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "请尽快更新", Toast.LENGTH_SHORT).show();
+                    }
+                }).setPositiveButton("立即安装", new DialogInterface.OnClickListener() {
+            @Override//确定按钮
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse("file://" + SDPATH), "application/vnd.android.package-archive");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        }).setCancelable(false)//点击其他区域关闭对话框
+                .show();
+    }
+
+
+    public void myDialog(final DownloadManager downloadManager, final String url, final String vName) {
+        new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
+                .setMessage("本期做了一些新功能和优化体验，快来试试吧？")//对话框提示正文
+                .setIcon(R.mipmap.ic_launcher)//对话框标题上的图片
+                .setNegativeButton("暂不升级", new DialogInterface.OnClickListener() {
+                    @Override//取消按钮
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "请尽快更新", Toast.LENGTH_SHORT).show();
+                    }
+                }).setPositiveButton("立即升级", new DialogInterface.OnClickListener() {
+            @Override//确定按钮
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, "正在后台下载，请稍后...", Toast.LENGTH_SHORT).show();
+                DownLoadAPK.downloadAPK(downloadManager, url, "校易行" + vName, "");
+            }
+        }).setCancelable(false)//点击其他区域关闭对话框
+                .show();
+    }
     //跳转状态
     private void checkJumpStatus() {
 

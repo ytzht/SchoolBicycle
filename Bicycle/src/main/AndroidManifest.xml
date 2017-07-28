@@ -76,22 +76,19 @@
             android:name="UMENG_APPKEY"
             android:value="594bd7b107fe6525ee0009ba" />
 
-        <!--支付宝-->
+        <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
-
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name=".ui.AppLauncherActivity"
             android:theme="@style/BaseTheme.Volunteer.Launcher">
@@ -162,7 +159,8 @@
         <activity android:name=".ui.pay.PayActivity" />
         <activity android:name=".ui.xingcheng_map_acvitity" />
         <activity android:name=".ui.MyRoute.MyRoute_Activity" />
-        <activity android:name=".ui.User_Activity"></activity>
+        <activity android:name=".ui.User_Activity" />
+        <activity android:name=".ui.openbynum_Activity"></activity>
     </application>
 
 </manifest>

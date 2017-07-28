@@ -16,11 +16,15 @@ public interface Apis {
 
     String getMyAppoint = "order/getMyAppoint";
 
+    String findNotPayRoute = "order/findNotPayRoute";
+
     String longLeaseOrder = "order/longLeaseOrder";
+
+    String submitLeaseOrder = "order/submitLeaseOrder";
 
     String getMyRoute = "order/getMyRoute";
 
-    String uploadLocation = "order/uploadLocation";
+    String uploadLocation = "order/uploadLocation?location=";
 
     String checkJumpStatus = "order/checkJumpStatus";
 

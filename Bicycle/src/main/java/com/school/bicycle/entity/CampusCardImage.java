@@ -16,7 +16,7 @@ public class CampusCardImage {
 
     private int code;
     private String msg;
-    private String Image_ur; // FIXME check this code
+    private String Image_ur; //
 
     public int getCode() {
         return code;

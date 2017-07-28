@@ -9,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -53,9 +55,11 @@ public class ResultActivity extends BaseToolBarActivity {
                 public void onClick(View v) {
                     String bike_number = getIntent().getStringExtra("bike_number");
                     String url = Apis.Base + Apis.leaseBicycle;
+                    String cookie = new UserService(ResultActivity.this).getCookie();
                     OkHttpUtils
                             .post()
                             .url(url)
+                            .addHeader("cookie", cookie)
                             .addParams("bike_number", bike_number)
                             .build()
                             .execute(new StringCallback() {
@@ -66,16 +70,21 @@ public class ResultActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("response",response);
+                                    Log.d("response", response);
+                                    BaseResult baseResult = gson.fromJson(response, BaseResult.class);
+                                    if (baseResult.getCode() == 1) {
+                                        //0表示不再用车中1表示用车中
+                                        new UserService(ResultActivity.this).setState("1");
+                                        finish();
+                                    }
+
                                 }
                             });
 
-                    //0表示不再用车中1表示用车中
-                    new UserService(ResultActivity.this).setState("1");
-                    finish();
+
                 }
             });
-        } else if (type.equals("yajin")){
+        } else if (type.equals("yajin")) {
             teResResult.setText("押金将在2个工作日内转入到\n您的押金支付账户内");
             btResNext.setText("返回主界面");
             btResNext.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +93,7 @@ public class ResultActivity extends BaseToolBarActivity {
                     finish();
                 }
             });
-        }else if (type.equals("tixian")){
+        } else if (type.equals("tixian")) {
             teResResult.setText("提现金额将在2个工作日内转入到\n您的押金支付账户内");
             btResNext.setText("返回主界面");
             btResNext.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +104,7 @@ public class ResultActivity extends BaseToolBarActivity {
                 }
             });
 
-        }else if(type.equals("date")){
+        } else if (type.equals("date")) {
             teResResult.setText("用车结束需归还至原停车位才可技术用车。\n点击主界面扫码开锁按钮解锁车辆，结束\n用车前您可多次上锁开锁");
             btResNext.setText("确定");
             btResNext.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +135,7 @@ public class ResultActivity extends BaseToolBarActivity {
                 }
             });
 
-        }else if(type.equals("returnbiycle")) {
+        } else if (type.equals("returnbiycle")) {
             teResResult.setText("还 车 成 功");
             btResNext.setText("返回主界面");
             btResNext.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +145,7 @@ public class ResultActivity extends BaseToolBarActivity {
                     finish();
                 }
             });
-        }else {
+        } else {
             // TODO: 2017/7/24 用于设置各个界面跳转到当前界面 该界面的显示
         }
     }

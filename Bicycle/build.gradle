@@ -79,6 +79,7 @@ dependencies {
 
     //    compile 'io.github.mayubao:pay_library:1.0.1'
     compile 'com.github.traex.calendarlistview:library:1.2.3'
+    compile files('libs/alipaySdk-20170710.jar')
     compile 'com.github.traex.calendarlistview:library:1.2.3'
     compile 'com.wanjian:sak:0.0.2'
     compile 'top.zibin:Luban:1.0.9'
@@ -119,8 +120,7 @@ dependencies {
     compile 'com.amap.api:search:latest.integration'
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-    compile files('libs/alipaySdk-20170710.jar')
 }

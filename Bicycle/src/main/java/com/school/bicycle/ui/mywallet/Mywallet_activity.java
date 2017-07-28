@@ -117,7 +117,6 @@ public class Mywallet_activity extends BaseToolBarActivity {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO: 2017/7/25 押金退款
                         String url = Apis.Base + Apis.depositRefund;
                         OkHttpUtils
                                 .get()

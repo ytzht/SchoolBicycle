@@ -18,6 +18,7 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.school.bicycle.ui.result.ResultActivity;
@@ -132,7 +133,46 @@ public class LockcloseActivity extends BaseToolBarActivity {
             case R.id.lock_kefu:
                 break;
             case R.id.lock_ok:
-                initlocation();
+                String url = Apis.Base + Apis.overUseBike;
+                String bike_number = getIntent().getStringExtra("bike_number");
+                String location = getIntent().getStringExtra("location");
+                tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                DEVICE_ID = tm.getDeviceId();
+                new UserService(LockcloseActivity.this).setState("0");
+                String cookie = new UserService(LockcloseActivity.this).getCookie();
+
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addHeader("cookie",cookie)
+                        .addParams("location", location)
+                        .addParams("imei", DEVICE_ID)
+                        .addParams("bike_number", bike_number)
+                        .addParams("diu", DEVICE_ID)
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.d("response",response);
+                                BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+                                if (baseResult.getCode()==1){
+                                    startActivity(OverPayActivity.class);
+//                                    startActivity(ResultActivity.class,"type","returnbiycle");
+                                    new UserService(LockcloseActivity.this).setState("0");
+                                    finish();
+                                }else {
+                                    showShort(baseResult.getMsg());
+//                                    new UserService(LockcloseActivity.this).setState("0");
+//                                    finish();
+                                }
+
+                            }
+                        });
                 break;
         }
     }

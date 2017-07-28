@@ -146,7 +146,6 @@ public class PayActivity extends BaseToolBarActivity {
                             request.timeStamp = wxPayParams.timestamp;
                             request.sign = wxPayParams.sign;
                             msgApi.sendReq(request);
-                            // TODO: 2017/7/27 未跳转到微信支付 
                         } else if (pay_type.equals("zfb")) {
                             final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
                             info = response;
@@ -164,7 +163,6 @@ public class PayActivity extends BaseToolBarActivity {
                             }.start();
 
                         } else {
-                            // TODO: 2017/7/27 用钱包支付
                             Pay_wallet p = gson.fromJson(response,Pay_wallet.class);
                             if (p.getCode()==1){
                                 showShort(p.getMsg());

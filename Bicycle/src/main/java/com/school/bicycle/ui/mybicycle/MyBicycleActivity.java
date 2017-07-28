@@ -77,7 +77,8 @@ public class MyBicycleActivity extends BaseToolBarActivity {
         String cookie = new UserService(MyBicycleActivity.this).getCookie();
 
         OkHttpUtils.get()
-                .url(url).addHeader("cookie",cookie)
+                .url(url)
+                .addHeader("cookie",cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -167,7 +168,6 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                         }
 
                         Log.d(TAG, s);
-                        // TODO: 2017/7/18 接口25
 
                         Map<String, String> map = new HashMap<>();
                         map.put("share_date", s);

@@ -181,7 +181,7 @@ public class CustomAlertDialog extends Dialog {
 //
 //                    @Override
 //                    public void onClick(View v) {
-//                        // TODO Auto-generated method stub
+//
 //                        dialog.dismiss();
 //                        positiveButtonClickListener.onClick(dialog,
 //                                DialogInterface.BUTTON_POSITIVE);
@@ -203,7 +203,7 @@ public class CustomAlertDialog extends Dialog {
 //
 //                    @Override
 //                    public void onClick(View v) {
-//                        // TODO Auto-generated method stub
+//
 //                        dialog.dismiss();
 //                        negativeButtonClickListener.onClick(dialog,
 //                                DialogInterface.BUTTON_NEGATIVE);
@@ -219,7 +219,7 @@ public class CustomAlertDialog extends Dialog {
 //
 //                        @Override
 //                        public void onClick(View v) {
-//                            // TODO Auto-generated method stub
+//
 //                            dialog.dismiss();
 //                        }
 //                    });

@@ -326,7 +326,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="支付宝支付" />
+                    android:text="钱包支付" />
 
                 <CheckBox
                     android:id="@+id/cb_wallet"

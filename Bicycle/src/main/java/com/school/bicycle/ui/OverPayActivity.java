@@ -100,6 +100,7 @@ public class OverPayActivity extends BaseToolBarActivity {
                             byDistance.setText(findNotPayRoute.getDistance());
                             byExpend.setText(findNotPayRoute.getCalories());
                             byPay.setText(findNotPayRoute.getTotal_fee());
+                            tvYe.setText(findNotPayRoute.getBalance());
                             price=findNotPayRoute.getTotal_fee();
                             bike_number=findNotPayRoute.getBike_number();
                         }
@@ -182,7 +183,6 @@ public class OverPayActivity extends BaseToolBarActivity {
                                     Pay_wallet p = gson.fromJson(response, Pay_wallet.class);
                                     if (p.getCode() == 1) {
                                         showShort(p.getMsg());
-                                        startActivity(ResultActivity.class, "type", "date");
                                         finish();
                                     } else {
                                         showShort(p.getMsg());

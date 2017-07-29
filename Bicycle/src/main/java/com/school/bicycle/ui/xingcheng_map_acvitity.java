@@ -99,7 +99,7 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
         String position = it.getStringExtra("position");
         int i = Integer.parseInt(position);
         mapBikeNumber.setText("车 牌 号"+getMyRoute.getBody().get(i).getBike_number());
-        mapDistance.setText("骑行距离："+getMyRoute.getBody().get(i).getDistance()+"KM");
+        mapDistance.setText("骑行距离："+getMyRoute.getBody().get(i).getDistance()+"M");
         mapTotalFee.setText("骑行消费："+getMyRoute.getBody().get(i).getTotal_fee()+"元");
         mapCalories.setText(getMyRoute.getBody().get(i).getCalories()+"卡");
         mapCarbonSaved.setText(getMyRoute.getBody().get(i).getCarbon_saved()+"g");

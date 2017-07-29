@@ -92,7 +92,8 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                     OkHttpUtils
                             .post()
-                            .url(url).addHeader("cookie",cookie)
+                            .url(url)
+                            .addHeader("cookie",cookie)
                             .addParams("bike_number", llSearchBicyclenumNum.getText().toString())
                             .build()
                             .execute(new StringCallback() {

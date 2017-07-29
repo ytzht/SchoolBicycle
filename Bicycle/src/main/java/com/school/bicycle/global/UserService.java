@@ -27,6 +27,7 @@ public class UserService {
     }
 
 
+    //1为显示一个 0为显示所有
     public void setShowOneMark(String ShowOneMark1) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 ShowOneMark, Context.MODE_PRIVATE);

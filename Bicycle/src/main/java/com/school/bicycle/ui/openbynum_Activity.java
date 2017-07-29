@@ -47,6 +47,7 @@ public class openbynum_Activity extends BaseToolBarActivity {
                 String num = edBiyclenumOpen.getText().toString();
                 if (!num.isEmpty()){
                     startActivity(LockOpenActivity.class, "lock_code", num, "location", location);
+                    finish();
                 }
 
                 break;

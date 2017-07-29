@@ -24,6 +24,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
+import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -117,9 +118,11 @@ public class PayActivity extends BaseToolBarActivity {
 
     private void initpay() {
         String url = Apis.Base + Apis.submitDayLeaseMoney;
+        String cookie = new UserService(PayActivity.this).getCookie();
         OkHttpUtils
                 .post()
                 .url(url)
+                .addHeader("cookie",cookie)
                 .addParams("price", PaymentAmount.getText().toString())
                 .addParams("pay_type", pay_type)
                 .build()
@@ -165,7 +168,7 @@ public class PayActivity extends BaseToolBarActivity {
                         } else {
                             Pay_wallet p = gson.fromJson(response,Pay_wallet.class);
                             if (p.getCode()==1){
-                                showShort(p.getMsg());
+//                                showShort(p.getMsg());
                                 startActivity(ResultActivity.class,"type","date");
                                 finish();
                             }else {

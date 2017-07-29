@@ -110,25 +110,6 @@ public class ResultActivity extends BaseToolBarActivity {
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    String bike_number = getIntent().getStringExtra("bike_number");
-//                    String url = Apis.Base + Apis.leaseBicycle;
-//                    OkHttpUtils
-//                            .post()
-//                            .url(url)
-//                            .addParams("bike_number", bike_number)
-//                            .build()
-//                            .execute(new StringCallback() {
-//                                @Override
-//                                public void onError(Call call, Exception e, int id) {
-//
-//                                }
-//
-//                                @Override
-//                                public void onResponse(String response, int id) {
-//                                    Log.d("response",response);
-//                                }
-//                            });
-
                     //0表示不再用车中1表示用车中
                     new UserService(ResultActivity.this).setState("1");
                     finish();

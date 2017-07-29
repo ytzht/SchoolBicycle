@@ -16,6 +16,8 @@ public interface Apis {
 
     String getMyAppoint = "order/getMyAppoint";
 
+    String dayLeaseList = "order/dayLeaseList";
+
     String findNotPayRoute = "order/findNotPayRoute";
 
     String longLeaseOrder = "order/longLeaseOrder";

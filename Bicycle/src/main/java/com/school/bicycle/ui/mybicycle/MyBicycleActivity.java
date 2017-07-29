@@ -24,6 +24,7 @@ import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.MyRoute.MyRoute_Activity;
 import com.school.bicycle.ui.Myeserve.MyReserveActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.school.bicycle.utils.MySelectorDecorators;
 import com.school.bicycle.utils.SelectDecorator;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -78,7 +79,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
 
         OkHttpUtils.get()
                 .url(url)
-                .addHeader("cookie",cookie)
+                .addHeader("cookie", cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -94,7 +95,8 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                             bikeNumber.setText(m.getBike_number());
                             shareIncome.setText(m.getShare_income());
                         } else {
-                            showShort(m.getMsg());
+                            bikeNumber.setText("无");
+                            shareIncome.setText(m.getShare_income());
                         }
                     }
                 });
@@ -168,11 +170,12 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                         }
 
                         Log.d(TAG, s);
-
+                        String cookie = new UserService(MyBicycleActivity.this).getCookie();
                         Map<String, String> map = new HashMap<>();
                         map.put("share_date", s);
                         OkHttpUtils.post()
                                 .params(map)
+                                .addHeader("cookie", cookie)
                                 .url(Apis.Base + Apis.StartShareMyBike)
                                 .build().execute(new StringCallback() {
                             @Override

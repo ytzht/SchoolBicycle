@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -49,6 +50,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.Polyline;
+import com.amap.api.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -56,6 +59,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.CheckJumpStatus;
+import com.school.bicycle.entity.DayleaseList;
 import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.UpDate;
 import com.school.bicycle.entity.UploadLocation;
@@ -93,6 +97,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -128,12 +133,20 @@ public class MainActivity extends BaseActivity implements IMainView,
     TextView kaluli;
     @BindView(R.id.length_biycile)
     TextView lengthBiycile;
+    @BindView(R.id.state_0)
+    RelativeLayout state0;
+    @BindView(R.id.finish_usecar)
+    TextView finishUsecar;
+    @BindView(R.id.saoma)
+    LinearLayout saoma;
+    @BindView(R.id.useing_biycle_lay)
+    RelativeLayout useingBiycleLay;
     //    @BindView(R.id.iv_pull)
     private ImageView iv_pull;
     //    @BindView(R.id.ll_detail)
     private LinearLayout ll_detail;
     private RelativeLayout useing_biycle_lay;
-    private LinearLayout saoma;
+
     private RelativeLayout state_0;
     private IMainPresenter iMainPresenter;
     private ImageView headImg;
@@ -167,8 +180,15 @@ public class MainActivity extends BaseActivity implements IMainView,
                     double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
                     lat = amapLocation.getLatitude();//获取纬度
                     lon = amapLocation.getLongitude();//获取经度
-                    Log.e("经纬度=", "locationType:" + locationType + ",latitude:" + lat + "longitude" + lon);
-                    initgetBikeMapList();
+                    Log.d("经纬度=", "locationType:" + locationType + ",latitude:" + lat + "longitude" + lon);
+                    if (new UserService(MainActivity.this).getState().equals("1")) {
+                        List<LatLng> latLngs = new ArrayList<LatLng>();
+                        latLngs.add(new LatLng(lon, lat));
+                        Polyline polyline = aMap.addPolyline(new PolylineOptions().
+                                addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
+
+                    }
+//                    initgetBikeMapList();
                     mLocationClient.stopLocation();
                 } else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -202,8 +222,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         initview();
         initClickListener();
         initmap();
-        initvalidateUser();
-
 
     }
 
@@ -270,7 +288,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         state_0 = (RelativeLayout) findViewById(R.id.state_0);
         finish_usecar = (TextView) findViewById(R.id.finish_usecar);
         useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
-        saoma = (LinearLayout) findViewById(R.id.saoma);
 
         if (new UserService(MainActivity.this).getState().equals("1")) {
             state_0.setVisibility(View.GONE);
@@ -328,7 +345,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 message.what = 1;
                 doActionHandler.sendMessage(message);
             }
-        }, 10000, 10000/* 表示1000毫秒之後，每隔1000毫秒執行一次 */);
+        }, 60000, 60000/* 表示1000毫秒之後，每隔1000毫秒執行一次 */);
     }
 
 
@@ -376,6 +393,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void initvalidateUser() {
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
+        Log.d("DEVICE_ID",DEVICE_ID);
         String url = Apis.Base +
                 Apis.validateUser
                 + DEVICE_ID;
@@ -494,6 +512,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 } else if (g.getBody().get(i).getColor().equals("green")) {
                                     markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                                             .decodeResource(getResources(), R.drawable.ico_green)));
+                                } else if (g.getBody().get(i).getColor().equals("blue")) {
+                                    markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                            .decodeResource(getResources(), R.drawable.ico_blue)));
                                 }
                                 // 将Marker设置为贴地显示，可以双指下拉地图查看效果
                                 markerOption.setFlat(true);//设置marker平贴地图效果
@@ -503,16 +524,11 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                             }
                         }
-                        showLong(g.getMsg());
                     }
 
                 });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 
     //点击事件
     private void initClickListener() {
@@ -545,7 +561,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         saoma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ZxingActivity.class, "location", lon + "," + lat);
+                String location = lon + "," + lat;
+                Log.d("location===", location);
+                startActivity(ZxingActivity.class, "location", location);
             }
         });
 
@@ -555,16 +573,14 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                 UserService s = new UserService(MainActivity.this);
                 if (s.getAlert().equals("0")) {
-                    //出弹窗吧
-                    showTips();
+
+                    showTips();     //出弹窗吧
                 } else {
                     //已经勾过不再提示，直接跳
-                    mTimer.cancel();
+//                    mTimer.cancel();
                     startActivity(LockcloseActivity.class, "bike_number", bike_number, "location", lon + "," + lat);
 
                 }
-
-
             }
         });
 
@@ -586,7 +602,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         fabQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(ZxingActivity.class);
+                String location = lon + "," + lat;
+                Log.d("location===", location);
+                startActivity(ZxingActivity.class, "location", location);
             }
         });
 
@@ -639,8 +657,8 @@ public class MainActivity extends BaseActivity implements IMainView,
                 if (box.isChecked()) {
                     new UserService(MainActivity.this).setAlert("1");
                 }
-                mTimer.cancel();
-                startActivity(LockcloseActivity.class);
+//                mTimer.cancel();
+                startActivity(LockcloseActivity.class, "bike_number", bike_number, "location", lon + "," + lat);
 
             }
         });
@@ -651,7 +669,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
-        mTimer.cancel();
+//        mTimer.cancel();
     }
 
     @Override
@@ -661,9 +679,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         initvalidateUser();
         checkJumpStatus();
         initview();
-        initvalidateUser();
 //        UpdateInfo();
     }
+
     boolean isWifi = false;
     private DownloadManager downloadManager;
 
@@ -688,9 +706,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                 @Override
                 public void onResponse(String response, int id) {
                     UpDate upDate = (new Gson()).fromJson(response, UpDate.class);
-                    if (upDate.getCode() == 1){
+                    if (upDate.getCode() == 1) {
 
-                    }else {
+                    } else {
                         showShort(upDate.getMsg());
                     }
 
@@ -702,15 +720,12 @@ public class MainActivity extends BaseActivity implements IMainView,
             //下面执行网络操作访问接口的目前最新版apk版本信息，如我这里https://api.cishan123.org/v2.2/api/AutoUpdate/UpdateInfoNew?type=yst&version=1.2
 
 
-
-
-
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void download(String downloadUrl, String vName){
+    public void download(String downloadUrl, String vName) {
         if (isWifi) {
             //wifi下自动下载最新版本，检测目录下是否已经下载好
             String SDPATH = Environment.getExternalStorageDirectory().getPath() + "/xyx/校易行" + vName + ".apk";//重命名，用来判断下载过没
@@ -725,6 +740,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             myDialog(downloadManager, downloadUrl, vName);
         }
     }
+
     public void InatallDialog(final String SDPATH) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
                 .setMessage("已下载完成最新版本，是否现在安装？")//对话框提示正文
@@ -766,6 +782,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         }).setCancelable(false)//点击其他区域关闭对话框
                 .show();
     }
+
     //跳转状态
     private void checkJumpStatus() {
 
@@ -789,10 +806,18 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                         if (checkJumpStatus.getBike_status() == 0) {
                             new UserService(MainActivity.this).setState("0");
+                            new UserService(MainActivity.this).setShowOneMark("0");
+                            initview();
                         } else if (checkJumpStatus.getBike_status() == 1) {
                             onemark(checkJumpStatus);
+                            new UserService(MainActivity.this).setShowOneMark("1");
+                            new UserService(MainActivity.this).setState("1");
+                            initview();
                         } else if (checkJumpStatus.getBike_status() == 2) {
                             onemark(checkJumpStatus);
+                            new UserService(MainActivity.this).setShowOneMark("1");
+                            new UserService(MainActivity.this).setState("1");
+                            initview();
                         } else if (checkJumpStatus.getBike_status() == 3) {
                             startActivity(OverPayActivity.class);
                         }
@@ -800,13 +825,13 @@ public class MainActivity extends BaseActivity implements IMainView,
                 });
     }
 
+    //显示一个点
     private void onemark(CheckJumpStatus checkJumpStatus) {
         AMap aMap = mMapView.getMap();
         aMap.clear();
+
         tvUse.setText("用车中：" + checkJumpStatus.getBody().get(0).getNumber());
-        new UserService(MainActivity.this).setShowOneMark("1");
         bike_number = checkJumpStatus.getBody().get(0).getNumber();
-        new UserService(MainActivity.this).setState("1");
         LatLng latLng = new LatLng(checkJumpStatus.getBody().get(0).getLat(), checkJumpStatus.getBody().get(0).getLog());
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(latLng);
@@ -875,7 +900,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    @Override
+    @Override//侧边栏
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -989,16 +1014,21 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (data.getColor().equals("yellow")) {
+                    showShort("该车辆已被长租");
+                } else {
+                    startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
+                }
 
-                startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
 
             }
         });
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(ResultActivity.class, "type", "time", "bike_number", data.getNumber());
                 bike_number = data.getNumber();
+                startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
+
 
             }
         });
@@ -1011,6 +1041,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     }
 
+    //获取弹窗窗口
     @Override
     public View getInfoContents(Marker marker) {
         if (infoWindow == null) {
@@ -1026,7 +1057,13 @@ public class MainActivity extends BaseActivity implements IMainView,
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.d("mark dian", "true");
-        marker.showInfoWindow();
+        final GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
+        if (data.getColor().equals("blue")) {
+
+        } else {
+            marker.showInfoWindow();
+        }
+
         return true;
     }
 
@@ -1050,8 +1087,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             initdingwei();
             checkJumpStatus();
         } else {
-            lon = target.longitude;
-            lat = target.latitude;
+            initdingwei();
             initgetBikeMapList();
         }
 
@@ -1071,6 +1107,28 @@ public class MainActivity extends BaseActivity implements IMainView,
         dialog.setCancelable(true);
         myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
         myCalendarInit();//初始化日历
+
+        String url = Apis.Base + Apis.dayLeaseList;
+        String cookie = new UserService(MainActivity.this).getCookie();
+
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addHeader("cookie", cookie)
+                .addParams("bike_number", bike_number)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        DayleaseList d = gson.fromJson(response, DayleaseList.class);
+
+                    }
+                });
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -79,6 +79,7 @@ public class ZxingActivity extends BaseToolBarActivity {
             String num = result.substring(result.indexOf("#") + 1);
             String location = getIntent().getStringExtra("location");
             Log.d("num", num);
+            Log.d("location", location);
             startActivity(LockOpenActivity.class, "lock_code", num, "location", location);
             finish();
 
@@ -102,6 +103,7 @@ public class ZxingActivity extends BaseToolBarActivity {
             case R.id.inbiycle_num:
                 String location = getIntent().getStringExtra("location");
                 startActivity(openbynum_Activity.class, "location", location);
+                finish();
                 break;
             case R.id.linear2:
                 if (!isOpen) {

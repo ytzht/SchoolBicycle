@@ -24,7 +24,7 @@ public class FindNotPayRoute {
     private String calories;
     private String total_fee;
     private String bike_number;
-    private double balance;
+    private String balance;
 
     public int getCode() {
         return code;
@@ -82,11 +82,11 @@ public class FindNotPayRoute {
         this.bike_number = bike_number;
     }
 
-    public double getBalance() {
+    public String getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(String balance) {
         this.balance = balance;
     }
 }

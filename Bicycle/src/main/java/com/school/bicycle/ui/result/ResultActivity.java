@@ -13,8 +13,6 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.User_Activity;
-import com.school.bicycle.ui.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -76,6 +74,8 @@ public class ResultActivity extends BaseToolBarActivity {
                                         //0表示不再用车中1表示用车中
                                         new UserService(ResultActivity.this).setState("1");
                                         finish();
+                                    }else {
+                                        showShort(baseResult.getMsg());
                                     }
 
                                 }

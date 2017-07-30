@@ -88,7 +88,9 @@ import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
 import com.school.bicycle.utils.MySelectorDecorator;
+import com.school.bicycle.utils.MySelectorDecorators;
 import com.school.bicycle.utils.OneDayDecorator;
+import com.school.bicycle.utils.SelectDecorator;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -96,8 +98,11 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1035,7 +1040,39 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAlert(data.getNumber());
+
+                String url = Apis.Base + Apis.dayLeaseList;
+                String cookie = new UserService(MainActivity.this).getCookie();
+                format = new SimpleDateFormat("yyyy-MM-dd");
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addHeader("cookie", cookie)
+                        .addParams("bike_number", bike_number)
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                L.d(response);
+                                DayleaseList d = gson.fromJson(response, DayleaseList.class);
+
+                                if (d.getCode() == 1){
+                                    showAlert(data.getNumber(), d.getBody());
+
+                                }else {
+                                    showShort(d.getMsg());
+                                }
+
+                            }
+                        });
+
+
+
             }
         });
 
@@ -1097,9 +1134,11 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     private static final String TAG = "=====";
     List<CalendarDay> selectedDates;
-
-    private void showAlert(final String i) {
+    List<Date> unlist = new ArrayList<>();
+    DateFormat format;
+    private void showAlert(final String i, List<String> list) {
         final String bike_number = i;
+
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.useday_calendar, null, false);
         dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
         tv_ok = (TextView) view.findViewById(R.id.tv_ok);
@@ -1107,33 +1146,25 @@ public class MainActivity extends BaseActivity implements IMainView,
         dialog.setCancelable(true);
         myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
         myCalendarInit();//初始化日历
+        list = new ArrayList<>();
+        list.clear();
+        for (int j = 0; j < list.size(); j++) {
+            try {
+                Date date = format.parse(list.get(j));
+                unlist.add(date);
+                myCalendar.addDecorators(new MySelectorDecorators(MainActivity.this), new SelectDecorator(MainActivity.this, date));
 
-        String url = Apis.Base + Apis.dayLeaseList;
-        String cookie = new UserService(MainActivity.this).getCookie();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
-        OkHttpUtils
-                .post()
-                .url(url)
-                .addHeader("cookie", cookie)
-                .addParams("bike_number", bike_number)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        DayleaseList d = gson.fromJson(response, DayleaseList.class);
-
-                    }
-                });
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 selectedDates = myCalendar.getSelectedDates();
+
 
                 String s = "";
                 if (selectedDates.size() > 0) {
@@ -1175,7 +1206,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         CalendarDay today = CalendarDay.today();
         myCalendar.state().edit()
                 .setMinimumDate(CalendarDay.today())
-                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 1, today.getDay()))
                 .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
 //        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);
@@ -1206,9 +1237,20 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     if (selected) {
                         myCalendar.setDateSelected(date, true);
+                        if (unlist.size()>0) {
+                            for (int i = 0; i < unlist.size(); i++) {
+                                if (unlist.get(i) == date.getDate()) {
+                                    myCalendar.setDateSelected(date, false);
+                                }
+                            }
+                        }
+
+
+
                     } else {
                         myCalendar.setDateSelected(date, false);
                     }
+
 
 
                     if (selectedDates.size() > 0) {

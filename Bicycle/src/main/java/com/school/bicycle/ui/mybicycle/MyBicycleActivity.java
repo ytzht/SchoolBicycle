@@ -18,14 +18,17 @@ import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Mybiycle;
+import com.school.bicycle.entity.SharedBikeList;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.MyRoute.MyRoute_Activity;
 import com.school.bicycle.ui.Myeserve.MyReserveActivity;
-import com.school.bicycle.ui.authentication.RealnameActivity;
-import com.school.bicycle.ui.lockclose.LockcloseActivity;
+import com.school.bicycle.utils.HighlightWeekendsDecorator;
+import com.school.bicycle.utils.MySelectorDecorator;
 import com.school.bicycle.utils.MySelectorDecorators;
+import com.school.bicycle.utils.OneDayDecorator;
 import com.school.bicycle.utils.SelectDecorator;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -33,6 +36,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +72,9 @@ public class MyBicycleActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_my_bicycle);
         ButterKnife.bind(this);
         setToolbarText("我的车辆");
+        cookie = new UserService(MyBicycleActivity.this).getCookie();
         initview();
+
     }
 
     private void initview() {
@@ -125,7 +131,38 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_myReservation_mybiycle:
                 //共享设置
-                showAlert();
+
+
+                String url = Apis.Base + Apis.dayLeaseLists;
+                format = new SimpleDateFormat("yyyy-MM-dd");
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addHeader("cookie", cookie)
+//                .addParams("bike_number", bike_number)
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                L.d(response);
+                                SharedBikeList d = gson.fromJson(response, SharedBikeList.class);
+                                if (d.getCode() == 1) {
+                                    unList.clear();
+                                    canList.clear();
+                                    showAlert(d.getBody());
+
+                                } else {
+                                    showShort(d.getMsg());
+                                }
+
+                            }
+                        });
+
+
                 break;
             case R.id.re_mypolice_mybiycle:
                 //报警
@@ -138,9 +175,11 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     private MaterialCalendarView myCalendar;
     private TextView tv_ok, tv_cancel;
 
+    List<Date> unList = new ArrayList<>();
+    List<SharedBikeList.BodyBean> canList = new ArrayList<>();
     private CheckBox cal_cb;
 
-    private void showAlert() {
+    private void showAlert(List<SharedBikeList.BodyBean> list) {
 
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.mybiycle_calendar, null, false);
         dialog = new AlertDialog.Builder(MyBicycleActivity.this).setView(view).setCancelable(false).show();
@@ -150,6 +189,29 @@ public class MyBicycleActivity extends BaseToolBarActivity {
         dialog.setCancelable(true);
         myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
         myCalendarInit();//初始化日历
+
+        if (list != null) {
+            for (int j = 0; j < list.size(); j++) {
+                try {
+                    Date date = format.parse(list.get(j).getStart_time());
+                    if (list.get(j).getLease_status() == 0) {
+                        canList.add(list.get(j));
+                        myCalendar.setDateSelected(date, true);
+                    } else {
+                        unList.add(date);
+                        myCalendar.addDecorators(new MySelectorDecorators(MyBicycleActivity.this),
+                                new SelectDecorator(MyBicycleActivity.this, date));
+                    }
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        setClickCalendar();
+
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,7 +232,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                         }
 
                         Log.d(TAG, s);
-                        String cookie = new UserService(MyBicycleActivity.this).getCookie();
+                        cookie = new UserService(MyBicycleActivity.this).getCookie();
                         Map<String, String> map = new HashMap<>();
                         map.put("share_date", s);
                         OkHttpUtils.post()
@@ -222,6 +284,70 @@ public class MyBicycleActivity extends BaseToolBarActivity {
 
     }
 
+    private void setClickCalendar() {
+        myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(MaterialCalendarView widget, final CalendarDay date, boolean selected) {
+                if (selected) {
+                    myCalendar.setDateSelected(date, true);
+                    if (unList.size() > 0) {
+                        for (int i = 0; i < unList.size(); i++) {
+                            if (unList.get(i).getTime() == date.getDate().getTime()) {
+                                myCalendar.setDateSelected(date, false);
+                                showShort("不可取消");
+                            }
+                        }
+                    }
+                } else {
+                    int q = 0;
+
+                    if (canList.size() > 0) {
+
+
+                        for (int i = 0; i < canList.size(); i++) {
+
+                            try {
+                                if (format.parse(canList.get(i).getStart_time()).getTime() == date.getDate().getTime()) {
+                                    q = 1;
+                                    OkHttpUtils.post()
+                                            .url(Apis.Base + Apis.CancelShareMyBike)
+                                            .addParams("sids", canList.get(i).getSid()+"")
+                                            .addHeader("cookie", cookie).build().execute(new StringCallback() {
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
+
+                                        }
+
+                                        @Override
+                                        public void onResponse(String response, int id) {
+                                            BaseResult result = gson.fromJson(response, BaseResult.class);
+                                            if (result.getCode() == 1){
+                                                myCalendar.setDateSelected(date, false);
+                                                showShort(result.getMsg());
+                                            }else {
+                                                showShort(result.getMsg());
+                                            }
+                                        }
+                                    });
+
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                    if (q == 0)
+                        myCalendar.setDateSelected(date, false);
+                }
+
+            }
+        });
+    }
+
+    String cookie;
+    DateFormat format;
+    private final OneDayDecorator oneDayDecorator = new OneDayDecorator();//今天
 
     public void myCalendarInit() {
         myCalendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
@@ -234,64 +360,15 @@ public class MyBicycleActivity extends BaseToolBarActivity {
         CalendarDay today = CalendarDay.today();
         myCalendar.state().edit()
                 .setMinimumDate(CalendarDay.today())
-                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 1, today.getDay()))
                 .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
-//        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);
         myCalendar.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-//                signDataInit(date.getYear(), date.get月租() + 1);
             }
         });
-        myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
 
-//                if (widget.getSelectedDates().size() > 2) {
-//
-//                    myCalendar.setDateSelected(date, false);
-//
-//                } else {
-
-                if (selected) {
-                    myCalendar.setDateSelected(date, true);
-                } else {
-                    myCalendar.setDateSelected(date, false);
-                }
-//                }
-//                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);
-
-            }
-        });
-//        MySelectorDecorator decorator = new MySelectorDecorator(this);
-//        myCalendar.addDecorators(decorator);
-
-
-        Date date = null;
-        Date date1 = null;
-        String str = "2017-7-18";
-        String str1 = "2017-7-11";
-        DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-            date1 = format1.parse(str1);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            date = format1.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        myCalendar.addDecorators(new MySelectorDecorators(this), new SelectDecorator(this, date));
-        myCalendar.addDecorators(new MySelectorDecorators(this), new SelectDecorator(this, date1));
-
-//        myCalendar.setDateSelected(date1, true);
-//        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1);
+        myCalendar.addDecorators(new MySelectorDecorator(this), new HighlightWeekendsDecorator(this), oneDayDecorator);
     }
-
-
 }

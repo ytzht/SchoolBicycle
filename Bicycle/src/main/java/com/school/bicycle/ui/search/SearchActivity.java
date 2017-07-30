@@ -50,7 +50,7 @@ public class SearchActivity extends BaseToolBarActivity {
         CalendarDay today = CalendarDay.today();
         myCalendar.state().edit()
                 .setMinimumDate(CalendarDay.today())
-                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 1, today.getDay()))
                 .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
         init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().getMonth() + 1, list);

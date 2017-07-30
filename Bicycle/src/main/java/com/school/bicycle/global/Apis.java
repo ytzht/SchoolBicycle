@@ -17,6 +17,7 @@ public interface Apis {
     String getMyAppoint = "order/getMyAppoint";
 
     String dayLeaseList = "order/dayLeaseList";
+//    String dayLeaseList = "order/dayLeaseList";
 
     String findNotPayRoute = "order/findNotPayRoute";
 
@@ -67,4 +68,8 @@ public interface Apis {
     String StartShareMyBike = "order/startShareMyBike";
 
     String UpDate = "";
+
+    String dayLeaseLists = "order/sharedBikeList";
+
+    String CancelShareMyBike = "order/cancelShareMyBike";
 }

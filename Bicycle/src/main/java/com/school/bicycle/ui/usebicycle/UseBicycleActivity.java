@@ -27,7 +27,6 @@ import com.school.bicycle.entity.QueryBikeListByDate;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
 import com.school.bicycle.utils.MySelectorDecorator;
@@ -249,7 +248,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         CalendarDay today = CalendarDay.today();
         myCalendar.state().edit()
                 .setMinimumDate(CalendarDay.today())
-                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 2, today.getDay()))
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 1, today.getDay()))
                 .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
 //        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);

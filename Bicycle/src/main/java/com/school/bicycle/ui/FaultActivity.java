@@ -23,7 +23,6 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -50,6 +49,8 @@ public class FaultActivity extends BaseToolBarActivity {
     Button btnSubmit;
     @BindView(R.id.rlv_problem)
     RecyclerView rlvProblem;
+    @BindView(R.id.et_txt)
+    EditText etTxt;
 
     private FaultAdapter adapter;
     private List<FailureList.ProblemsBean> problems = new ArrayList<>();
@@ -68,7 +69,7 @@ public class FaultActivity extends BaseToolBarActivity {
         String cookie = new UserService(FaultActivity.this).getCookie();
 
         OkHttpUtils.get()
-                .url(Apis.Base + Apis.FailureList) .addHeader("cookie",cookie)
+                .url(Apis.Base + Apis.FailureList).addHeader("cookie", cookie)
                 .build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -113,6 +114,9 @@ public class FaultActivity extends BaseToolBarActivity {
 
                 }
 
+                s = s + etTxt.getText().toString();
+
+                L.d(s);
                 if (s.equals("")) {
                     showShort("请选择出现的问题");
                     return;

@@ -75,6 +75,4 @@ public interface Apis {
     String dayLeaseLists = "order/sharedBikeList";
 
     String CancelShareMyBike = "order/cancelShareMyBike";
-
-    String Version = "version";
 }

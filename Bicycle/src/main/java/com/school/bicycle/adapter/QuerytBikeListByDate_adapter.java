@@ -61,13 +61,19 @@ public class QuerytBikeListByDate_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
         viewHolde.tvBiyclenumAda.setText("车牌号："+ data.get(i).getNumber());
-        viewHolde.tvDistanceAda.setText(data.get(i).getAdress());
+        viewHolde.tvDistanceAda.setText(data.get(i).getAddress());
         if (data.get(i).getColor().equals("yellow")){
             viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_yellow);
             viewHolde.tvSharingtimeAda.setText("共享时间："+data.get(i).getValid_time());
         }else if (data.get(i).getColor().equals("green")){
             viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_green);
             viewHolde.tvSharingtimeAda.setText("随时可用");
+        }else if (data.get(i).getColor().equals("red")){
+            viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_red);
+            viewHolde.tvSharingtimeAda.setText("已被长租");
+        }else if (data.get(i).getColor().equals("blue")){
+            viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_blue);
+            viewHolde.tvSharingtimeAda.setText("这是您的长租车辆，随时扫码使用");
         }
 
         return view;

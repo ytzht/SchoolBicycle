@@ -295,12 +295,20 @@ public class CheckJumpStatus {
 
         public static class LeaseInfoBean {
             /**
-             * 时租 : 0.04
-             * 日租 : 0.02
+             * 时租 : 2
+             * 日租 : 30
+             * 月租 : 100
+             * 季租 : 180
+             * 半年租 : 300
+             * 年租 : 500
              */
 
             private String 时租;
             private String 日租;
+            private String 月租;
+            private String 季租;
+            private String 半年租;
+            private String 年租;
 
             public String get时租() {
                 return 时租;
@@ -316,6 +324,38 @@ public class CheckJumpStatus {
 
             public void set日租(String 日租) {
                 this.日租 = 日租;
+            }
+
+            public String get月租() {
+                return 月租;
+            }
+
+            public void set月租(String 月租) {
+                this.月租 = 月租;
+            }
+
+            public String get季租() {
+                return 季租;
+            }
+
+            public void set季租(String 季租) {
+                this.季租 = 季租;
+            }
+
+            public String get半年租() {
+                return 半年租;
+            }
+
+            public void set半年租(String 半年租) {
+                this.半年租 = 半年租;
+            }
+
+            public String get年租() {
+                return 年租;
+            }
+
+            public void set年租(String 年租) {
+                this.年租 = 年租;
             }
         }
     }

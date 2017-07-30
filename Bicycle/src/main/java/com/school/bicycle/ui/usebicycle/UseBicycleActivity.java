@@ -119,6 +119,12 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                         } else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("green")) {
                                             ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_green);
                                             usebiycleBynumBiycletime.setText("随时可用");
+                                        }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("red")) {
+                                            ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_red);
+                                            usebiycleBynumBiycletime.setText("已被长租");
+                                        }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("blue")) {
+                                            ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_blue);
+                                            usebiycleBynumBiycletime.setText("这是您的长租车辆，随时扫码使用");
                                         }
                                     }
 
@@ -137,7 +143,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
-                it.putExtra("onebikeinfo",queryBikeListByDate.getBike_info().get(position));
+                it.putExtra("bike_number",queryBikeListByDate.getBike_info().get(position).getNumber());
                 startActivity(it);
             }
         });

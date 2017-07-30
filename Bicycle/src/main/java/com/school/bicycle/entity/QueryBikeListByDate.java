@@ -63,12 +63,12 @@ public class QueryBikeListByDate implements Serializable{
         private List<?> valid_time;
         private LeaseInfoBean lease_info;
 
-        public String getAdress() {
+        public String getAddress() {
             return address;
         }
 
-        public void setAdress(String adress) {
-            this.address = adress;
+        public void setAddress(String address) {
+            this.address = address;
         }
 
         public double getLog() {
@@ -127,7 +127,7 @@ public class QueryBikeListByDate implements Serializable{
             this.lease_info = lease_info;
         }
 
-        public static class LeaseInfoBean implements Serializable{
+        public static class LeaseInfoBean  implements Serializable{
             /**
              * 时租 : 2
              * 日租 : 30

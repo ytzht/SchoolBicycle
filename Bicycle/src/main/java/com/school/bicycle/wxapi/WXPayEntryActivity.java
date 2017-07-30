@@ -46,15 +46,15 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
             switch (resp.errCode) {
                 case 0:
                     showShort("支付成功");
-//                    EventBus.getDefault().post(new WxPayEvent(true));
+
                     break;
                 case -2:
                     showShort("取消支付");
-//                    EventBus.getDefault().post(new WxPayEvent(false));
+
                     break;
                 default:
                     showShort("支付失败");
-//                    EventBus.getDefault().post(new WxPayEvent(false));
+
                     break;
             }
         }

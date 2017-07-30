@@ -17,7 +17,8 @@ public interface Apis {
     String getMyAppoint = "order/getMyAppoint";
 
     String dayLeaseList = "order/dayLeaseList";
-//    String dayLeaseList = "order/dayLeaseList";
+
+    String invite = "production/invite?phone=";
 
     String findNotPayRoute = "order/findNotPayRoute";
 
@@ -38,6 +39,8 @@ public interface Apis {
     String dayLeaseOrder = "order/dayLeaseOrder";
 
     String submitDayLeaseMoney = "order/submitDayLeaseMoney";
+
+    String checkBikeByNumber = "order/checkBikeByNumber";
 
     String overUseBike = "order/overUseBike";
 

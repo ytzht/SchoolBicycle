@@ -168,6 +168,7 @@ public class GetBikeMapList {
             this.valid_time = valid_time;
         }
 
+
         public static class LeaseInfoBean {
             /**
              * 时租 : 2

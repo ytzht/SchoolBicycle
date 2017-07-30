@@ -174,26 +174,45 @@ public class MainActivity extends BaseActivity implements IMainView,
     ValidateUser v;
     private Timer mTimer;
 
+    //以前的定位点
+    private LatLng oldLatLng;
+    //是否是第一次定位
+    private boolean isFirstLatLng;
+
 
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
 
         @Override
         public void onLocationChanged(AMapLocation amapLocation) {
-
-            if (amapLocation != null) {
-                if (amapLocation.getErrorCode() == 0) {
-                    //可在其中解析amapLocation获取相应内容。
-                    double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                    lat = amapLocation.getLatitude();//获取纬度
-                    lon = amapLocation.getLongitude();//获取经度
-                    Log.d("经纬度=", "locationType:" + locationType + ",latitude:" + lat + "longitude" + lon);
-                    if (new UserService(MainActivity.this).getState().equals("1")) {
-                        List<LatLng> latLngs = new ArrayList<LatLng>();
-                        latLngs.add(new LatLng(lon, lat));
-                        Polyline polyline = aMap.addPolyline(new PolylineOptions().
-                                addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
-
+            if (mLocationListener != null && amapLocation != null) {
+                if (amapLocation != null) {
+                    if (amapLocation.getErrorCode() == 0) {
+                        //可在其中解析amapLocation获取相应内容。
+                        double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                        lat = amapLocation.getLatitude();//获取纬度
+                        lon = amapLocation.getLongitude();//获取经度
+                        Log.d("经纬度=", "locationType:" + locationType + ",latitude:" + lat + "longitude" + lon);
+                        if (new UserService(MainActivity.this).getState().equals("1")) {
+                            LatLng newLatLng = new LatLng(lon,lat);
+                            if (isFirstLatLng) {
+                                //记录第一次的定位信息
+                                oldLatLng = newLatLng;
+                                isFirstLatLng = false;
+                            }
+                            //位置有变化
+                            if (oldLatLng != newLatLng) {
+                                Log.e("Amap", amapLocation.getLatitude() + "," + amapLocation.getLongitude());
+                                setUpMap(oldLatLng, newLatLng);
+                                oldLatLng = newLatLng;
+                            } else {
+                            String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
+                            Log.e("AmapErr", errText);
+                            if (isFirstLatLng) {
+                                showShort(errText);
+                            }
+                        }
                     }
+                }
 //                    initgetBikeMapList();
                     mLocationClient.stopLocation();
                 } else {
@@ -202,6 +221,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                             + amapLocation.getErrorCode() + ", errInfo:"
                             + amapLocation.getErrorInfo());
                 }
+
             }
         }
     };
@@ -225,6 +245,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
+        isFirstLatLng = true;
         initview();
         initClickListener();
         initmap();
@@ -342,6 +363,17 @@ public class MainActivity extends BaseActivity implements IMainView,
         }
     }
 
+
+    /**绘制两个坐标点之间的线段,从以前位置到现在位置*/
+    private void setUpMap(LatLng oldData,LatLng newData ) {
+
+        // 绘制一个大地曲线
+        aMap.addPolyline((new PolylineOptions())
+                .add(oldData, newData)
+                .geodesic(true).color(Color.GREEN));
+
+    }
+
     //定时上传位置
     private void setTimerTask() {
         mTimer.schedule(new TimerTask() {
@@ -399,7 +431,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void initvalidateUser() {
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
-        Log.d("DEVICE_ID", DEVICE_ID);
+        Log.d("DEVICE_ID",DEVICE_ID);
         String url = Apis.Base +
                 Apis.validateUser
                 + DEVICE_ID;
@@ -604,7 +636,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 //重新定位并重新请求当前位置周边车辆信息
                 new UserService(MainActivity.this).setShowOneMark("0");
                 cameraUpdate = CameraUpdateFactory
-                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 18, 0, 30));
+                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
                 aMap.moveCamera(cameraUpdate);
             }
         });
@@ -679,6 +711,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         super.onDestroy();
         new UserService(MainActivity.this).setShowOneMark("0");
         mMapView.onDestroy();
+        if(null != mlocationClient){
+            mlocationClient.onDestroy();
+        }
 //        mTimer.cancel();
     }
 
@@ -699,9 +734,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         super.onNewIntent(intent);
         L.d("onnewIntent");
         queryBikeListByDate = new QueryBikeListByDate();
-//        initmap();
-//        queryBikeListByDate.setBike_info((List<QueryBikeListByDate.BikeInfoBean>) intent.getSerializableExtra("onebikeinfo"));
-        showOneCar((QueryBikeListByDate.BikeInfoBean) intent.getSerializableExtra("onebikeinfo"));
+        showOneCar(intent.getStringExtra("bike_number"));
     }
 
     boolean isWifi = false;
@@ -709,6 +742,8 @@ public class MainActivity extends BaseActivity implements IMainView,
     String content = "";
 
     private void checkVersion() {
+    //更新apk 相关
+    private void UpdateInfo() {
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         isWifi = NetworkInfo.State.CONNECTED == ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
 
@@ -740,6 +775,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
 
+    //更新apk 相关
     public void download(String downloadUrl, String vName) {
         if (isWifi) {
             //wifi下自动下载最新版本，检测目录下是否已经下载好
@@ -755,7 +791,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             myDialog(downloadManager, downloadUrl, vName);
         }
     }
-
+    //更新apk 相关
     public void InatallDialog(final String SDPATH) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
                 .setMessage("已下载完成最新版本，是否现在安装？")//对话框提示正文
@@ -777,7 +813,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         }).setCancelable(false)//点击其他区域关闭对话框
                 .show();
     }
-
+    //更新apk 相关
     public void myDialog(final DownloadManager downloadManager, final String url, final String vName) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
                 .setMessage(content)//对话框提示正文
@@ -822,19 +858,22 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                         if (checkJumpStatus.getBike_status() == 0) {
                             new UserService(MainActivity.this).setState("0");
-                            new UserService(MainActivity.this).setShowOneMark("0");
+                            //未租车状态
                             initview();
                         } else if (checkJumpStatus.getBike_status() == 1) {
-                            onemark(checkJumpStatus);
+                            onemark(checkJumpStatus.getBody().get(0).getNumber());
                             new UserService(MainActivity.this).setShowOneMark("1");
                             new UserService(MainActivity.this).setState("1");
+                            //时租中
                             initview();
                         } else if (checkJumpStatus.getBike_status() == 2) {
-                            onemark(checkJumpStatus);
+                            onemark(checkJumpStatus.getBody().get(0).getNumber());
                             new UserService(MainActivity.this).setShowOneMark("1");
                             new UserService(MainActivity.this).setState("1");
+                            //日租中
                             initview();
                         } else if (checkJumpStatus.getBike_status() == 3) {
+                            //时租付款
                             startActivity(OverPayActivity.class);
                         } else if (checkJumpStatus.getBike_status() == 4) {
                             // TODO: 2017/7/30 长租
@@ -914,6 +953,19 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onPause() {
         super.onPause();
         mMapView.onPause();
+        deactivate();
+    }
+
+    /**
+     * 停止定位
+     */
+    public void deactivate() {
+        mLocationListener = null;
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+            mlocationClient.onDestroy();
+        }
+        mlocationClient = null;
     }
 
     @Override
@@ -934,27 +986,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        // getMenuInflater().inflate(R.menu.drawer, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override//侧边栏
@@ -1025,6 +1057,112 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     View infoWindow = null;
 
+    private CameraUpdate cameraUpdate;
+    //显示选中车辆点
+    private void showOneCar(final String bike_number) {
+        new UserService(MainActivity.this).setShowOneMark("1");
+        String num = new UserService(MainActivity.this).getShowOneMark();
+        String url = Apis.Base + Apis.checkBikeByNumber;
+        String cookie = new UserService(MainActivity.this).getCookie();
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addHeader("cookie",cookie)
+                .addParams("bike_number",bike_number)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        L.d(response);
+                        GetBikeMapList getBikeMapList = gson.fromJson(response,GetBikeMapList.class);
+                        AMap aMap = mMapView.getMap();
+                        aMap.clear();
+//        bike_number = infoBean.getNumber();
+                        LatLng latLng = new LatLng(getBikeMapList.getBody().get(0).getLat(),
+                                getBikeMapList.getBody().get(0).getLog());
+                        MarkerOptions markerOption = new MarkerOptions();
+                        markerOption.position(latLng);
+                        markerOption.title("自行车").snippet("自行车");
+                        markerOption.draggable(false);//设置Marker可拖动
+                        if (getBikeMapList.getBody().get(0).getColor().equals("yellow")) {
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(), R.drawable.ico_yellow)));
+                        } else if (getBikeMapList.getBody().get(0).getColor().equals("green")) {
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(), R.drawable.ico_green)));
+                        } else if (getBikeMapList.getBody().get(0).getColor().equals("red")) {
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(), R.drawable.ico_red)));
+                        }else if (getBikeMapList.getBody().get(0).getColor().equals("blue")){
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(), R.drawable.ico_blue)));
+                        }
+                        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                        markerOption.setFlat(true);//设置marker平贴地图效果
+                        markerOption.visible(true);
+                        Marker marker = aMap.addMarker(markerOption.position(latLng));
+                        marker.setObject(getBikeMapList.getBody().get(0));
+                        cameraUpdate = CameraUpdateFactory
+                                .newCameraPosition(new CameraPosition(new LatLng(getBikeMapList.getBody().get(0).getLat(),
+                                        getBikeMapList.getBody().get(0).getLog()), 18, 0, 0));
+                        aMap.moveCamera(cameraUpdate);
+                    }
+                });
+
+    }
+
+    //显示一个点
+    private void onemark(final String bike_number) {
+        String url = Apis.Base + Apis.checkBikeByNumber;
+        String cookie = new UserService(MainActivity.this).getCookie();
+        OkHttpUtils
+                .post()
+                .url(url)
+                .addHeader("cookie",cookie)
+                .addParams("bike_number",bike_number)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        GetBikeMapList getBikeMapList = gson.fromJson(response,GetBikeMapList.class);
+                        AMap aMap = mMapView.getMap();
+                        aMap.clear();
+                        tvUse.setText("用车中：" + bike_number);
+//                        bike_number = bike_number;
+                        LatLng latLng = new LatLng(getBikeMapList.getBody().get(0).getLat(), getBikeMapList.getBody().get(0).getLog());
+                        MarkerOptions markerOption = new MarkerOptions();
+                        markerOption.position(latLng);
+                        markerOption.title("自行车").snippet("自行车");
+                        markerOption.draggable(false);//设置Marker可拖动
+                        if (getBikeMapList.getBody().get(0).getColor().equals("yellow")) {
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(), R.drawable.ico_yellow)));
+                        } else if (getBikeMapList.getBody().get(0).getColor().equals("green")) {
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(), R.drawable.ico_green)));
+                        } else if (getBikeMapList.getBody().get(0).getColor().equals("red")) {
+
+                        }
+                        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                        markerOption.setFlat(true);//设置marker平贴地图效果
+                        markerOption.visible(true);
+                        Marker marker = aMap.addMarker(markerOption.position(latLng));
+                        marker.setObject(getBikeMapList.getBody().get(0));
+                    }
+                });
+
+    }
+
     @Override
     public View getInfoWindow(Marker marker) {
         return null;
@@ -1068,10 +1206,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                     + "元/3个月 \n" + data.getLease_info().get半年租() + "元/半年 " + data.getLease_info().get年租() + "元/一年");
         }
 
+        //长租点击事件
         tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (data.getColor().equals("yellow")) {
+                if (!data.getColor().equals("green")) {
                     showShort("该车辆已被长租");
                 } else {
                     startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
@@ -1080,26 +1219,35 @@ public class MainActivity extends BaseActivity implements IMainView,
 
             }
         });
+        //时租点击事件
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (checkJumpStatus.getBike_status() == 4) {
                     showShort("您是长租用户");
+                }else {
+                    if (data.getColor().equals("green")||data.getColor().equals("yellow")){
+                        bike_number = data.getNumber();
+                        startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
+                    }
                 } else {
                     bike_number = data.getNumber();
                     startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
                 }
 
+                }
+
 
             }
         });
+        //日租点击事件
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String url = Apis.Base + Apis.dayLeaseList;
                 String cookie = new UserService(MainActivity.this).getCookie();
                 format = new SimpleDateFormat("yyyy-MM-dd");
+                bike_number = data.getNumber();
                 OkHttpUtils
                         .post()
                         .url(url)
@@ -1159,18 +1307,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         return true;
     }
 
-    //infowindow点击事件
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-
-    }
 
 
-    @Override
-    public void onCameraChange(CameraPosition cameraPosition) {
-
-    }
-
+    //地图中心移动结束
     @Override
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         LatLng target = cameraPosition.target;
@@ -1198,6 +1337,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     List<Date> unlist = new ArrayList<>();
     DateFormat format;
 
+    //日租日历
     private void showAlert(final String i, List<String> list) {
         final String bike_number = i;
 
@@ -1338,5 +1478,39 @@ public class MainActivity extends BaseActivity implements IMainView,
         myCalendar.addDecorators(new MySelectorDecorator(this), new HighlightWeekendsDecorator(this), oneDayDecorator);
 
 //        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        // getMenuInflater().inflate(R.menu.drawer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //infowindow点击事件
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+
+    }
+
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+
     }
 }

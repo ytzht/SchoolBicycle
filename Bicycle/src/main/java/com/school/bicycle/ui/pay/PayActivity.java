@@ -194,8 +194,14 @@ public class PayActivity extends BaseToolBarActivity {
             if (TextUtils.equals(resultStatus, "9000")) {
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                 Toast.makeText(PayActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-                startActivity(ResultActivity.class,"type","date");
-                finish();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(ResultActivity.class,"type","date");
+                        finish();
+                    }
+                });
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                 Toast.makeText(PayActivity.this, "支付失败", Toast.LENGTH_SHORT).show();

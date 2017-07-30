@@ -212,7 +212,7 @@ public class OverPayActivity extends BaseToolBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(ResultActivity.class,"type","date");
+                        startActivity(ResultActivity.class,"type","returnbiycle");
                         finish();
                     }
                 });

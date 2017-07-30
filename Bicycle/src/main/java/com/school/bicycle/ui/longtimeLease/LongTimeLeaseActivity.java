@@ -28,6 +28,7 @@ import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -191,9 +192,11 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                         }
                         String url = Apis.Base + Apis.longLeaseOrder;
                         Log.d("=====", lease_type + " " + bike_number + " " + price + " " + pay_type);
+                        String cookie = new UserService(LongTimeLeaseActivity.this).getCookie();
                         OkHttpUtils
                                 .post()
                                 .url(url)
+                                .addHeader("cookie",cookie)
                                 .addParams("lease_type", lease_type)
                                 .addParams("bike_number", bike_number)
                                 .addParams("price", price)
@@ -211,18 +214,23 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
 
                                         if (pay_type.equals("wx")) {
                                             Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
-                                            WxPayParams wxPayParams =gson.fromJson(wxpayinfo.getPay_info(),WxPayParams.class);
-                                            final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
-                                            msgApi.registerApp(wxPayParams.appid);
-                                            PayReq request = new PayReq();
-                                            request.appId =wxPayParams.appid;
-                                            request.partnerId = wxPayParams.partnerid;
-                                            request.prepayId = wxPayParams.prepayid;
-                                            request.packageValue = "Sign=WXPay";
-                                            request.nonceStr = wxPayParams.noncestr;
-                                            request.timeStamp = wxPayParams.timestamp;
-                                            request.sign = wxPayParams.sign;
-                                            msgApi.sendReq(request);
+                                            if (wxpayinfo.getCode()==1){
+                                                WxPayParams wxPayParams =gson.fromJson(wxpayinfo.getPay_info(),WxPayParams.class);
+                                                final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
+                                                msgApi.registerApp(wxPayParams.appid);
+                                                PayReq request = new PayReq();
+                                                request.appId =wxPayParams.appid;
+                                                request.partnerId = wxPayParams.partnerid;
+                                                request.prepayId = wxPayParams.prepayid;
+                                                request.packageValue = "Sign=WXPay";
+                                                request.nonceStr = wxPayParams.noncestr;
+                                                request.timeStamp = wxPayParams.timestamp;
+                                                request.sign = wxPayParams.sign;
+                                                msgApi.sendReq(request);
+                                            }else {
+                                                showShort(wxpayinfo.getMsg());
+                                            }
+
                                         } else {
                                         final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
 
@@ -243,20 +251,6 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
                                         }else {
                                             showShort(payInfo.getMsg());
                                         }
-                                        info = response;
-                                        new Thread() {
-                                            @Override
-                                            public void run() {
-                                                super.run();
-                                                PayTask payTask = new PayTask(LongTimeLeaseActivity.this);
-                                                Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
-                                                Message message = mHandler.obtainMessage();
-                                                message.what = 200;
-                                                message.obj = result;
-                                                mHandler.sendMessage(message);
-                                            }
-                                        }.start();
-
                                     }}
                                 });
 

@@ -66,6 +66,8 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     @BindView(R.id.share_income)
     TextView shareIncome;
 
+    Mybiycle m;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +98,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response", response);
-                        Mybiycle m = gson.fromJson(response, Mybiycle.class);
+                        m = gson.fromJson(response, Mybiycle.class);
                         if (m.getCode() == 1) {
                             bikeNumber.setText(m.getBike_number());
                             shareIncome.setText(m.getShare_income());

@@ -10,8 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
@@ -60,6 +63,7 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
 
     private IMainPresenter iMainPresenter;
     Intent it;
+    private CameraUpdate cameraUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +81,21 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
     private void initmap() {
         if (aMap == null) {
             aMap = mMapView.getMap();
+            UiSettings uiSettings = aMap.getUiSettings();
+            // 通过UISettings.setZoomControlsEnabled(boolean)来设置缩放按钮是否能显示
+            uiSettings.setZoomControlsEnabled(false);
         }
-        iMainPresenter = new MainPresenterCompl(getBaseContext(), this);
-        iMainPresenter.initLocation(aMap);
-        iMainPresenter.initUISettings(aMap);
-        MyLocationStyle myLocationStyle;
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE); //定位一次，且将视角移动到地图中心点。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.getUiSettings().setMyLocationButtonEnabled(false);//设置默认定位按钮是否显示，非必需设置。
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+
+//        iMainPresenter = new MainPresenterCompl(getBaseContext(), this);
+//        iMainPresenter.initLocation(aMap);
+//        iMainPresenter.initUISettings(aMap);
+//        MyLocationStyle myLocationStyle;
+//        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
+//        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+//        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE); //定位一次，且将视角移动到地图中心点。
+//        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+//        aMap.getUiSettings().setMyLocationButtonEnabled(false);//设置默认定位按钮是否显示，非必需设置。
+//        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         aMap.moveCamera(CameraUpdateFactory.zoomTo(16));//显示地图等级15级
         initline();
 
@@ -97,6 +105,10 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
         it = getIntent();
         GetMyRoute getMyRoute = (GetMyRoute) it.getSerializableExtra("getMyRoute");
         String position = it.getStringExtra("position");
+        cameraUpdate = CameraUpdateFactory
+                .newCameraPosition(new CameraPosition(new LatLng(getMyRoute.getBody().get(0).getLines().get(0).getLog(),
+                        getMyRoute.getBody().get(0).getLines().get(0).getLat()), 18, 0, 30));
+        aMap.moveCamera(cameraUpdate);
         int i = Integer.parseInt(position);
         mapBikeNumber.setText("车 牌 号"+getMyRoute.getBody().get(i).getBike_number());
         mapDistance.setText("骑行距离："+getMyRoute.getBody().get(i).getDistance()+"M");

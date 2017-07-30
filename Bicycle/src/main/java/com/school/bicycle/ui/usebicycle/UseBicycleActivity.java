@@ -137,9 +137,8 @@ public class UseBicycleActivity extends BaseToolBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
-                it.putExtra("",queryBikeListByDate.getBike_info().get(position));
-//                new UserService(UseBicycleActivity.this).setshowone(queryBikeListByDate.getBike_info().get(position).toString());
-
+                it.putExtra("onebikeinfo",queryBikeListByDate.getBike_info().get(position));
+                startActivity(it);
             }
         });
     }

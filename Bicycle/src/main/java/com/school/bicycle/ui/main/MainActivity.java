@@ -798,6 +798,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 .show();
     }
 
+    CheckJumpStatus checkJumpStatus;
     //跳转状态
     private void checkJumpStatus() {
 
@@ -817,7 +818,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response跳转状态", response);
-                        CheckJumpStatus checkJumpStatus = gson.fromJson(response, CheckJumpStatus.class);
+                        checkJumpStatus = gson.fromJson(response, CheckJumpStatus.class);
 
                         if (checkJumpStatus.getBike_status() == 0) {
                             new UserService(MainActivity.this).setState("0");
@@ -1081,8 +1082,13 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bike_number = data.getNumber();
-                startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
+                if (checkJumpStatus.getBike_status()==4){
+                    showShort("您是长租用户");
+                }else {
+                    bike_number = data.getNumber();
+                    startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
+                }
+
 
 
             }

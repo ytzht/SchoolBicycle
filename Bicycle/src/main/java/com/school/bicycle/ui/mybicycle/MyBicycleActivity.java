@@ -62,6 +62,8 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     @BindView(R.id.share_income)
     TextView shareIncome;
 
+    Mybiycle m;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +92,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response", response);
-                        Mybiycle m = gson.fromJson(response, Mybiycle.class);
+                        m = gson.fromJson(response, Mybiycle.class);
                         if (m.getCode() == 1) {
                             bikeNumber.setText(m.getBike_number());
                             shareIncome.setText(m.getShare_income());
@@ -125,7 +127,12 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_myReservation_mybiycle:
                 //共享设置
-                showAlert();
+                if (m.getCode()==1){
+                    showAlert();
+                }else {
+                    showShort("您不是长租用户，无法进行共享");
+                }
+
                 break;
             case R.id.re_mypolice_mybiycle:
                 //报警
@@ -137,7 +144,6 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     private static final String TAG = "=====";
     private MaterialCalendarView myCalendar;
     private TextView tv_ok, tv_cancel;
-
     private CheckBox cal_cb;
 
     private void showAlert() {

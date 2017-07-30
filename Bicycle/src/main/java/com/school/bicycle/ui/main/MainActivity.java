@@ -42,6 +42,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -61,6 +62,7 @@ import com.school.bicycle.R;
 import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.DayleaseList;
 import com.school.bicycle.entity.GetBikeMapList;
+import com.school.bicycle.entity.QueryBikeListByDate;
 import com.school.bicycle.entity.UpDate;
 import com.school.bicycle.entity.UploadLocation;
 import com.school.bicycle.entity.ValidateUser;
@@ -596,7 +598,10 @@ public class MainActivity extends BaseActivity implements IMainView,
             @Override
             public void onClick(View v) {
                 //重新定位并重新请求当前位置周边车辆信息
-                mLocationClient.startLocation();
+                new UserService(MainActivity.this).setShowOneMark("0");
+                cameraUpdate = CameraUpdateFactory
+                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 18, 0, 30));
+                aMap.moveCamera(cameraUpdate);
             }
         });
         fabQr.setOnClickListener(new View.OnClickListener() {
@@ -668,6 +673,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        new UserService(MainActivity.this).setShowOneMark("0");
         mMapView.onDestroy();
 //        mTimer.cancel();
     }
@@ -680,6 +686,16 @@ public class MainActivity extends BaseActivity implements IMainView,
         checkJumpStatus();
         initview();
 //        UpdateInfo();
+    }
+    QueryBikeListByDate queryBikeListByDate;
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        L.d("onnewIntent");
+        queryBikeListByDate = new QueryBikeListByDate();
+//        initmap();
+//        queryBikeListByDate.setBike_info((List<QueryBikeListByDate.BikeInfoBean>) intent.getSerializableExtra("onebikeinfo"));
+        showOneCar((QueryBikeListByDate.BikeInfoBean) intent.getSerializableExtra("onebikeinfo"));
     }
 
     boolean isWifi = false;
@@ -763,7 +779,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                 .show();
     }
 
-
     public void myDialog(final DownloadManager downloadManager, final String url, final String vName) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
                 .setMessage("本期做了一些新功能和优化体验，快来试试吧？")//对话框提示正文
@@ -820,16 +835,56 @@ public class MainActivity extends BaseActivity implements IMainView,
                             initview();
                         } else if (checkJumpStatus.getBike_status() == 3) {
                             startActivity(OverPayActivity.class);
+                        }else  if (checkJumpStatus.getBike_status() == 4){
+                            // TODO: 2017/7/30 长租
                         }
                     }
                 });
+    }
+
+
+    private CameraUpdate cameraUpdate;
+    //显示选中车辆点
+    private void showOneCar(QueryBikeListByDate.BikeInfoBean infoBean) {
+        new UserService(MainActivity.this).setShowOneMark("1");
+        AMap aMap = mMapView.getMap();
+        aMap.clear();
+        bike_number = infoBean.getNumber();
+        LatLng latLng = new LatLng(infoBean.getLat(), infoBean.getLog());
+        MarkerOptions markerOption = new MarkerOptions();
+        markerOption.position(latLng);
+        markerOption.title("自行车").snippet("自行车");
+        markerOption.draggable(false);//设置Marker可拖动
+        if (infoBean.getColor().equals("yellow")) {
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.drawable.ico_yellow)));
+        } else if (infoBean.getColor().equals("green")) {
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.drawable.ico_green)));
+        } else if (infoBean.getColor().equals("red")) {
+
+        }
+        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+        markerOption.setFlat(true);//设置marker平贴地图效果
+        markerOption.visible(true);
+
+        GetBikeMapList.BodyBean g = new GetBikeMapList.BodyBean();
+        g.setAddress(infoBean.getAdress());
+        g.setColor(infoBean.getColor());
+        g.setLog(infoBean.getLog());
+
+        Marker marker = aMap.addMarker(markerOption.position(latLng));
+        marker.setObject(g);
+        cameraUpdate = CameraUpdateFactory
+                .newCameraPosition(new CameraPosition(new LatLng(infoBean.getLat(),
+                        infoBean.getLog()), 18, 0, 30));
+        aMap.moveCamera(cameraUpdate);
     }
 
     //显示一个点
     private void onemark(CheckJumpStatus checkJumpStatus) {
         AMap aMap = mMapView.getMap();
         aMap.clear();
-
         tvUse.setText("用车中：" + checkJumpStatus.getBody().get(0).getNumber());
         bike_number = checkJumpStatus.getBody().get(0).getNumber();
         LatLng latLng = new LatLng(checkJumpStatus.getBody().get(0).getLat(), checkJumpStatus.getBody().get(0).getLog());
@@ -1083,12 +1138,18 @@ public class MainActivity extends BaseActivity implements IMainView,
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         LatLng target = cameraPosition.target;
         Log.d("onCameraChange", target.latitude + "jinjin------" + target.longitude);
-        if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
+        if (new UserService(MainActivity.this).getState().equals("1")) {
             initdingwei();
             checkJumpStatus();
         } else {
-            initdingwei();
-            initgetBikeMapList(target);
+            String showOneMark = new UserService(MainActivity.this).getShowOneMark();
+            if (showOneMark.equals("1")){
+
+            }else if (showOneMark.equals("0")){
+                initdingwei();
+                initgetBikeMapList(target);
+            }
+
         }
 
 

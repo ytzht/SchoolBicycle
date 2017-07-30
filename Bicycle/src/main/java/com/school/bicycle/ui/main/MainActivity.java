@@ -660,8 +660,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                 }
             }
         });
-
-
     }
 
     //显示停车提示

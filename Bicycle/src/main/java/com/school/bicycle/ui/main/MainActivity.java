@@ -53,7 +53,6 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -63,9 +62,9 @@ import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.DayleaseList;
 import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.QueryBikeListByDate;
-import com.school.bicycle.entity.UpDate;
 import com.school.bicycle.entity.UploadLocation;
 import com.school.bicycle.entity.ValidateUser;
+import com.school.bicycle.entity.VersionCheck;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
@@ -400,7 +399,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void initvalidateUser() {
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
-        Log.d("DEVICE_ID",DEVICE_ID);
+        Log.d("DEVICE_ID", DEVICE_ID);
         String url = Apis.Base +
                 Apis.validateUser
                 + DEVICE_ID;
@@ -690,9 +689,11 @@ public class MainActivity extends BaseActivity implements IMainView,
         initvalidateUser();
         checkJumpStatus();
         initview();
-//        UpdateInfo();
+//        checkVersion();
     }
+
     QueryBikeListByDate queryBikeListByDate;
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -705,46 +706,39 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     boolean isWifi = false;
     private DownloadManager downloadManager;
+    String content = "";
 
-    private void UpdateInfo() {
+    private void checkVersion() {
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         isWifi = NetworkInfo.State.CONNECTED == ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
-        try {
-            // getPackageName()是你当前类的包名，0代表是获取版本信息
-            PackageInfo packInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            String url = "https://api.cishan123.org/v2.2/api/AutoUpdate/UpdateInfoNew?type=yst&version=1.2";
-            //获取到versionNum 用vName接收, downloadUrl = http://file.cishan123.org/yst_1.7.apk
-            final String vName = "1.7";
-            final String downloadUrl = "http://file.cishan123.org/yst_1.7.apk";
-            download(downloadUrl, vName);
-            OkHttpUtils.get().url(Apis.Base + Apis.UpDate).build().execute(new StringCallback() {
-                @Override
-                public void onError(Call call, Exception e, int id) {
 
+        OkHttpUtils.get().url(Apis.Base + Apis.Version).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
 
-                }
+            }
 
-                @Override
-                public void onResponse(String response, int id) {
-                    UpDate upDate = (new Gson()).fromJson(response, UpDate.class);
-                    if (upDate.getCode() == 1) {
-
-                    } else {
-                        showShort(upDate.getMsg());
+            @Override
+            public void onResponse(String response, int id) {
+                VersionCheck check = gson.fromJson(response, VersionCheck.class);
+                if (check.getCode() == 1) {
+                    content = check.getBody().getContent();
+                    try {
+                        PackageInfo packInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                        if (!packInfo.versionName.equals(check.getBody().getVersion())) {
+                            download(check.getBody().getFile_url().trim(), check.getBody().getVersion());
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
                     }
 
-
+                } else {
+                    showShort(check.getMsg());
                 }
-            });
-
-//            packInfo.versionName;
-            //下面执行网络操作访问接口的目前最新版apk版本信息，如我这里https://api.cishan123.org/v2.2/api/AutoUpdate/UpdateInfoNew?type=yst&version=1.2
-
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
+
 
     public void download(String downloadUrl, String vName) {
         if (isWifi) {
@@ -786,7 +780,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     public void myDialog(final DownloadManager downloadManager, final String url, final String vName) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
-                .setMessage("本期做了一些新功能和优化体验，快来试试吧？")//对话框提示正文
+                .setMessage(content)//对话框提示正文
                 .setIcon(R.mipmap.ic_launcher)//对话框标题上的图片
                 .setNegativeButton("暂不升级", new DialogInterface.OnClickListener() {
                     @Override//取消按钮
@@ -804,6 +798,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
     CheckJumpStatus checkJumpStatus;
+
     //跳转状态
     private void checkJumpStatus() {
 
@@ -841,7 +836,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                             initview();
                         } else if (checkJumpStatus.getBike_status() == 3) {
                             startActivity(OverPayActivity.class);
-                        }else  if (checkJumpStatus.getBike_status() == 4){
+                        } else if (checkJumpStatus.getBike_status() == 4) {
                             // TODO: 2017/7/30 长租
                         }
                     }
@@ -850,6 +845,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
 
     private CameraUpdate cameraUpdate;
+
     //显示选中车辆点
     private void showOneCar(QueryBikeListByDate.BikeInfoBean infoBean) {
         new UserService(MainActivity.this).setShowOneMark("1");
@@ -1087,13 +1083,12 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkJumpStatus.getBike_status()==4){
+                if (checkJumpStatus.getBike_status() == 4) {
                     showShort("您是长租用户");
-                }else {
+                } else {
                     bike_number = data.getNumber();
                     startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
                 }
-
 
 
             }
@@ -1122,16 +1117,15 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 L.d(response);
                                 DayleaseList d = gson.fromJson(response, DayleaseList.class);
 
-                                if (d.getCode() == 1){
+                                if (d.getCode() == 1) {
                                     showAlert(data.getNumber(), d.getBody());
 
-                                }else {
+                                } else {
                                     showShort(d.getMsg());
                                 }
 
                             }
                         });
-
 
 
             }
@@ -1186,9 +1180,9 @@ public class MainActivity extends BaseActivity implements IMainView,
             checkJumpStatus();
         } else {
             String showOneMark = new UserService(MainActivity.this).getShowOneMark();
-            if (showOneMark.equals("1")){
+            if (showOneMark.equals("1")) {
 
-            }else if (showOneMark.equals("0")){
+            } else if (showOneMark.equals("0")) {
                 initdingwei();
                 initgetBikeMapList(target);
             }
@@ -1203,6 +1197,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     List<CalendarDay> selectedDates;
     List<Date> unlist = new ArrayList<>();
     DateFormat format;
+
     private void showAlert(final String i, List<String> list) {
         final String bike_number = i;
 
@@ -1304,7 +1299,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     if (selected) {
                         myCalendar.setDateSelected(date, true);
-                        if (unlist.size()>0) {
+                        if (unlist.size() > 0) {
                             for (int i = 0; i < unlist.size(); i++) {
                                 if (unlist.get(i) == date.getDate()) {
                                     myCalendar.setDateSelected(date, false);
@@ -1313,11 +1308,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                         }
 
 
-
                     } else {
                         myCalendar.setDateSelected(date, false);
                     }
-
 
 
                     if (selectedDates.size() > 0) {

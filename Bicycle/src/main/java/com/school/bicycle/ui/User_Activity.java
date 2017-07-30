@@ -1,8 +1,6 @@
 package com.school.bicycle.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,12 +9,9 @@ import android.widget.TextView;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.User;
-import com.school.bicycle.entity.ValidateUser;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.main.MainActivity;
-import com.school.bicycle.ui.register.RegisterActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -37,6 +32,12 @@ public class User_Activity extends BaseToolBarActivity {
     LinearLayout linearLayout5;
     @BindView(R.id.Signout)
     TextView Signout;
+    @BindView(R.id.verify_status_user)
+    TextView verifyStatusUser;
+    @BindView(R.id.deposit_status_user)
+    TextView depositStatusUser;
+
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class User_Activity extends BaseToolBarActivity {
         String cookie = new UserService(User_Activity.this).getCookie();
         OkHttpUtils.get()
                 .url(url)
-                .addHeader("cookie",cookie)
+                .addHeader("cookie", cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -63,16 +64,28 @@ public class User_Activity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d("response",response);
-                        User user = gson.fromJson(response, User.class);
+                        Log.d("response", response);
+                        user = gson.fromJson(response, User.class);
                         if (user.getCode() == 1) {
                             userName.setText(user.getName());
                             userPhone.setText(user.getPhone());
+                            if (user.getDeposit_status()==1){
+                                depositStatusUser.setText("押金充值成功");
+                            }else {
+                                depositStatusUser.setText("未付押金");
+                            }
+                            if (user.getVerify_status()==1){
+                                depositStatusUser.setText("已实名认证");
+                            }else {
+                                depositStatusUser.setText("未实名认证");
+                            }
+
                         }
                     }
                 });
 
 
+        //退出登录
         Signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +106,7 @@ public class User_Activity extends BaseToolBarActivity {
                                 if (b.getCode() == 1) {
                                     showShort(b.getMsg());
                                     new UserService(User_Activity.this).setValidateUser("0");
+                                    new UserService(User_Activity.this).setCookie("0");
                                     finish();
                                 } else {
                                     showShort(b.getMsg());
@@ -110,7 +124,7 @@ public class User_Activity extends BaseToolBarActivity {
 
     }
 
-    @OnClick({R.id.user_name, R.id.user_changephone, R.id.Signout})
+    @OnClick({R.id.user_name, R.id.user_changephone, R.id.Signout,R.id.verify_status_user, R.id.deposit_status_user})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_name:
@@ -119,6 +133,12 @@ public class User_Activity extends BaseToolBarActivity {
                 break;
             case R.id.Signout:
                 break;
+            case R.id.verify_status_user:
+                break;
+            case R.id.deposit_status_user:
+                break;
         }
     }
+
+
 }

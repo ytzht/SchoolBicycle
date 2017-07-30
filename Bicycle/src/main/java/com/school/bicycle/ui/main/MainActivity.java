@@ -443,7 +443,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//显示地图等级15级
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(17));//显示地图等级15级
         aMap.setInfoWindowAdapter(this);
         aMap.setOnCameraChangeListener(this);
         aMap.setOnMarkerClickListener(this);
@@ -473,12 +473,12 @@ public class MainActivity extends BaseActivity implements IMainView,
 
 
     //获取周围单车位置列表
-    private void initgetBikeMapList() {
+    private void initgetBikeMapList(LatLng target) {
 
         String url = Apis.Base +
                 "order/getBikeMapList?locations="
-                + lon + "," + lat;
-        Log.d("经纬度=", lon + "," + lat + "   " + url);
+                + target.longitude + "," + target.latitude;
+        Log.d("经纬度=", target.longitude + "," + target.latitude + "   " + url);
 
         OkHttpUtils.get()
                 .url(url)
@@ -1088,7 +1088,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             checkJumpStatus();
         } else {
             initdingwei();
-            initgetBikeMapList();
+            initgetBikeMapList(target);
         }
 
 

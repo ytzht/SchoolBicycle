@@ -122,7 +122,7 @@ public class ResultActivity extends BaseToolBarActivity {
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new UserService(ResultActivity.this).settixian("0");
+                    new UserService(ResultActivity.this).setShowOneMark("0");
                     finish();
                 }
             });

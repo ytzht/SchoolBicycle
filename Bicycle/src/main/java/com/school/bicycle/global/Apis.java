@@ -40,6 +40,8 @@ public interface Apis {
 
     String submitDayLeaseMoney = "order/submitDayLeaseMoney";
 
+    String checkLongLease = "order/checkLongLease";
+
     String checkBikeByNumber = "order/checkBikeByNumber";
 
     String overUseBike = "order/overUseBike";

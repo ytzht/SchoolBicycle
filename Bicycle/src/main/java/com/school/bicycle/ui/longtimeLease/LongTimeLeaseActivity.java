@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
@@ -30,6 +31,8 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.pay.PayActivity;
+import com.school.bicycle.ui.result.ResultActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -181,87 +184,118 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
             case R.id.wx_icon:
                 break;
             case R.id.tv_okpay:
-                if (month == 0) {
-                    showShort("请选择长租时间");
-                } else {
-                    if (cbWx.isChecked() || cbZfb.isChecked()) {
-                        if (cbZfb.isChecked()) {
-                            pay_type = "zfb";
-                        } else {
-                            pay_type = "wx";
-                        }
-                        String url = Apis.Base + Apis.longLeaseOrder;
-                        Log.d("=====", lease_type + " " + bike_number + " " + price + " " + pay_type);
-                        String cookie = new UserService(LongTimeLeaseActivity.this).getCookie();
-                        OkHttpUtils
-                                .post()
-                                .url(url)
-                                .addHeader("cookie",cookie)
-                                .addParams("lease_type", lease_type)
-                                .addParams("bike_number", bike_number)
-                                .addParams("price", price)
-                                .addParams("pay_type", pay_type)
-                                .build()
-                                .execute(new StringCallback() {
-                                    @Override
-                                    public void onError(Call call, Exception e, int id) {
+                initpay();
+//                String url = Apis.Base + Apis.checkLongLease;
+//                String cookie = new UserService(LongTimeLeaseActivity.this).getCookie();
+//                OkHttpUtils
+//                        .post()
+//                        .url(url)
+//                        .addHeader("cookie",cookie)
+//                        .build()
+//                        .execute(new StringCallback() {
+//                            @Override
+//                            public void onError(Call call, Exception e, int id) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onResponse(String response, int id) {
+//                                Log.d("response",response);
+//                                BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+//                                if (baseResult.getCode()==1){
+//                                    initpay();
+//                                    showShort(baseResult.getMsg());
+//                                }else {
+//                                    showShort(baseResult.getMsg());
+//                                }
+//
+//                            }
+//                        });
 
-                                    }
-
-                                    @Override
-                                    public void onResponse(String response, int id) {
-                                        Log.d("response", response);
-
-                                        if (pay_type.equals("wx")) {
-                                            Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
-                                            if (wxpayinfo.getCode()==1){
-                                                WxPayParams wxPayParams =gson.fromJson(wxpayinfo.getPay_info(),WxPayParams.class);
-                                                final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
-                                                msgApi.registerApp(wxPayParams.appid);
-                                                PayReq request = new PayReq();
-                                                request.appId =wxPayParams.appid;
-                                                request.partnerId = wxPayParams.partnerid;
-                                                request.prepayId = wxPayParams.prepayid;
-                                                request.packageValue = "Sign=WXPay";
-                                                request.nonceStr = wxPayParams.noncestr;
-                                                request.timeStamp = wxPayParams.timestamp;
-                                                request.sign = wxPayParams.sign;
-                                                msgApi.sendReq(request);
-                                            }else {
-                                                showShort(wxpayinfo.getMsg());
-                                            }
-
-                                        } else {
-                                        final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
-
-                                        if (payInfo.getCode() == 1) {
-                                            info = response;
-                                            new Thread() {
-                                                @Override
-                                                public void run() {
-                                                    super.run();
-                                                    PayTask payTask = new PayTask(LongTimeLeaseActivity.this);
-                                                    Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
-                                                    Message message = mHandler.obtainMessage();
-                                                    message.what = 200;
-                                                    message.obj = result;
-                                                    mHandler.sendMessage(message);
-                                                }
-                                            }.start();
-                                        }else {
-                                            showShort(payInfo.getMsg());
-                                        }
-                                    }}
-                                });
-
-                    } else {
-                        showShort("请至少选择一种支付方式");
-                    }
-                }
                 break;
             case R.id.zfb_icon:
                 break;
 
+        }
+    }
+
+    private void initpay() {
+        if (month == 0) {
+            showShort("请选择长租时间");
+        } else {
+            if (cbWx.isChecked() || cbZfb.isChecked()) {
+                if (cbZfb.isChecked()) {
+                    pay_type = "zfb";
+                } else {
+                    pay_type = "wx";
+                }
+                String url = Apis.Base + Apis.longLeaseOrder;
+                Log.d("=====", lease_type + " " + bike_number + " " + price + " " + pay_type);
+                String cookie = new UserService(LongTimeLeaseActivity.this).getCookie();
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addHeader("cookie",cookie)
+                        .addParams("lease_type", lease_type)
+                        .addParams("bike_number", bike_number)
+                        .addParams("price", price)
+                        .addParams("pay_type", pay_type)
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.d("response", response);
+
+                                if (pay_type.equals("wx")) {
+                                    Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
+                                    if (wxpayinfo.getCode()==1){
+                                        WxPayParams wxPayParams =gson.fromJson(wxpayinfo.getPay_info(),WxPayParams.class);
+                                        final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
+                                        msgApi.registerApp(wxPayParams.appid);
+                                        PayReq request = new PayReq();
+                                        request.appId =wxPayParams.appid;
+                                        request.partnerId = wxPayParams.partnerid;
+                                        request.prepayId = wxPayParams.prepayid;
+                                        request.packageValue = "Sign=WXPay";
+                                        request.nonceStr = wxPayParams.noncestr;
+                                        request.timeStamp = wxPayParams.timestamp;
+                                        request.sign = wxPayParams.sign;
+                                        msgApi.sendReq(request);
+                                    }else {
+                                        showShort(wxpayinfo.getMsg());
+                                    }
+
+                                } else {
+                                    final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
+
+                                    if (payInfo.getCode() == 1) {
+                                        info = response;
+                                        new Thread() {
+                                            @Override
+                                            public void run() {
+                                                super.run();
+                                                PayTask payTask = new PayTask(LongTimeLeaseActivity.this);
+                                                Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
+                                                Message message = mHandler.obtainMessage();
+                                                message.what = 200;
+                                                message.obj = result;
+                                                mHandler.sendMessage(message);
+                                            }
+                                        }.start();
+                                    }else {
+                                        showShort(payInfo.getMsg());
+                                    }
+                                }}
+                        });
+
+            } else {
+                showShort("请至少选择一种支付方式");
+            }
         }
     }
 
@@ -277,6 +311,13 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
             if (TextUtils.equals(resultStatus, "9000")) {
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                 Toast.makeText(LongTimeLeaseActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        startActivity(ResultActivity.class,"type","dateReturnBiycle");
+                        finish();
+                    }
+                });
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                 Toast.makeText(LongTimeLeaseActivity.this, "支付失败", Toast.LENGTH_SHORT).show();

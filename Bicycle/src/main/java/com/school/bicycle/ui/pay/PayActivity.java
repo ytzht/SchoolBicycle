@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.DayLeaseOrder;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
@@ -21,6 +22,7 @@ import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
@@ -194,7 +196,6 @@ public class PayActivity extends BaseToolBarActivity {
             if (TextUtils.equals(resultStatus, "9000")) {
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                 Toast.makeText(PayActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

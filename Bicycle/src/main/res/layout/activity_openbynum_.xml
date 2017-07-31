@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="打开手电筒"
+                android:text="扫码解锁"
                 android:textColor="@color/all_textc" />
 
         </LinearLayout>

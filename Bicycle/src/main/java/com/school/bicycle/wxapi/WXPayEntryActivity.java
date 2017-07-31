@@ -19,6 +19,7 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
     private static final String TAG = "com.Schoolbiycle.WXPayEntryActivity";
 
     private IWXAPI api;
+    public static  int wxreslut;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
     public void onResp(BaseResp resp) {
 
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+            wxreslut = resp.errCode;
             switch (resp.errCode) {
                 case 0:
                     showShort("支付成功");

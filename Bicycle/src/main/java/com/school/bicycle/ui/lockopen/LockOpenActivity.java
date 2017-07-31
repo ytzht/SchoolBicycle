@@ -18,6 +18,7 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.main.MainActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -33,7 +34,7 @@ public class LockOpenActivity extends BaseToolBarActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock_open);
         setToolbarText("开锁");
-        String lock_code = getIntent().getStringExtra("lock_code");
+        final String lock_code = getIntent().getStringExtra("lock_code");
         String location = getIntent().getStringExtra("location");
         String url = Apis.Base + Apis.unlocking;
         Log.d("lock_code", lock_code);
@@ -61,6 +62,7 @@ public class LockOpenActivity extends BaseToolBarActivity  {
                             finish();
                         }else {
                             showShort(baseResult.getMsg());
+//                          startActivity(MainActivity.class,"bike_number",lock_code+"");
                         }
 
                     }

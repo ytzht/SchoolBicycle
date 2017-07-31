@@ -61,67 +61,75 @@ public class LockcloseActivity extends BaseToolBarActivity {
 
     }
     //获取当前位置并请求停车
-    private void initlocation() {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //获取所有可用的位置提供器
-        List<String> providers = locationManager.getProviders(true);
-        if(providers.contains(LocationManager.GPS_PROVIDER)){
-            //如果是GPS
-            locationProvider = LocationManager.GPS_PROVIDER;
-        }else if(providers.contains(LocationManager.NETWORK_PROVIDER)){
-            //如果是Network
-            locationProvider = LocationManager.NETWORK_PROVIDER;
-        }else{
-            Toast.makeText(this, "没有可用的位置提供器", Toast.LENGTH_SHORT).show();
-            return ;
-        }
-        //获取Location
-        location = locationManager.getLastKnownLocation(locationProvider);
-        if(location!=null){
-            //不为空,显示地理位置经纬度
-            String url = Apis.Base + Apis.overUseBike;
-            String locationstring = location.getLongitude()+","+location.getLatitude();
-
-            tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            DEVICE_ID = tm.getDeviceId();
-            new UserService(LockcloseActivity.this).setState("0");
-            String cookie = new UserService(LockcloseActivity.this).getCookie();
-
-            OkHttpUtils
-                    .post()
-                    .url(url)
-                    .addHeader("cookie",cookie)
-                    .addParams("location", locationstring)
-                    .addParams("imei", DEVICE_ID)
-                    .addParams("diu", DEVICE_ID)
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
-
-                        }
-
-                        @Override
-                        public void onResponse(String response, int id) {
-                            Log.d("response",response);
-                            BaseResult baseResult = gson.fromJson(response,BaseResult.class);
-                            if (baseResult.getCode()==1){
-                                startActivity(ResultActivity.class,"type","returnbiycle");
-                                new UserService(LockcloseActivity.this).setState("0");
-                                finish();
-                            }else {
-                                showShort(baseResult.getMsg());
-                                new UserService(LockcloseActivity.this).setState("0");
-                                finish();
-                            }
-
-                        }
-                    });
-
-        }
-        //监视地理位置变化
-        locationManager.requestLocationUpdates(locationProvider, 3000, 1, locationListener);
-    }
+//    private void initlocation() {
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        //获取所有可用的位置提供器
+//        List<String> providers = locationManager.getProviders(true);
+//        if(providers.contains(LocationManager.GPS_PROVIDER)){
+//            //如果是GPS
+//            locationProvider = LocationManager.GPS_PROVIDER;
+//        }else if(providers.contains(LocationManager.NETWORK_PROVIDER)){
+//            //如果是Network
+//            locationProvider = LocationManager.NETWORK_PROVIDER;
+//        }else{
+//            Toast.makeText(this, "没有可用的位置提供器", Toast.LENGTH_SHORT).show();
+//            return ;
+//        }
+//        //获取Location
+//        location = locationManager.getLastKnownLocation(locationProvider);
+//        if(location!=null){
+//            //不为空,显示地理位置经纬度
+//            String url = Apis.Base + Apis.overUseBike;
+//            String locationstring = location.getLongitude()+","+location.getLatitude();
+//
+//            tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//            DEVICE_ID = tm.getDeviceId();
+//            new UserService(LockcloseActivity.this).setState("0");
+//            String cookie = new UserService(LockcloseActivity.this).getCookie();
+//
+//            OkHttpUtils
+//                    .post()
+//                    .url(url)
+//                    .addHeader("cookie",cookie)
+//                    .addParams("location", locationstring)
+//                    .addParams("imei", DEVICE_ID)
+//                    .addParams("diu", DEVICE_ID)
+//                    .build()
+//                    .execute(new StringCallback() {
+//                        @Override
+//                        public void onError(Call call, Exception e, int id) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onResponse(String response, int id) {
+//                            Log.d("response",response);
+//                            BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+//                            if (baseResult.getCode()==1){
+//                                int status = Integer.parseInt(getIntent().getStringExtra("status"));
+//                                if (status==1){
+//                                    finish();
+//                                    //日租停车
+//                                }else if (status==2){
+//                                    startActivity(ResultActivity.class,"type","date");
+////                                    new UserService(LockcloseActivity.this).setState("0");
+//                                    finish();
+//                                    //时租停车
+//                                }else if (status==4){
+//                                    finish();
+//                                }
+//
+//                            }else {
+//                                showShort(baseResult.getMsg());
+//                            }
+//
+//                        }
+//                    });
+//
+//        }
+//        //监视地理位置变化
+//        locationManager.requestLocationUpdates(locationProvider, 3000, 1, locationListener);
+////    }
 
     @OnClick({R.id.lock_refresh, R.id.lock_no, R.id.lock_kefu, R.id.lock_ok})
     public void onViewClicked(View view) {
@@ -161,14 +169,23 @@ public class LockcloseActivity extends BaseToolBarActivity {
                                 Log.d("response",response);
                                 BaseResult baseResult = gson.fromJson(response,BaseResult.class);
                                 if (baseResult.getCode()==1){
-                                    startActivity(OverPayActivity.class);
-                                    new UserService(LockcloseActivity.this).setState("0");
-                                    finish();
+                                    int status = Integer.parseInt(getIntent().getStringExtra("status"));
+                                    if (status==1){
+                                        finish();
+                                        //日租停车
+                                    }else if (status==2){
+                                        startActivity(ResultActivity.class,"type","date");
+//                                    new UserService(LockcloseActivity.this).setState("0");
+                                        finish();
+                                        //时租停车
+                                    }else if (status==4){
+                                        finish();
+                                    }
                                 }else {
                                     showShort(baseResult.getMsg());
-//                                    new UserService(LockcloseActivity.this).setState("0");
-//                                    finish();
                                 }
+
+
 
                             }
                         });

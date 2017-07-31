@@ -12,10 +12,10 @@ public class ValidateUser implements Serializable{
     /**
      * code : 1
      * msg : 登陆成功
-     * body : {"user_id":25,"phone":"15553426817","wallet":0,"device_id":"862561039857212","deposit_status":0,"status":1,"alarm_switch":1,"reg_from":"android","create_time":"2017-07-27 13:00:16"}
-     * name : 单宝滨
+     * body : {"user_id":33,"credit_score":0,"phone":"18153527447","wallet":0,"device_id":"864168031434798","deposit_status":1,"status":1,"alarm_switch":1,"reg_from":"android","create_time":"2017-07-28 20:04:02"}
+     * name : 吕道欣
      * deposit_status : 1
-     * verify_status : 0
+     * verify_status : 1
      */
 
     private int code;
@@ -75,20 +75,22 @@ public class ValidateUser implements Serializable{
 
     public static class BodyBean {
         /**
-         * user_id : 25
-         * phone : 15553426817
+         * user_id : 33
+         * credit_score : 0
+         * phone : 18153527447
          * wallet : 0.0
-         * device_id : 862561039857212
-         * deposit_status : 0
+         * device_id : 864168031434798
+         * deposit_status : 1
          * status : 1
          * alarm_switch : 1
          * reg_from : android
-         * create_time : 2017-07-27 13:00:16
+         * create_time : 2017-07-28 20:04:02
          */
 
         private int user_id;
+        private int credit_score;
         private String phone;
-        private double wallet;
+        private String wallet;
         private String device_id;
         private int deposit_status;
         private int status;
@@ -104,6 +106,14 @@ public class ValidateUser implements Serializable{
             this.user_id = user_id;
         }
 
+        public int getCredit_score() {
+            return credit_score;
+        }
+
+        public void setCredit_score(int credit_score) {
+            this.credit_score = credit_score;
+        }
+
         public String getPhone() {
             return phone;
         }
@@ -112,11 +122,11 @@ public class ValidateUser implements Serializable{
             this.phone = phone;
         }
 
-        public double getWallet() {
+        public String getWallet() {
             return wallet;
         }
 
-        public void setWallet(double wallet) {
+        public void setWallet(String wallet) {
             this.wallet = wallet;
         }
 

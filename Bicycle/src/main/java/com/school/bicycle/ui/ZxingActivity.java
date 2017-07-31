@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.ui.lockopen.LockOpenActivity;
+import com.school.bicycle.ui.main.MainActivity;
+import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.uuzuche.lib_zxing.activity.CaptureFragment;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
@@ -68,20 +70,25 @@ public class ZxingActivity extends BaseToolBarActivity {
     CodeUtils.AnalyzeCallback analyzeCallback = new CodeUtils.AnalyzeCallback() {
         @Override
         public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-//            Intent resultIntent = new Intent();
-//            Bundle bundle = new Bundle();
-//            bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
-//            bundle.putString(CodeUtils.RESULT_STRING, result);
-//            resultIntent.putExtras(bundle);
-//            ZxingActivity.this.setResult(RESULT_OK, resultIntent);
-//            ZxingActivity.this.finish();
             Log.d("result", result);
             String num = result.substring(result.indexOf("#") + 1);
             String location = getIntent().getStringExtra("location");
+            String status = getIntent().getStringExtra("status");
             Log.d("num", num);
             Log.d("location", location);
-            startActivity(LockOpenActivity.class, "lock_code", num, "location", location);
-            finish();
+            Log.d("status", status);
+            if (status.equals("0")){
+                //跳回主界面
+                Intent it = new Intent(ZxingActivity.this, MainActivity.class);
+                it.putExtra("bike_number",num);
+                startActivity(it);
+                finish();
+            }else {
+                startActivity(LockOpenActivity.class, "lock_code", num, "location", location);
+                finish();
+            }
+
+
 
         }
 
@@ -102,7 +109,8 @@ public class ZxingActivity extends BaseToolBarActivity {
         switch (view.getId()) {
             case R.id.inbiycle_num:
                 String location = getIntent().getStringExtra("location");
-                startActivity(openbynum_Activity.class, "location", location);
+                String status = getIntent().getStringExtra("status");
+                startActivity(openbynum_Activity.class, "location", location,"status",status);
                 finish();
                 break;
             case R.id.linear2:

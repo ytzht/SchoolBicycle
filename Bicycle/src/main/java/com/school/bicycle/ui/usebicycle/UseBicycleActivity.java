@@ -145,6 +145,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                 Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
                 it.putExtra("bike_number",queryBikeListByDate.getBike_info().get(position).getNumber());
                 startActivity(it);
+                finish();
             }
         });
     }

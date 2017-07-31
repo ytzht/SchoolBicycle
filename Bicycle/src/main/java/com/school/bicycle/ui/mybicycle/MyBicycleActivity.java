@@ -133,8 +133,6 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_myReservation_mybiycle:
                 //共享设置
-
-
                 String url = Apis.Base + Apis.dayLeaseLists;
                 format = new SimpleDateFormat("yyyy-MM-dd");
                 OkHttpUtils

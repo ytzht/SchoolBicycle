@@ -8,18 +8,21 @@ import java.util.List;
 
 public class CheckJumpStatus {
 
+
     /**
      * code : 1
      * msg : 操作成功
-     * body : [{"mybike":1,"gd_id":67,"log":"121.44145488739015","lat":"37.47678236501855","number":"011130","address":"山东省烟台市莱山区黄海路街道清泉路山东工商学院","color":"blue","long_lease":0,"valid_time":[],"type":"1","lease_info":{"时租":"0.04","日租":"0.02"}}]
-     * bike_status : 3
-     * my_route : {"rid":44,"user_id":31,"bike_number":"011130","start_time":"2017-07-28 17:00:04","end_time":"2017-07-28 17:04:07","time_span":"4","total_fee":0,"distance":5.79,"calories":2,"status":1,"pay_status":0}
+     * body : [{"mybike":1,"gd_id":113,"log":"121.441261","lat":"37.477207","number":"011169","address":"山东省烟台市莱山区黄海路街道观海路191号山东工商学院(桐林路)","color":"blue","long_lease":0,"valid_time":[],"type":"1","lease_info":{"时租":"0.04","日租":"0.02"}}]
+     * bike_status : 1
+     * bike_number : 011169
+     * lock_status : 1
      */
 
     private int code;
     private String msg;
     private int bike_status;
-    private MyRouteBean my_route;
+    private String bike_number;
+    private int lock_status;
     private List<BodyBean> body;
 
     public int getCode() {
@@ -46,12 +49,20 @@ public class CheckJumpStatus {
         this.bike_status = bike_status;
     }
 
-    public MyRouteBean getMy_route() {
-        return my_route;
+    public String getBike_number() {
+        return bike_number;
     }
 
-    public void setMy_route(MyRouteBean my_route) {
-        this.my_route = my_route;
+    public void setBike_number(String bike_number) {
+        this.bike_number = bike_number;
+    }
+
+    public int getLock_status() {
+        return lock_status;
+    }
+
+    public void setLock_status(int lock_status) {
+        this.lock_status = lock_status;
     }
 
     public List<BodyBean> getBody() {
@@ -62,130 +73,14 @@ public class CheckJumpStatus {
         this.body = body;
     }
 
-    public static class MyRouteBean {
-        /**
-         * rid : 44
-         * user_id : 31
-         * bike_number : 011130
-         * start_time : 2017-07-28 17:00:04
-         * end_time : 2017-07-28 17:04:07
-         * time_span : 4
-         * total_fee : 0.0
-         * distance : 5.79
-         * calories : 2
-         * status : 1
-         * pay_status : 0
-         */
-
-        private int rid;
-        private int user_id;
-        private String bike_number;
-        private String start_time;
-        private String end_time;
-        private String time_span;
-        private double total_fee;
-        private double distance;
-        private int calories;
-        private int status;
-        private int pay_status;
-
-        public int getRid() {
-            return rid;
-        }
-
-        public void setRid(int rid) {
-            this.rid = rid;
-        }
-
-        public int getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(int user_id) {
-            this.user_id = user_id;
-        }
-
-        public String getBike_number() {
-            return bike_number;
-        }
-
-        public void setBike_number(String bike_number) {
-            this.bike_number = bike_number;
-        }
-
-        public String getStart_time() {
-            return start_time;
-        }
-
-        public void setStart_time(String start_time) {
-            this.start_time = start_time;
-        }
-
-        public String getEnd_time() {
-            return end_time;
-        }
-
-        public void setEnd_time(String end_time) {
-            this.end_time = end_time;
-        }
-
-        public String getTime_span() {
-            return time_span;
-        }
-
-        public void setTime_span(String time_span) {
-            this.time_span = time_span;
-        }
-
-        public double getTotal_fee() {
-            return total_fee;
-        }
-
-        public void setTotal_fee(double total_fee) {
-            this.total_fee = total_fee;
-        }
-
-        public double getDistance() {
-            return distance;
-        }
-
-        public void setDistance(double distance) {
-            this.distance = distance;
-        }
-
-        public int getCalories() {
-            return calories;
-        }
-
-        public void setCalories(int calories) {
-            this.calories = calories;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
-
-        public int getPay_status() {
-            return pay_status;
-        }
-
-        public void setPay_status(int pay_status) {
-            this.pay_status = pay_status;
-        }
-    }
-
     public static class BodyBean {
         /**
          * mybike : 1
-         * gd_id : 67
-         * log : 121.44145488739015
-         * lat : 37.47678236501855
-         * number : 011130
-         * address : 山东省烟台市莱山区黄海路街道清泉路山东工商学院
+         * gd_id : 113
+         * log : 121.441261
+         * lat : 37.477207
+         * number : 011169
+         * address : 山东省烟台市莱山区黄海路街道观海路191号山东工商学院(桐林路)
          * color : blue
          * long_lease : 0
          * valid_time : []
@@ -295,20 +190,12 @@ public class CheckJumpStatus {
 
         public static class LeaseInfoBean {
             /**
-             * 时租 : 2
-             * 日租 : 30
-             * 月租 : 100
-             * 季租 : 180
-             * 半年租 : 300
-             * 年租 : 500
+             * 时租 : 0.04
+             * 日租 : 0.02
              */
 
             private String 时租;
             private String 日租;
-            private String 月租;
-            private String 季租;
-            private String 半年租;
-            private String 年租;
 
             public String get时租() {
                 return 时租;
@@ -324,38 +211,6 @@ public class CheckJumpStatus {
 
             public void set日租(String 日租) {
                 this.日租 = 日租;
-            }
-
-            public String get月租() {
-                return 月租;
-            }
-
-            public void set月租(String 月租) {
-                this.月租 = 月租;
-            }
-
-            public String get季租() {
-                return 季租;
-            }
-
-            public void set季租(String 季租) {
-                this.季租 = 季租;
-            }
-
-            public String get半年租() {
-                return 半年租;
-            }
-
-            public void set半年租(String 半年租) {
-                this.半年租 = 半年租;
-            }
-
-            public String get年租() {
-                return 年租;
-            }
-
-            public void set年租(String 年租) {
-                this.年租 = 年租;
             }
         }
     }

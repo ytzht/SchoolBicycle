@@ -51,7 +51,6 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -259,21 +258,66 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     }
 
-    int recLen = 0;
+    long recLen = 0;
     TimeCountDownTextView countDownView;
+    TextView countdown1;
     long mMinute, mSecond;
 
+    long maxTime = 60000;//设置倒计时的时长！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
     private void initTimeDown() {
         countDownView = (TimeCountDownTextView) findViewById(R.id.countdown);
-        countDownView.setCountDownTimes(600000);//10min
-        countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
-            @Override
-            public void onFinish() {
-                //倒计时结束
-                initTime();//开始正计时
+        countdown1 = (TextView) findViewById(R.id.countdown1);
+
+
+        long nowTime = new Date().getTime();
+        final UserService service = new UserService(MainActivity.this);
+
+        long betweenTime = nowTime - service.getUseTime();
+        if (betweenTime > maxTime){//上次记录的时间比现在多十分钟以上，说明:1.是上一个车，锁是锁住的。2.是这个车，锁是打开的，开始正计时。应该重新存值
+
+            if (checkJumpStatus != null){
+                if (checkJumpStatus.getLock_status() == 1){//锁是锁住的
+                    countDownView.setCountDownTimes(maxTime);//10min
+                    countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
+                        @Override
+                        public void onFinish() {
+                            //倒计时结束
+                            service.setUsingTime(new Date().getTime());
+                            countDownView.setVisibility(View.GONE);
+                            countdown1.setVisibility(View.VISIBLE);
+                            initTime();//开始正计时
+                        }
+                    });
+                    countDownView.start();//开始倒计时
+                }else {//锁是打开的,这时候应该开始正计时，时间从记录的开始，如果没记录，从现在开始
+                    countDownView.setVisibility(View.GONE);
+                    countdown1.setVisibility(View.VISIBLE);
+                    recLen = nowTime - service.getUsingTime();
+                    if (recLen == 0){
+                        //之前没存过，存一下
+                        service.setUsingTime(new Date().getTime());
+                    }
+                    initTime();//开始正计时
+                }
             }
-        });
-        countDownView.start();//开始倒计时
+
+            service.setUseTime(new Date().getTime());
+
+        } else {//正好是当前的车，也需要重新存值，不过从差值的时间开始倒计时
+            countDownView.setCountDownTimes(betweenTime);//10min
+            countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
+                @Override
+                public void onFinish() {
+                    //倒计时结束
+                    service.setUsingTime(new Date().getTime());
+                    countDownView.setVisibility(View.GONE);
+                    countdown1.setVisibility(View.VISIBLE);
+                    initTime();//开始正计时
+                }
+            });
+            countDownView.start();//开始倒计时
+        }
+
     }
 
     //用车计时
@@ -304,8 +348,8 @@ public class MainActivity extends BaseActivity implements IMainView,
                             sec = "" + mSecond;
                         }
 
-                        countDownView.setText(Html.fromHtml(String.format("%1$s:%2$s", min, sec)));
-                        L.d(countDownView.getText().toString());
+                        countdown1.setText(Html.fromHtml(String.format("%1$s:%2$s", min, sec)));
+                        L.d(countdown1.getText().toString());
                     }
                 });
 
@@ -1132,7 +1176,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                             new UserService(MainActivity.this).setState("1");
                             bike_number = checkJumpStatus.getBike_number();
                             //时租中
-                            initview();
+                            initview();// TODO: 2017/7/31 倒计时相关 。。。
                         } else if (checkJumpStatus.getBike_status() == 2) {
                             onemark(checkJumpStatus.getBody().get(0).getNumber());
                             new UserService(MainActivity.this).setShowOneMark("1");
@@ -1144,7 +1188,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                             //时租付款
                             startActivity(OverPayActivity.class);
                         } else if (checkJumpStatus.getBike_status() == 4) {
-                            // TODO: 2017/7/30 长租
                             bike_number = checkJumpStatus.getBike_number();
                             if (checkJumpStatus.getLock_status() == 1) {
                                 new UserService(MainActivity.this).setState("0");

@@ -38,8 +38,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        app:countDownTime="600000" />
+        android:layout_marginTop="17dp" />
+    <TextView
+        android:id="@+id/countdown1"
+        android:layout_width="80dp"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"/>
 
     <TextView
         android:id="@+id/finish_usecar"

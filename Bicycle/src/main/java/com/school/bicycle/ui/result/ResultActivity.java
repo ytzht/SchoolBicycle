@@ -67,7 +67,7 @@ public class ResultActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("response", response);
+                                    Log.d("response=====", response);
                                     BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                     if (baseResult.getCode() == 1) {
                                         //0表示不再用车中1表示用车中

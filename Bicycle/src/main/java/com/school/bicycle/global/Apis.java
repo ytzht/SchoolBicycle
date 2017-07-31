@@ -34,6 +34,8 @@ public interface Apis {
 
     String unlocking = "order/unlocking";
 
+    String overLongLeaseBike = "order/overLongLeaseBike";
+
     String leaseBicycle = "order/leaseBicycle";
 
     String dayLeaseOrder = "order/dayLeaseOrder";

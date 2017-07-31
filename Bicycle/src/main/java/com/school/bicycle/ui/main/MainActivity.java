@@ -59,10 +59,13 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.DayleaseList;
 import com.school.bicycle.entity.GetBikeMapList;
+import com.school.bicycle.entity.Lockstatus;
 import com.school.bicycle.entity.QueryBikeListByDate;
+import com.school.bicycle.entity.SharedBikeList;
 import com.school.bicycle.entity.UpDate;
 import com.school.bicycle.entity.UploadLocation;
 import com.school.bicycle.entity.ValidateUser;
@@ -105,7 +108,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -168,7 +173,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     private ImageView dialog_close;
     //初始化dialog
     AlertDialog.Builder paydialog;
-    Dialog dialog;
     View pay_lay;
     TelephonyManager tm;
     String DEVICE_ID;
@@ -194,7 +198,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         lon = amapLocation.getLongitude();//获取经度
                         Log.d("经纬度=", "locationType:" + locationType + ",latitude:" + lat + "longitude" + lon);
                         if (new UserService(MainActivity.this).getState().equals("1")) {
-                            LatLng newLatLng = new LatLng(lon,lat);
+                            LatLng newLatLng = new LatLng(lon, lat);
                             if (isFirstLatLng) {
                                 //记录第一次的定位信息
                                 oldLatLng = newLatLng;
@@ -206,14 +210,14 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 setUpMap(oldLatLng, newLatLng);
                                 oldLatLng = newLatLng;
                             } else {
-                            String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
-                            Log.e("AmapErr", errText);
-                            if (isFirstLatLng) {
-                                showShort(errText);
+                                String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
+                                Log.e("AmapErr", errText);
+                                if (isFirstLatLng) {
+                                    showShort(errText);
+                                }
                             }
                         }
                     }
-                }
 //                    initgetBikeMapList();
                     mLocationClient.stopLocation();
                 } else {
@@ -250,6 +254,8 @@ public class MainActivity extends BaseActivity implements IMainView,
         initview();
         initClickListener();
         initmap();
+        LatLng target = new LatLng(lon,lat);
+        initgetBikeMapList(target);
 
     }
 
@@ -339,6 +345,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
         }
 
+
         if (new UserService(MainActivity.this).getValidateUser().equals("0")) {
             name.setText("未登录");
             score.setText("");
@@ -365,8 +372,10 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
 
-    /**绘制两个坐标点之间的线段,从以前位置到现在位置*/
-    private void setUpMap(LatLng oldData,LatLng newData ) {
+    /**
+     * 绘制两个坐标点之间的线段,从以前位置到现在位置
+     */
+    private void setUpMap(LatLng oldData, LatLng newData) {
 
         // 绘制一个大地曲线
         aMap.addPolyline((new PolylineOptions())
@@ -432,7 +441,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     private void initvalidateUser() {
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
-        Log.d("DEVICE_ID",DEVICE_ID);
+        Log.d("DEVICE_ID", DEVICE_ID);
         String url = Apis.Base +
                 Apis.validateUser
                 + DEVICE_ID;
@@ -454,7 +463,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         if (v.getCode() == 1) {
                             new UserService(MainActivity.this).setValidateUser("1");
                             name.setText(v.getBody().getPhone());
-                            score.setText("信用分："+v.getBody().getCredit_score());
+                            score.setText("信用分：" + v.getBody().getCredit_score());
 //
 //                            if (v.getBody().getStatus() == 1) {
 //                                score.setText("手机已认证");
@@ -523,7 +532,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         String cookie = new UserService(MainActivity.this).getCookie();
         OkHttpUtils.get()
                 .url(url)
-                .addHeader("cookie",cookie)
+                .addHeader("cookie", cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -605,7 +614,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             public void onClick(View v) {
                 String location = lon + "," + lat;
                 Log.d("location===", location);
-                startActivity(ZxingActivity.class, "location", location,"status","1");
+                startActivity(ZxingActivity.class, "location", location, "status", "1");
 
 
             }
@@ -622,15 +631,15 @@ public class MainActivity extends BaseActivity implements IMainView,
                 } else {
                     //已经勾过不再提示，直接跳
 //                    mTimer.cancel();
-                    if(checkJumpStatus.getBike_status()==1){
+                    if (checkJumpStatus.getBike_status() == 1) {
                         bike_number = checkJumpStatus.getBike_number();
                         startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
-                                lon + "," + lat,"status","1");
-                    }else if (checkJumpStatus.getBike_status()==2){
+                                lon + "," + lat, "status", "1");
+                    } else if (checkJumpStatus.getBike_status() == 2) {
                         bike_number = checkJumpStatus.getBike_number();
                         startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
-                                lon + "," + lat,"status","2");
-                    }else if (checkJumpStatus.getBike_status()==4){
+                                lon + "," + lat, "status", "2");
+                    } else if (checkJumpStatus.getBike_status() == 4) {
                         showTips();
                     }
 
@@ -662,10 +671,10 @@ public class MainActivity extends BaseActivity implements IMainView,
                 String location = lon + "," + lat;
                 Log.d("location===", location);
 
-                if(checkJumpStatus.getBike_status()==0){
-                    startActivity(ZxingActivity.class, "location", location,"status","0");
-                }else {
-                    startActivity(ZxingActivity.class, "location", location,"status","1");
+                if (checkJumpStatus.getBike_status() == 0) {
+                    startActivity(ZxingActivity.class, "location", location, "status", "0");
+                } else {
+                    startActivity(ZxingActivity.class, "location", location, "status", "1");
                 }
 //                startActivity(ZxingActivity.class, "location", location);
             }
@@ -689,8 +698,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         final Dialog dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
 
 
-
-
 //        TextView msg_btn_over = (TextView) view.findViewById(R.id.msg_btn_over);
 //        msg_txt.setText("车辆归回原处才可结束用车，由用户不当操作造成的财产损失将追究法律责任。");
 
@@ -701,9 +708,42 @@ public class MainActivity extends BaseActivity implements IMainView,
         msg_btn_over.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bike_number = checkJumpStatus.getBike_number();
-                startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
-                        lon + "," + lat,"status","4");
+
+
+                String url = Apis.Base + Apis.overLongLeaseBike;
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addHeader("cookie", new UserService(MainActivity.this).getCookie())
+                        .addParams("bike_number", checkJumpStatus.getBike_number())
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.d("response提示锁状态", response);
+//
+                                Lockstatus lockstatus = gson.fromJson(response, Lockstatus.class);
+                                if (lockstatus.getCode() == 1) {
+                                    if (lockstatus.getLock_status() == 1) {
+                                        new UserService(MainActivity.this).setState("0");
+                                        initview();
+                                        LatLng latLng = new LatLng(lon,lat);
+                                        initgetBikeMapList(latLng);
+                                        if (dialog.isShowing()) dialog.dismiss();
+                                    } else {
+                                        showLong("请注意车辆安全，锁没有锁上！");
+                                    }
+                                }
+                            }
+                        });
+//                bike_number = checkJumpStatus.getBike_number();
+//                startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
+//                        lon + "," + lat,"status","4");
             }
         });
 
@@ -713,26 +753,223 @@ public class MainActivity extends BaseActivity implements IMainView,
         msg_btn_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //点击确定
-                //判断checkbox
-                if (dialog.isShowing()) dialog.dismiss();
-                if (box.isChecked()) {
-                    new UserService(MainActivity.this).setAlert("1");
-                }
-//                mTimer.cancel();
-                startActivity(LockcloseActivity.class, "bike_number", bike_number, "location", lon + "," + lat);
+                String cookie;
+                cookie = new UserService(MainActivity.this).getCookie();
+                String url = Apis.Base + Apis.dayLeaseLists;
+                format = new SimpleDateFormat("yyyy-MM-dd");
+                OkHttpUtils
+                        .post()
+                        .url(url)
+                        .addHeader("cookie", cookie)
+//                .addParams("bike_number", bike_number)
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                L.d(response);
+                                SharedBikeList d = gson.fromJson(response, SharedBikeList.class);
+                                if (d.getCode() == 1) {
+                                    unList.clear();
+                                    canList.clear();
+                                    showAlertshare(d.getBody());
+                                    if (dialog.isShowing()) dialog.dismiss();
+
+                                } else {
+                                    showShort(d.getMsg());
+                                }
+
+                            }
+                        });
 
             }
         });
     }
 
+    List<Date> unList = new ArrayList<>();
+    List<SharedBikeList.BodyBean> canList = new ArrayList<>();
+    private TextView tv_okmain, tv_cancel;
+    private CheckBox cal_cb;
+    private AlertDialog dialog;
+
+    private void setClickCalendar() {
+        myCalendar.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(MaterialCalendarView widget, final CalendarDay date, boolean selected) {
+                if (selected) {
+                    myCalendar.setDateSelected(date, true);
+                    if (unList.size() > 0) {
+                        for (int i = 0; i < unList.size(); i++) {
+                            if (unList.get(i).getTime() == date.getDate().getTime()) {
+                                myCalendar.setDateSelected(date, false);
+                                showShort("不可取消");
+                            }
+                        }
+                    }
+                } else {
+                    int q = 0;
+
+                    if (canList.size() > 0) {
+
+
+                        for (int i = 0; i < canList.size(); i++) {
+
+                            try {
+                                if (format.parse(canList.get(i).getStart_time()).getTime() == date.getDate().getTime()) {
+                                    q = 1;
+                                    String cookie;
+                                    cookie = new UserService(MainActivity.this).getCookie();
+                                    OkHttpUtils.post()
+                                            .url(Apis.Base + Apis.CancelShareMyBike)
+                                            .addParams("sids", canList.get(i).getSid() + "")
+                                            .addHeader("cookie", cookie).build().execute(new StringCallback() {
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
+
+                                        }
+
+                                        @Override
+                                        public void onResponse(String response, int id) {
+                                            BaseResult result = gson.fromJson(response, BaseResult.class);
+                                            if (result.getCode() == 1) {
+                                                myCalendar.setDateSelected(date, false);
+                                                showShort(result.getMsg());
+                                            } else {
+                                                showShort(result.getMsg());
+                                            }
+                                        }
+                                    });
+
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                    if (q == 0)
+                        myCalendar.setDateSelected(date, false);
+                }
+
+            }
+        });
+    }
+
+    private void showAlertshare(List<SharedBikeList.BodyBean> list) {
+
+        View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.mybiycle_calendar, null, false);
+        dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
+        tv_okmain = (TextView) view.findViewById(R.id.tv_ok);
+        tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
+        cal_cb = (CheckBox) view.findViewById(R.id.cal_cb);
+        dialog.setCancelable(true);
+        myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
+        myCalendarInit();//初始化日历
+
+        if (list != null) {
+            for (int j = 0; j < list.size(); j++) {
+                try {
+                    Date date = format.parse(list.get(j).getStart_time());
+                    if (list.get(j).getLease_status() == 0) {
+                        canList.add(list.get(j));
+                        myCalendar.setDateSelected(date, true);
+                    } else {
+                        unList.add(date);
+                        myCalendar.addDecorators(new MySelectorDecorators(MainActivity.this),
+                                new SelectDecorator(MainActivity.this, date));
+                    }
+
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        setClickCalendar();
+
+        tv_okmain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (cal_cb.isChecked()) {
+                    List<CalendarDay> selectedDates = myCalendar.getSelectedDates();
+
+                    String s = "";
+                    if (selectedDates.size() > 0) {
+                        for (int i = 0; i < selectedDates.size(); i++) {
+                            String format = new SimpleDateFormat("yyyy-MM-dd").format(selectedDates.get(i).getDate());
+                            Log.d(TAG, "onClick: " + format);
+                            if (selectedDates.size() == i + 1) {
+                                s = s + format;
+                            } else {
+                                s = s + format + ",";
+                            }
+                        }
+
+                        Log.d(TAG, s);
+                        String cookie;
+                        cookie = new UserService(MainActivity.this).getCookie();
+                        Map<String, String> map = new HashMap<>();
+                        map.put("share_date", s);
+                        OkHttpUtils.post()
+                                .params(map)
+                                .addHeader("cookie", cookie)
+                                .url(Apis.Base + Apis.StartShareMyBike)
+                                .build().execute(new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                Log.d(TAG, "onResponse: " + response);
+                                BaseResult result = (new Gson()).fromJson(response, BaseResult.class);
+                                if (result.getCode() == 1) {
+                                    showShort(result.getMsg());
+                                    if (dialog.isShowing()) dialog.dismiss();
+                                } else {
+                                    showShort(result.getMsg());
+                                }
+                            }
+                        });
+                    } else {
+                        showShort("请选择日期");
+                    }
+                } else {
+                    new AlertDialog.Builder(MainActivity.this).setTitle("提示").setMessage("请仔细阅读共享协议，如果同意请勾选以继续")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                }
+
+
+            }
+        });
+
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dialog.isShowing()) dialog.dismiss();
+            }
+        });
+
+
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         new UserService(MainActivity.this).setShowOneMark("0");
         mMapView.onDestroy();
-        if(null != mlocationClient){
+        if (null != mlocationClient) {
             mlocationClient.onDestroy();
         }
 //        mTimer.cancel();
@@ -747,7 +984,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         initview();
 //        UpdateInfo();
     }
+
     QueryBikeListByDate queryBikeListByDate;
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -799,6 +1038,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             e.printStackTrace();
         }
     }
+
     //更新apk 相关
     public void download(String downloadUrl, String vName) {
         if (isWifi) {
@@ -815,6 +1055,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             myDialog(downloadManager, downloadUrl, vName);
         }
     }
+
     //更新apk 相关
     public void InatallDialog(final String SDPATH) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
@@ -837,6 +1078,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         }).setCancelable(false)//点击其他区域关闭对话框
                 .show();
     }
+
     //更新apk 相关
     public void myDialog(final DownloadManager downloadManager, final String url, final String vName) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
@@ -858,6 +1100,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
     CheckJumpStatus checkJumpStatus;
+
     //跳转状态
     private void checkJumpStatus() {
 
@@ -900,13 +1143,14 @@ public class MainActivity extends BaseActivity implements IMainView,
                         } else if (checkJumpStatus.getBike_status() == 3) {
                             //时租付款
                             startActivity(OverPayActivity.class);
-                        }else  if (checkJumpStatus.getBike_status() == 4){
+                        } else if (checkJumpStatus.getBike_status() == 4) {
                             // TODO: 2017/7/30 长租
                             bike_number = checkJumpStatus.getBike_number();
-                            if (checkJumpStatus.getLock_status()==1){
+                            if (checkJumpStatus.getLock_status() == 1) {
                                 new UserService(MainActivity.this).setState("0");
-                            }else {
+                            } else {
                                 new UserService(MainActivity.this).setState("1");
+                                showOneCar(checkJumpStatus.getBike_number());
 
                             }
                             initview();
@@ -950,8 +1194,6 @@ public class MainActivity extends BaseActivity implements IMainView,
             super.onBackPressed();
         }
     }
-
-
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -1024,17 +1266,17 @@ public class MainActivity extends BaseActivity implements IMainView,
     View infoWindow = null;
 
     private CameraUpdate cameraUpdate;
+
     //显示选中车辆点
     private void showOneCar(final String bike_number) {
         new UserService(MainActivity.this).setShowOneMark("1");
-        String num = new UserService(MainActivity.this).getShowOneMark();
         String url = Apis.Base + Apis.checkBikeByNumber;
         String cookie = new UserService(MainActivity.this).getCookie();
         OkHttpUtils
                 .post()
                 .url(url)
-                .addHeader("cookie",cookie)
-                .addParams("bike_number",bike_number)
+                .addHeader("cookie", cookie)
+                .addParams("bike_number", bike_number)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -1045,7 +1287,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                     @Override
                     public void onResponse(String response, int id) {
                         L.d(response);
-                        GetBikeMapList getBikeMapList = gson.fromJson(response,GetBikeMapList.class);
+                        GetBikeMapList getBikeMapList = gson.fromJson(response, GetBikeMapList.class);
                         AMap aMap = mMapView.getMap();
                         aMap.clear();
 //        bike_number = infoBean.getNumber();
@@ -1064,7 +1306,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         } else if (getBikeMapList.getBody().get(0).getColor().equals("red")) {
                             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                                     .decodeResource(getResources(), R.drawable.ico_red)));
-                        }else if (getBikeMapList.getBody().get(0).getColor().equals("blue")){
+                        } else if (getBikeMapList.getBody().get(0).getColor().equals("blue")) {
                             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
                                     .decodeResource(getResources(), R.drawable.ico_blue)));
                         }
@@ -1090,8 +1332,8 @@ public class MainActivity extends BaseActivity implements IMainView,
         OkHttpUtils
                 .post()
                 .url(url)
-                .addHeader("cookie",cookie)
-                .addParams("bike_number",bike_number)
+                .addHeader("cookie", cookie)
+                .addParams("bike_number", bike_number)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -1101,7 +1343,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     @Override
                     public void onResponse(String response, int id) {
-                        GetBikeMapList getBikeMapList = gson.fromJson(response,GetBikeMapList.class);
+                        GetBikeMapList getBikeMapList = gson.fromJson(response, GetBikeMapList.class);
                         AMap aMap = mMapView.getMap();
                         aMap.clear();
                         tvUse.setText("用车中：" + bike_number);
@@ -1172,7 +1414,7 @@ public class MainActivity extends BaseActivity implements IMainView,
             tv_longrent_info.setText("长租：" + data.getLease_info().get月租() + "元/月 " + data.getLease_info().get季租()
                     + "元/3个月 \n" + data.getLease_info().get半年租() + "元/半年 " + data.getLease_info().get年租() + "元/一年");
         }
-        if (data.getColor().equals("blue")){
+        if (data.getColor().equals("blue")) {
             tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
             tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
             tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
@@ -1185,9 +1427,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                 if (!data.getColor().equals("green")) {
                     showShort("该车辆已被长租");
                 } else {
-                    if (checkJumpStatus.getBike_status()==4){
+                    if (checkJumpStatus.getBike_status() == 4) {
                         showShort("您已经是长租用户");
-                    }else {
+                    } else {
                         startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
                     }
 
@@ -1200,16 +1442,15 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkJumpStatus.getBike_status()==4){
+                if (checkJumpStatus.getBike_status() == 4) {
                     showShort("您是长租用户");
-                }else {
-                    if (data.getColor().equals("green")||data.getColor().equals("yellow")){
+                } else {
+                    if (data.getColor().equals("green") || data.getColor().equals("yellow")) {
                         bike_number = data.getNumber();
                         startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
                     }
 
                 }
-
 
 
             }
@@ -1218,9 +1459,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (checkJumpStatus.getBike_status()==4){
+                if (checkJumpStatus.getBike_status() == 4) {
                     showShort("您是长租用户");
-                }else {
+                } else {
                     String url = Apis.Base + Apis.dayLeaseList;
                     String cookie = new UserService(MainActivity.this).getCookie();
                     format = new SimpleDateFormat("yyyy-MM-dd");
@@ -1241,9 +1482,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 public void onResponse(String response, int id) {
                                     L.d(response);
                                     DayleaseList d = gson.fromJson(response, DayleaseList.class);
-                                    if (d.getCode() == 1){
+                                    if (d.getCode() == 1) {
                                         showAlert(data.getNumber(), d.getBody());
-                                    }else {
+                                    } else {
                                         showShort(d.getMsg());
                                     }
 
@@ -1283,7 +1524,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
 
-
     //地图中心移动结束
     @Override
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
@@ -1294,9 +1534,10 @@ public class MainActivity extends BaseActivity implements IMainView,
             checkJumpStatus();
         } else {
             String showOneMark = new UserService(MainActivity.this).getShowOneMark();
-            if (showOneMark.equals("1")){
+            if (showOneMark.equals("1")) {
+                initview();
 
-            }else if (showOneMark.equals("0")){
+            } else if (showOneMark.equals("0")) {
                 initdingwei();
                 initgetBikeMapList(target);
             }
@@ -1311,6 +1552,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     List<CalendarDay> selectedDates;
     List<Date> unlist = new ArrayList<>();
     DateFormat format;
+
     //日租日历
     private void showAlert(final String i, List<String> list) {
         final String bike_number = i;
@@ -1413,7 +1655,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     if (selected) {
                         myCalendar.setDateSelected(date, true);
-                        if (unlist.size()>0) {
+                        if (unlist.size() > 0) {
                             for (int i = 0; i < unlist.size(); i++) {
                                 if (unlist.get(i) == date.getDate()) {
                                     myCalendar.setDateSelected(date, false);
@@ -1422,11 +1664,9 @@ public class MainActivity extends BaseActivity implements IMainView,
                         }
 
 
-
                     } else {
                         myCalendar.setDateSelected(date, false);
                     }
-
 
 
                     if (selectedDates.size() > 0) {

@@ -153,7 +153,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                                 if (d.getCode() == 1) {
                                     unList.clear();
                                     canList.clear();
-                                    showAlert(d.getBody());
+                                    showAlertshare(d.getBody());
 
                                 } else {
                                     showShort(d.getMsg());
@@ -179,7 +179,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
     List<SharedBikeList.BodyBean> canList = new ArrayList<>();
     private CheckBox cal_cb;
 
-    private void showAlert(List<SharedBikeList.BodyBean> list) {
+    private void showAlertshare(List<SharedBikeList.BodyBean> list) {
 
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.mybiycle_calendar, null, false);
         dialog = new AlertDialog.Builder(MyBicycleActivity.this).setView(view).setCancelable(false).show();

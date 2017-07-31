@@ -56,8 +56,13 @@ public class Consumption_fragment extends BaseFragment {
                         Log.d("re",response);
                         Gson gson  = new Gson();
                         Consumption consumption = gson.fromJson(response,Consumption.class);
-                        Consumption_adapter c = new Consumption_adapter(getActivity(),consumption.getConsumer_details());
-                        consumption_listview.setAdapter(c);
+                        if (consumption.getMsg().equals("暂无数据")){
+                            showShort("暂无数据");
+                        }else {
+                            Consumption_adapter c = new Consumption_adapter(getActivity(),consumption.getConsumer_details());
+                            consumption_listview.setAdapter(c);
+                        }
+
                     }
                 });
 

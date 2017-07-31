@@ -58,9 +58,14 @@ public class Share_fragment extends BaseFragment {
                         Log.d("re",response);
                         Gson gson  = new Gson();
                         QueryShareDetails queryShareDetails = gson.fromJson(response,QueryShareDetails.class);
-                        ShareDetails_adapter c =
-                                new ShareDetails_adapter(getActivity(),queryShareDetails.getShare_details());
-                        consumption_listview.setAdapter(c);
+                        if (queryShareDetails.getMsg().equals("暂无数据")){
+                            showShort("暂无数据");
+                        }else {
+                            ShareDetails_adapter c =
+                                    new ShareDetails_adapter(getActivity(),queryShareDetails.getShare_details());
+                            consumption_listview.setAdapter(c);
+                        }
+
 
                     }
                 });

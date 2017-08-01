@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="16"
         android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,13 +25,14 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application>
+//http://dev.umeng.com/push/android/integration
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="594bd7b107fe6525ee0009ba" >
         </meta-data>
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
-            android:value="xxxxxxxxxxxxxxxxxxxxxxxxxxxx" >
+            android:value="7afe42091417bc54841e5186b640e247" >
         </meta-data>
 
         <service

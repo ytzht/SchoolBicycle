@@ -1,5 +1,7 @@
 package com.school.bicycle.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,10 +11,11 @@ import java.util.List;
 
 public class GetMyRoute implements Serializable {
 
+
     /**
      * code : 1
      * msg : 操作成功
-     * body : [{"rid":1,"user_id":12,"bike_number":"012011","start_time":"2017-06-24 21:26:34","end_time":"2017-06-24 21:46:37","time_span":"11","total_fee":2.2,"distance":2.3,"calories":23,"carbon_saved":100,"status":true,"create_time":"2017-06-24 21:50:14","lines":[{"lid":1,"user_id":12,"bike_number":"012011","rid":1,"lat":37.477225,"log":121.477225,"create_time":"2017-06-24 21:56:18"},{"lid":2,"user_id":12,"bike_number":"012011","rid":1,"lat":121.442689,"log":37.477634,"create_time":"2017-06-24 21:56:59"}]}]
+     * body : [{"rid":172,"order_number":"H20170731184413399006","user_id":32,"bike_number":"011094","start_time":"2017-07-31 18:43:51","end_time":"2017-07-31 18:44:07","time_span":"0","total_fee":0.02,"distance":0,"calories":0,"carbon_saved":0,"status":true,"pay_status":true,"lines":[]},{"rid":174,"order_number":"H20170731184544743007","user_id":32,"bike_number":"011094","start_time":"2017-07-31 18:45:17","end_time":"2017-07-31 18:45:43","time_span":"0","total_fee":0.02,"distance":0,"calories":0,"carbon_saved":0,"status":true,"pay_status":true,"lines":[{"lid":5384,"user_id":32,"bike_number":"011094","rid":174,"lat":37.477148,"log":121.441372,"create_time":"2017-07-31 18:45:17"}]}]
      */
 
     private int code;
@@ -43,35 +46,37 @@ public class GetMyRoute implements Serializable {
         this.body = body;
     }
 
-    public static class BodyBean implements Serializable {
+    public static class BodyBean {
         /**
-         * rid : 1
-         * user_id : 12
-         * bike_number : 012011
-         * start_time : 2017-06-24 21:26:34
-         * end_time : 2017-06-24 21:46:37
-         * time_span : 11
-         * total_fee : 2.2
-         * distance : 2.3
-         * calories : 23
-         * carbon_saved : 100
+         * rid : 172
+         * order_number : H20170731184413399006
+         * user_id : 32
+         * bike_number : 011094
+         * start_time : 2017-07-31 18:43:51
+         * end_time : 2017-07-31 18:44:07
+         * time_span : 0
+         * total_fee : 0.02
+         * distance : 0.0
+         * calories : 0
+         * carbon_saved : 0
          * status : true
-         * create_time : 2017-06-24 21:50:14
-         * lines : [{"lid":1,"user_id":12,"bike_number":"012011","rid":1,"lat":37.477225,"log":121.477225,"create_time":"2017-06-24 21:56:18"},{"lid":2,"user_id":12,"bike_number":"012011","rid":1,"lat":121.442689,"log":37.477634,"create_time":"2017-06-24 21:56:59"}]
+         * pay_status : true
+         * lines : []
          */
 
         private int rid;
+        private String order_number;
         private int user_id;
         private String bike_number;
         private String start_time;
         private String end_time;
         private String time_span;
-        private double total_fee;
-        private double distance;
+        private String total_fee;
+        private String distance;
         private int calories;
         private int carbon_saved;
         private boolean status;
-        private String create_time;
+        private boolean pay_status;
         private List<LinesBean> lines;
 
         public int getRid() {
@@ -80,6 +85,14 @@ public class GetMyRoute implements Serializable {
 
         public void setRid(int rid) {
             this.rid = rid;
+        }
+
+        public String getOrder_number() {
+            return order_number;
+        }
+
+        public void setOrder_number(String order_number) {
+            this.order_number = order_number;
         }
 
         public int getUser_id() {
@@ -122,19 +135,19 @@ public class GetMyRoute implements Serializable {
             this.time_span = time_span;
         }
 
-        public double getTotal_fee() {
+        public String getTotal_fee() {
             return total_fee;
         }
 
-        public void setTotal_fee(double total_fee) {
+        public void setTotal_fee(String total_fee) {
             this.total_fee = total_fee;
         }
 
-        public double getDistance() {
+        public String getDistance() {
             return distance;
         }
 
-        public void setDistance(double distance) {
+        public void setDistance(String distance) {
             this.distance = distance;
         }
 
@@ -162,12 +175,12 @@ public class GetMyRoute implements Serializable {
             this.status = status;
         }
 
-        public String getCreate_time() {
-            return create_time;
+        public boolean isPay_status() {
+            return pay_status;
         }
 
-        public void setCreate_time(String create_time) {
-            this.create_time = create_time;
+        public void setPay_status(boolean pay_status) {
+            this.pay_status = pay_status;
         }
 
         public List<LinesBean> getLines() {
@@ -178,21 +191,25 @@ public class GetMyRoute implements Serializable {
             this.lines = lines;
         }
 
-        public static class LinesBean implements Serializable{
+
+        public static class LinesBean {
             /**
-             * lid : 1
-             * user_id : 12
-             * bike_number : 012011
-             * rid : 1
-             * lat : 37.477225
-             * log : 121.477225
-             * create_time : 2017-06-24 21:56:18
+             * lid : 5384
+             * user_id : 32
+             * bike_number : 011094
+             * rid : 174
+             * lat : 37.477148
+             * log : 121.441372
+             * create_time : 2017-07-31 18:45:17
              */
 
             private int lid;
-            private int user_id;
-            private String bike_number;
-            private int rid;
+            @SerializedName("user_id")
+            private int user_idX;
+            @SerializedName("bike_number")
+            private String bike_numberX;
+            @SerializedName("rid")
+            private int ridX;
             private double lat;
             private double log;
             private String create_time;
@@ -205,28 +222,28 @@ public class GetMyRoute implements Serializable {
                 this.lid = lid;
             }
 
-            public int getUser_id() {
-                return user_id;
+            public int getUser_idX() {
+                return user_idX;
             }
 
-            public void setUser_id(int user_id) {
-                this.user_id = user_id;
+            public void setUser_idX(int user_idX) {
+                this.user_idX = user_idX;
             }
 
-            public String getBike_number() {
-                return bike_number;
+            public String getBike_numberX() {
+                return bike_numberX;
             }
 
-            public void setBike_number(String bike_number) {
-                this.bike_number = bike_number;
+            public void setBike_numberX(String bike_numberX) {
+                this.bike_numberX = bike_numberX;
             }
 
-            public int getRid() {
-                return rid;
+            public int getRidX() {
+                return ridX;
             }
 
-            public void setRid(int rid) {
-                this.rid = rid;
+            public void setRidX(int ridX) {
+                this.ridX = ridX;
             }
 
             public double getLat() {

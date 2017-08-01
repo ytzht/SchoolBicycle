@@ -410,6 +410,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         aMap.addPolyline((new PolylineOptions())
                 .add(oldData, newData)
                 .geodesic(true).color(Color.GREEN));
+        L.d("我在画线！！！！");
 
     }
 
@@ -457,6 +458,10 @@ public class MainActivity extends BaseActivity implements IMainView,
 //                                        showShort("上传成功");
                                         kaluli.setText(uploadLocation.getCalories() + "卡");
                                         lengthBiycile.setText(uploadLocation.getDistance() + "米");
+                                    }else {
+                                        tvUse.setText("车已锁");
+
+
                                     }
                                 }
                             });
@@ -1114,7 +1119,11 @@ public class MainActivity extends BaseActivity implements IMainView,
         super.onNewIntent(intent);
         L.d("onnewIntent");
         queryBikeListByDate = new QueryBikeListByDate();
-        showOneCar(intent.getStringExtra("bike_number"));
+       String bikenum =  intent.getStringExtra("bike_number");
+        if (!bikenum.isEmpty()){
+            showOneCar(bikenum);
+        }
+
     }
 
     boolean isWifi = false;

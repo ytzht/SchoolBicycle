@@ -105,11 +105,14 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
         it = getIntent();
         GetMyRoute getMyRoute = (GetMyRoute) it.getSerializableExtra("getMyRoute");
         String position = it.getStringExtra("position");
-        cameraUpdate = CameraUpdateFactory
-                .newCameraPosition(new CameraPosition(new LatLng(getMyRoute.getBody().get(0).getLines().get(0).getLog(),
-                        getMyRoute.getBody().get(0).getLines().get(0).getLat()), 18, 0, 30));
-        aMap.moveCamera(cameraUpdate);
         int i = Integer.parseInt(position);
+        if (getMyRoute.getBody().get(i).getLines().size()==0){
+
+        }else {
+        cameraUpdate = CameraUpdateFactory
+                .newCameraPosition(new CameraPosition(new LatLng(
+                        getMyRoute.getBody().get(i).getLines().get(0).getLat(),getMyRoute.getBody().get(i).getLines().get(0).getLog()), 18, 0, 30));
+        aMap.moveCamera(cameraUpdate);
         mapBikeNumber.setText("车 牌 号"+getMyRoute.getBody().get(i).getBike_number());
         mapDistance.setText("骑行距离："+getMyRoute.getBody().get(i).getDistance()+"M");
         mapTotalFee.setText("骑行消费："+getMyRoute.getBody().get(i).getTotal_fee()+"元");
@@ -127,6 +130,8 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
 
         Polyline polyline = aMap.addPolyline(new PolylineOptions().
                 addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
+
+        }
     }
 
     @Override

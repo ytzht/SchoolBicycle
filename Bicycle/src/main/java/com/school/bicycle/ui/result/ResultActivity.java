@@ -14,6 +14,7 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.lockclose.LockcloseActivity;
+import com.school.bicycle.ui.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -72,6 +73,7 @@ public class ResultActivity extends BaseToolBarActivity {
                                     BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                     if (baseResult.getCode() == 1) {
                                         //0表示不再用车中1表示用车中
+                                        startActivity(MainActivity.class,"bike_number","");
                                         finish();
                                     }else {
                                         showShort(baseResult.getMsg());

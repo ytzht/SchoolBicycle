@@ -121,9 +121,10 @@ public class PayActivity extends BaseToolBarActivity {
 
     @Override
     protected void onResume() {
-
         super.onResume();
+        L.d("wchat-0",PayCore.getInstance().mWeichatState+"");
         if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
+            L.d("wchat-1",PayCore.getInstance().mWeichatState+"");
             PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
             startActivity(ResultActivity.class,"type","date");
             finish();

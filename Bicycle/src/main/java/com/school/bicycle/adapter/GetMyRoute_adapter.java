@@ -58,9 +58,9 @@ public class GetMyRoute_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
 
-        viewHolde.OrdernumberMyroute.setText("订单号："+data.get(i).getRid()+"");
+        viewHolde.OrdernumberMyroute.setText("订单号："+data.get(i).getOrder_number()+"");
         viewHolde.carnumberMyroute.setText("车牌号："+data.get(i).getBike_number());
-        viewHolde.timeMyroute.setText("下单时间："+data.get(i).getStart_time());
+        viewHolde.timeMyroute.setText("下单时间："+data.get(i).getEnd_time());
 
         return view;
     }

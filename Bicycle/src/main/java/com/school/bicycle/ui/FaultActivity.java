@@ -22,6 +22,7 @@ import com.school.bicycle.entity.FailureList;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.global.UTFXMLString;
 import com.school.bicycle.global.UserService;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -69,7 +70,8 @@ public class FaultActivity extends BaseToolBarActivity {
         String cookie = new UserService(FaultActivity.this).getCookie();
 
         OkHttpUtils.get()
-                .url(Apis.Base + Apis.FailureList).addHeader("cookie", cookie)
+                .url(Apis.Base + Apis.FailureList)
+                .addHeader("cookie", cookie)
                 .build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -128,10 +130,12 @@ public class FaultActivity extends BaseToolBarActivity {
                 }
                 Map<String, String> map = new HashMap<>();
 
-                map.put("bike_number", etInput.getText().toString());
-                map.put("problem", s);
+                map.put("bike_number", UTFXMLString.getUTF8XMLString(etInput.getText().toString()));
+                map.put("problem", UTFXMLString.getUTF8XMLString(s));
                 L.d(s);
+                String cookie = new UserService(FaultActivity.this).getCookie();
                 OkHttpUtils.post()
+                        .addHeader("cookie", cookie)
                         .params(map)
                         .url(Apis.Base + Apis.FailureReporting)
                         .build().execute(new StringCallback() {

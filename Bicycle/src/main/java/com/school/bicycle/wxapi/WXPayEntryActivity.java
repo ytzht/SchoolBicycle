@@ -2,7 +2,9 @@ package com.school.bicycle.wxapi;
 
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
+import com.school.bicycle.global.ToastManager;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -11,8 +13,11 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.logging.Logger;
 
 
 public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEventHandler {
@@ -39,6 +44,8 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
 
     @Override
     public void onReq(BaseReq req) {
+
+        Log.v("wechat","onReq() returned: " + req);
     }
 
     @Override
@@ -48,15 +55,18 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
             wxreslut = resp.errCode;
             switch (resp.errCode) {
                 case 0:
-                    showShort("支付成功");
+                    L.d("wchat0",resp.errCode+"");
+                    ToastManager.send(this, "支付成功");
                     PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Success;
                     break;
                 case -2:
-                    showShort("取消支付");
-                    PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Failed;
+                    L.d("wchat-2",resp.errCode+"");
+                    ToastManager.send(this, "取消支付");
+                    PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Cancle;
                     break;
                 default:
-                    showShort("支付失败");
+                    L.d("wchatdefault",resp.errCode+"");
+                    ToastManager.send(this, "支付失败");
                     PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Failed;
                     break;
             }

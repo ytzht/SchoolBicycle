@@ -8,3 +8,5 @@ Directory:.idea/
 Directory:gradle/
 /gradlew.bat
 /.idea/
+/Bicycle/build/
+/build/

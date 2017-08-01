@@ -46,7 +46,7 @@ public class GetMyRoute implements Serializable {
         this.body = body;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable{
         /**
          * rid : 172
          * order_number : H20170731184413399006
@@ -192,7 +192,7 @@ public class GetMyRoute implements Serializable {
         }
 
 
-        public static class LinesBean {
+        public static class LinesBean implements Serializable{
             /**
              * lid : 5384
              * user_id : 32

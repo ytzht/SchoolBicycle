@@ -53,7 +53,7 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d("response", response);
+                        Log.d("response我的预约", response);
                         myAppoint = gson.fromJson(response, MyAppoint.class);
                         if (myAppoint.getCode() == 1) {
                             Myreserve_adapter myreserve_adapter = new Myreserve_adapter(MyReserveActivity.this, myAppoint.getMy_appoint(), MyReserveActivity.this);

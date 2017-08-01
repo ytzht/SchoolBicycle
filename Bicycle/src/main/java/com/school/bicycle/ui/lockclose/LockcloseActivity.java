@@ -55,10 +55,6 @@ public class LockcloseActivity extends BaseToolBarActivity {
         setContentView(R.layout.activity_lockclose);
         ButterKnife.bind(this);
         setToolbarText("锁车");
-
-
-
-
     }
 
     @OnClick({R.id.lock_refresh, R.id.lock_no, R.id.lock_kefu, R.id.lock_ok})

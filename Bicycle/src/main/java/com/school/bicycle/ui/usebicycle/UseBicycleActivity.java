@@ -104,7 +104,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                 @Override
                                 public void onResponse(String response, int id) {
                                     Log.d("response", response);
-                                    QueryBikeListByBikeNumber queryBikeListByBikeNumber = gson.fromJson(response, QueryBikeListByBikeNumber.class);
+                                    final QueryBikeListByBikeNumber queryBikeListByBikeNumber = gson.fromJson(response, QueryBikeListByBikeNumber.class);
                                     if (queryBikeListByBikeNumber.getCode() == 0) {
                                         showShort(queryBikeListByBikeNumber.getMsg());
                                     } else {
@@ -127,6 +127,21 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                             usebiycleBynumBiycletime.setText("这是您的长租车辆，随时扫码使用");
                                         }
                                     }
+                                    usebiycleBynum.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if (queryBikeListByBikeNumber.getBike_info().getColor().equals("red")){
+                                                showShort("该车辆已经被长租，请查询其他车辆");
+                                            }else {
+                                                new UserService(UseBicycleActivity.this).setShowOneMark("1");
+                                                Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
+                                                it.putExtra("bike_number",queryBikeListByBikeNumber.getBike_info().getNumber());
+                                                startActivity(it);
+                                                finish();
+                                            }
+
+                                        }
+                                    });
 
                                 }
                             });
@@ -142,10 +157,17 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         lvShowUsebicycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
-                it.putExtra("bike_number",queryBikeListByDate.getBike_info().get(position).getNumber());
-                startActivity(it);
-                finish();
+                if (queryBikeListByDate.getBike_info().get(position).getColor().equals("red")){
+                    showShort("该车辆已经被长租，请查询其他车辆");
+                }else {
+                    new UserService(UseBicycleActivity.this).setShowOneMark("1");
+                    Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
+
+                    it.putExtra("bike_number",queryBikeListByDate.getBike_info().get(position).getNumber());
+                    startActivity(it);
+                    finish();
+                }
+
             }
         });
     }

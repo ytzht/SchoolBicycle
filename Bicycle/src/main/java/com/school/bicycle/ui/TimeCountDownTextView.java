@@ -19,7 +19,7 @@ import java.util.TimerTask;
  */
 
 public class TimeCountDownTextView extends TextView {
-    private static final long MAX_COUNTDOWN_TIME = 1000 * 6000 * 10; // 1000 minutes
+    private static final long MAX_COUNTDOWN_TIME = 1000 * 60; // 1000 minutes
     private CountDownTimer mTimer = null;
     private String mCss;
     private long mCountDownTime;

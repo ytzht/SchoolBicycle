@@ -22,6 +22,8 @@ public class UserService {
     private static final String Cookie = "Cookie";
     private static final String UseTime = "UseTime";
     private static final String UsingTime = "UsingTime";
+    private static final String BikeNumber = "BikeNumber";
+    private static final String UseNewBike = "UseNewBike";
     private static final String COOKIE_PREFS = "CookiePrefsFile";
 
     private static final String ShowOneMark = "ShowOneMark";
@@ -137,6 +139,30 @@ public class UserService {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 USER_PREFS, Context.MODE_PRIVATE);
         return memberPrefs.getLong(UsingTime, new Date().getTime());
+
+    }
+    public void setUseNewBike(long value) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        memberPrefs.edit().putLong(UseNewBike,value).apply();
+    }
+
+    public long getUseNewBike() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        return memberPrefs.getLong(UseNewBike, 0);
+
+    }
+    public void setBikeNumber(String value) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(BikeNumber,value).apply();
+    }
+
+    public String getBikeNumber() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        return memberPrefs.getString(BikeNumber, "0");
 
     }
 

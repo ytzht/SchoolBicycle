@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="swipebackhelper-3.1.2">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/49619ccac8212e307c12a17a9fddcb0adb0bcf2a/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/49619ccac8212e307c12a17a9fddcb0adb0bcf2a/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jude/swipebackhelper/3.1.2/d511466d7b58cf4130dbdd300d5d4b22eda82545/swipebackhelper-3.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

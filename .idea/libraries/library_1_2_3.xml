@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="library-1.2.3">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/b7de55441d7c86e280aa6f79a739be94ac6f637c/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b7de55441d7c86e280aa6f79a739be94ac6f637c/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.traex.calendarlistview/library/1.2.3/e2d12ebe690305b006430e7a2e047b0cb59f1707/library-1.2.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

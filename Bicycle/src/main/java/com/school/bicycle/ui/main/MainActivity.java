@@ -54,7 +54,6 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
 import com.google.gson.Gson;
-import com.google.zxing.common.StringUtils;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -273,38 +272,47 @@ public class MainActivity extends BaseActivity implements IMainView,
     TimeCountDownTextView countDownView;
     TextView countdown1;
     long mMinute, mSecond;
-
-    long maxTime = 60000;//设置倒计时的时长！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+    UserService service;
+    long maxTime = 60 * 1000;//设置倒计时的时长！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 
     private void initTimeDown() {
+        if (countDownView != null)
         countDownView = (TimeCountDownTextView) findViewById(R.id.countdown);
+        if (countdown1 != null)
         countdown1 = (TextView) findViewById(R.id.countdown1);
 
-
-        long nowTime = new Date().getTime();
         final UserService service = new UserService(MainActivity.this);
 
-        long betweenTime = nowTime - service.getUseTime();
-        if (betweenTime > maxTime) {//上次记录的时间比现在多十分钟以上，说明:1.是上一个车，锁是锁住的。2.是这个车，锁是打开的，开始正计时。应该重新存值
-
+        long betweenTime = (new Date().getTime() - service.getUseTime())/100;
+        if (betweenTime > maxTime) {
+            L.d("上次记录的时间比现在多十分钟以上，说明:1.是上一个车，锁是锁住的。2.是这个车，锁是打开的，开始正计时。应该重新存值");
             if (checkJumpStatus != null) {
-                if (checkJumpStatus.getLock_status() == 1) {//锁是锁住的
-                    countDownView.setCountDownTimes(maxTime);//10min
-                    countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
-                        @Override
-                        public void onFinish() {
-                            //倒计时结束
-                            service.setUsingTime(new Date().getTime());
-                            countDownView.setVisibility(View.GONE);
-                            countdown1.setVisibility(View.VISIBLE);
-                            initTime();//开始正计时
+                if (checkJumpStatus.getLock_status() == 1) {//
+                    if (!isOldBike) {
+                        L.d("1锁是锁住的，本次用车第一次显示，开始倒计时，倒计时结束开始正计时");
+                        downTime(maxTime);
+                    }else {
+
+                        betweenTime = (new Date().getTime() - new UserService(MainActivity.this).getUseNewBike())/100;
+                        L.d("锁 betweenTime"+betweenTime + " now " + new Date().getTime() + " getUseNewBike " + new UserService(MainActivity.this).getUseNewBike());
+                        if (betweenTime > maxTime){
+                            betweenTime = maxTime;
+                        }else {
+                            betweenTime = maxTime - betweenTime;
                         }
-                    });
-                    countDownView.start();//开始倒计时
-                } else {//锁是打开的,这时候应该开始正计时，时间从记录的开始，如果没记录，从现在开始
-                    countDownView.setVisibility(View.GONE);
-                    countdown1.setVisibility(View.VISIBLE);
-                    recLen = nowTime - service.getUsingTime();
+                        L.d("1.5锁是锁住的，本次用车不是第一次显示，开始从 " + betweenTime + " 倒计时，倒计时结束开始正计时");
+                        downTime(betweenTime);
+
+                    }
+                } else {
+                    if ((new Date().getTime() - service.getUsingTime())/100 > maxTime) {
+                        recLen = 0;
+                    } else {
+                        recLen = (new Date().getTime() - service.getUsingTime())/100;
+                    }
+
+                    L.d("2锁是打开的,这时候应该开始正计时，时间从记录的 " + recLen + " 开始，如果没记录，从现在0开始");
+
                     if (recLen == 0) {
                         //之前没存过，存一下
                         service.setUsingTime(new Date().getTime());
@@ -315,25 +323,56 @@ public class MainActivity extends BaseActivity implements IMainView,
 
             service.setUseTime(new Date().getTime());
 
-        } else {//正好是当前的车，也需要重新存值，不过从差值的时间开始倒计时
-            countDownView.setCountDownTimes(betweenTime);//10min
-            countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
-                @Override
-                public void onFinish() {
-                    //倒计时结束
-                    service.setUsingTime(new Date().getTime());
-                    countDownView.setVisibility(View.GONE);
-                    countdown1.setVisibility(View.VISIBLE);
+        } else {//分两种情况
+
+            if (checkJumpStatus != null) {
+                if (checkJumpStatus.getLock_status() == 1) {//
+
+                    betweenTime = (new Date().getTime() - new UserService(MainActivity.this).getUseNewBike())/100;
+                    L.d("锁 betweenTime"+betweenTime + " now " + new Date().getTime() + " getUseNewBike " + new UserService(MainActivity.this).getUseNewBike());
+                    if (betweenTime > maxTime){
+                        betweenTime = maxTime;
+                    }else {
+                        betweenTime = maxTime - betweenTime;
+                    }
+                    L.d("3锁是锁住的，本次用车不是第一次显示，开始从 " + betweenTime + " 倒计时，倒计时结束开始正计时");
+                    downTime(betweenTime);
+                } else {
+                    recLen = (new Date().getTime() - service.getUsingTime())/100;
+                    L.d("4锁是打开的,这时候应该开始正计时，时间从记录的 " + recLen + " 开始，如果没记录，从现在0开始");
+
+                    if (recLen == 0) {
+                        //之前没存过，存一下
+                        service.setUsingTime(new Date().getTime());
+                    }
                     initTime();//开始正计时
                 }
-            });
-            countDownView.start();//开始倒计时
+            }
+
+            service.setUseTime(new Date().getTime());
         }
 
     }
 
+    private void downTime(long during_time){
+        countDownView.setCountDownTimes(during_time);//10min
+        countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
+            @Override
+            public void onFinish() {
+                //倒计时结束
+                new UserService(MainActivity.this).setUsingTime(new Date().getTime());
+
+                initTime();//开始正计时
+            }
+        });
+        countDownView.start();//开始倒计时
+    }
     //用车计时
     private void initTime() {
+
+        countDownView.setVisibility(View.GONE);
+        countdown1.setVisibility(View.VISIBLE);
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -1066,7 +1105,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 //        if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
 //
 //        } else {
-            checkJumpStatus();
+        checkJumpStatus();
 //        }
         initvalidateUser();
         initview();
@@ -1199,6 +1238,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     CheckJumpStatus checkJumpStatus;
 
+    boolean isOldBike = true;
     //跳转状态
     private void checkJumpStatus() {
 
@@ -1233,6 +1273,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                             new UserService(MainActivity.this).setShowOneMark("1");
                             new UserService(MainActivity.this).setState("1");
                             bike_number = checkJumpStatus.getBike_number();
+
 //                            setTimerTask();
                             //时租中
                             initview();// TODO: 2017/7/31 倒计时相关 。。。
@@ -1246,6 +1287,16 @@ public class MainActivity extends BaseActivity implements IMainView,
                             bike_number = checkJumpStatus.getBike_number();
 //                            setTimerTask();
 //                            lianxudingwei();
+
+                            if ((new UserService(MainActivity.this).getBikeNumber()).equals(bike_number)) {
+                                L.d("锁  又是这个车");
+                                isOldBike = true;
+                            } else {
+                                new UserService(MainActivity.this).setBikeNumber(bike_number);
+                                L.d("锁  新车是 " + bike_number);
+                                new UserService(MainActivity.this).setUseNewBike(new Date().getTime());
+                                isOldBike = false;
+                            }
                             initTimeDown();
                             lianxumap();
                             countdown.setVisibility(View.VISIBLE);

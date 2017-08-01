@@ -75,9 +75,9 @@ public class User_Activity extends BaseToolBarActivity {
                                 depositStatusUser.setText("未付押金");
                             }
                             if (user.getVerify_status()==1){
-                                depositStatusUser.setText("已实名认证");
+                                verifyStatusUser.setText("已实名认证");
                             }else {
-                                depositStatusUser.setText("未实名认证");
+                                verifyStatusUser.setText("未实名认证");
                             }
 
                         }

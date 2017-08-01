@@ -3,129 +3,120 @@
 
     <item
         is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\nutz.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="d035a0f72aef5cfc94f3ca04d880515746f11fb8">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\nutz_5cdadc6499d26f5d2679171581fba71ebb45d829\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\umeng_social_net.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="09a14799b9e09cb72bd2d0346f13dec601a71f6c">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_net_3b1d88de27574f4eff863e84980430d4e49eee65\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\umeng_social_api.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="55a810a3647e7324408cb9ca3c64d7c7bfc8f138">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_api_cfa0cbc452e721deb3a04a426e664c45ef6fedea\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="503a0a7044d3b65ce2e6a9dbe2256859e966e7d2">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_48b9b39dd87f570a73f993ebb30579744f070dd1\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\build\intermediates\exploded-aar\in.srain.cube\cube-sdk\1.0.44.39-SNAPSHOT\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="c4e9efa3341f649380754c88ebfa70cbdfb1816c">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\10\in.srain.cube-cube-sdk-1.0.44.39-SNAPSHOT_7d2bd85f2fe945cd3fded5629819b2dc57da1430\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\umeng_social_shareboard.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="c698121d485cc1cd502ff8fad5e4e71f72ad1e9b">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_shareboard_702c4c8d201c37ede88e3b10c3c5ae85080d6d73\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\alipaySdk-20170710.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="7e9257967505ebd92083a8019ec1c6495506ddbd">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\alipaySdk-20170710_571fc001153c3e4f280baa0d00288a8a1056100f\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\umeng_social_shareview.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="7302d576b34443698c6e1bd5301a146682198c16">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_shareview_8c3d325ef439bccc9f4fe747a0f2d2c2e0d35f58\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\umeng_shareboard_widget.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="4b1a59e4c996ee354c2db160f4b1ad3b0e94aab5">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_shareboard_widget_e56ade368e32284a5ce7cb6ef88181684dce73c0\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\SocialSDK_Sina_Simplify.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="8f6fd4de4b889f18e552c4c334d82cc6cc77fa4c">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\SocialSDK_Sina_Simplify_13ac91aee5712d757228ab308dbe6d68c6309aa8\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_bd464966b00731fd2f7b1d48ce022d9417a4bb1c\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\SocialSDK_WeChat_Simplify.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.3"
-        sha1="08ae64e705bc856d5560e932d86684de5e9934aa">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\SocialSDK_WeChat_Simplify_8cbf9d6f679f9dd3e27c047a57b588f726417bfc\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\SocialSDK_QQ_Simplify.jar"
-        jumboMode="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\SocialSDK_QQ_Simplify.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="6739b2dd368e2855c24528249dae9fbe14e7f09b">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\SocialSDK_QQ_Simplify_3047c429b68e64f434a1bced13de8fb3f3cad2ff\classes.dex" />
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\SocialSDK_QQ_Simplify_43cdda60bdab0c9641c97992e65e27cf8a3c302c\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="H:\project\SchoolBicycle\Bicycle\libs\umeng_social_tool.jar"
-        jumboMode="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\umeng_social_shareboard.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="c698121d485cc1cd502ff8fad5e4e71f72ad1e9b">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_shareboard_aa21247f186530f030725c6448f160ff574784ed\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\SocialSDK_Sina_Simplify.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="8f6fd4de4b889f18e552c4c334d82cc6cc77fa4c">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\SocialSDK_Sina_Simplify_fe00697870816943a0d3e7523a74d0d29d868f8a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\nutz.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d035a0f72aef5cfc94f3ca04d880515746f11fb8">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\nutz_5896a197de6a635b5501fd2aa11b4b5cf18a1070\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\umeng_social_api.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="55a810a3647e7324408cb9ca3c64d7c7bfc8f138">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_api_8336a73e359347c33a26c66a0f60ae04b7f0792a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.tencent.mm.opensdk\wechat-sdk-android-without-mta\1.3.4\a7bebff567a2b8801f4f8c79438bae1e95d052ab\wechat-sdk-android-without-mta-1.3.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a7bebff567a2b8801f4f8c79438bae1e95d052ab">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\10\wechat-sdk-android-without-mta-1.3.4_0f62e517aa5dedd9a6cb6ca24569d8532e15eb38\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\umeng_social_tool.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="87ef211d4ef0c257c7d040fbaa411832330eb9aa">
-        <dex dex="H:\project\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_tool_0ac338f2498e0b3619c23677d50d3a4f84805362\classes.dex" />
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_tool_e95a1d96b314d1e5df7e9db4d5a8fe7543731eaa\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\umeng_shareboard_widget.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4b1a59e4c996ee354c2db160f4b1ad3b0e94aab5">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_shareboard_widget_216425f1c1a234980d5e79a824cb37fb6c4597f4\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\exploded-aar\in.srain.cube\cube-sdk\1.0.44.39-SNAPSHOT\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="c4e9efa3341f649380754c88ebfa70cbdfb1816c">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\10\in.srain.cube-cube-sdk-1.0.44.39-SNAPSHOT_c18b973689f81f6cba17df9dfbb1d312025fd595\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\umeng_social_net.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="09a14799b9e09cb72bd2d0346f13dec601a71f6c">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_net_435958602c31b826639285d52c78d6bc90266b17\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\SocialSDK_WeChat_Simplify.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="08ae64e705bc856d5560e932d86684de5e9934aa">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\SocialSDK_WeChat_Simplify_76d91141d81d90cec3573afcb47b9a92b58582d1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\alipaySdk-20170710.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="7e9257967505ebd92083a8019ec1c6495506ddbd">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\alipaySdk-20170710_d31043d3222afba77b1e75c3a042ea08d8d2adcd\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="F:\LETVdownload\SchoolBicycle\Bicycle\libs\umeng_social_shareview.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="7302d576b34443698c6e1bd5301a146682198c16">
+        <dex dex="F:\LETVdownload\SchoolBicycle\Bicycle\build\intermediates\transforms\dex\debug\folders\1000\2\umeng_social_shareview_ddf27f4395c7d58c080754ad1aad0aa8210bae32\classes.dex" />
     </item>
 
 </items>

@@ -23,6 +23,7 @@ import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
@@ -118,6 +119,17 @@ public class PayActivity extends BaseToolBarActivity {
 
     String info;
 
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
+            PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
+            startActivity(ResultActivity.class,"type","date");
+            finish();
+        }
+    }
+
     private void initpay() {
         String url = Apis.Base + Apis.submitDayLeaseMoney;
         String cookie = new UserService(PayActivity.this).getCookie();
@@ -151,6 +163,7 @@ public class PayActivity extends BaseToolBarActivity {
                             request.timeStamp = wxPayParams.timestamp;
                             request.sign = wxPayParams.sign;
                             msgApi.sendReq(request);
+
                         } else if (pay_type.equals("zfb")) {
                             final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
                             info = response;

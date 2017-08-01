@@ -101,6 +101,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
                                 if (baseResult.getCode()==1){
                                     int status = Integer.parseInt(getIntent().getStringExtra("status"));
                                     if (status==1){
+                                        new UserService(LockcloseActivity.this).setShowOneMark("0");
                                         finish();
                                         //日租停车
                                     }else if (status==2){

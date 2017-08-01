@@ -173,8 +173,6 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                                     Log.d("info_cookies", "onResponse-size: " + cookies);
                                     s = session.substring(0, session.indexOf(";"));
                                     Log.d("info_s", "session is  :" + s);
-
-
                                     return null;
                                 }
 

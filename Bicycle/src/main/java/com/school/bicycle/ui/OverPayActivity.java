@@ -23,6 +23,7 @@ import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.school.bicycle.ui.pay.PayActivity;
@@ -222,6 +223,17 @@ public class OverPayActivity extends BaseToolBarActivity {
             }
         }
     };
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
+            PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
+            startActivity(ResultActivity.class,"type","returnbiycle");
+            finish();
+        }
+    }
 
     private void initview() {
         cbWallet.setChecked(false);

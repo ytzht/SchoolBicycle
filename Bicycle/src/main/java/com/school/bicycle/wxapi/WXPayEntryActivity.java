@@ -2,6 +2,7 @@ package com.school.bicycle.wxapi;
 
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.PayCore;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -48,17 +49,19 @@ public class WXPayEntryActivity extends BaseToolBarActivity implements IWXAPIEve
             switch (resp.errCode) {
                 case 0:
                     showShort("支付成功");
-
+                    PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Success;
                     break;
                 case -2:
                     showShort("取消支付");
-
+                    PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Failed;
                     break;
                 default:
                     showShort("支付失败");
-
+                    PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Failed;
                     break;
             }
+
+
         }
     }
 }

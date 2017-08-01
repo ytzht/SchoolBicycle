@@ -13,6 +13,7 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -103,6 +104,7 @@ public class ResultActivity extends BaseToolBarActivity {
         } else if (type.equals("date")) {
             teResResult.setText("用车结束需归还至原停车位才可技术用车。\n点击主界面扫码开锁按钮解锁车辆，结束\n用车前您可多次上锁开锁");
             btResNext.setText("确定");
+            new UserService(ResultActivity.this).setShowOneMark("0");
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -26,7 +26,6 @@ import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -99,8 +98,6 @@ import com.school.bicycle.utils.MySelectorDecorators;
 import com.school.bicycle.utils.OneDayDecorator;
 import com.school.bicycle.utils.SelectDecorator;
 import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -155,27 +152,16 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     LinearLayout saoma;
     @BindView(R.id.useing_biycle_lay)
     RelativeLayout useingBiycleLay;
-    //    @BindView(R.id.iv_pull)
     private ImageView iv_pull;
-    //    @BindView(R.id.ll_detail)
     private LinearLayout ll_detail;
-    private RelativeLayout useing_biycle_lay;
 
-    private RelativeLayout state_0;
     private IMainPresenter iMainPresenter;
     private ImageView headImg;
     private TextView name, score, finish_usecar;
     double lat;//获取纬度
     double lon;//获取经度
-    AMapLocation aMapLocation;
     private AMapLocationClient mlocationClient;
-    private AMapLocationClientOption mLocationOption;
-    //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
-    private ImageView dialog_close;
-    //初始化dialog
-    AlertDialog.Builder paydialog;
-    View pay_lay;
     TelephonyManager tm;
     String DEVICE_ID;
     ValidateUser v;
@@ -192,12 +178,11 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         if (mListener != null && amapLocation != null) {
-            if (amapLocation != null) {
-                if (amapLocation.getErrorCode() == 0) {
-                    //可在其中解析amapLocation获取相应内容。
+            if (amapLocation.getErrorCode() == 0) {
+                //可在其中解析amapLocation获取相应内容。
 //                        double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                    lat = amapLocation.getLatitude();//获取纬度
-                    lon = amapLocation.getLongitude();//获取经度
+                lat = amapLocation.getLatitude();//获取纬度
+                lon = amapLocation.getLongitude();//获取经度
 //                    String latlng_free =  new UserService(MainActivity.this).getLatLon();
 //                    if (!latlng_free.equals("0")){
 //                        lat = Double.parseDouble(latlng_free.substring(0,latlng_free.indexOf(",")));
@@ -205,55 +190,48 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //                    }else {
 //
 //                    }
-                    Log.d("我在不停地定位=", "latitude:" + lat + "longitude" + lon);
-                    if (new UserService(MainActivity.this).getState().equals("1")) {
-                        LatLng newLatLng = new LatLng(lat, lon);
-                        if (isFirstLatLng) {
-                            //记录第一次的定位信息
-                            oldLatLng = newLatLng;
-                            isFirstLatLng = false;
+                Log.d("我在不停地定位=", "latitude:" + lat + "longitude" + lon);
+                if (new UserService(MainActivity.this).getState().equals("1")) {
+                    LatLng newLatLng = new LatLng(lat, lon);
+                    if (isFirstLatLng) {
+                        //记录第一次的定位信息
+                        oldLatLng = newLatLng;
+                        isFirstLatLng = false;
+                    }
+                    //位置有变化
+                    if (oldLatLng != newLatLng) {
+                        Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
+                        Log.e("Amap", amapLocation.getLatitude() + "," + amapLocation.getLongitude());
+                        if (getDistance(oldLatLng, newLatLng) > 20) {
+                            if (checkJumpStatus.getLock_status() == 0) {
+                                setUpMap(oldLatLng, newLatLng);
+                                new UserService(MainActivity.this).setLatLon(lat + "," + lon);
+                                oldLatLng = newLatLng;
+                                Message message = new Message();
+                                message.what = 1;
+                                doActionHandler.sendMessage(message);
+                                cameraUpdate = CameraUpdateFactory
+                                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+                                aMap.moveCamera(cameraUpdate);
+                            }
                         }
-                        //位置有变化
-                        if (oldLatLng != newLatLng) {
-                            Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
-                            Log.e("Amap", amapLocation.getLatitude() + "," + amapLocation.getLongitude());
-                            if (getDistance(oldLatLng, newLatLng) > 20) {
-                                if (checkJumpStatus.getLock_status() == 0) {
-                                    setUpMap(oldLatLng, newLatLng);
-                                    new UserService(MainActivity.this).setLatLon(lat+","+lon);
-                                    oldLatLng = newLatLng;
-                                    Message message = new Message();
-                                    message.what = 1;
-                                    doActionHandler.sendMessage(message);
-                                    cameraUpdate = CameraUpdateFactory
-                                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-                                    aMap.moveCamera(cameraUpdate);
-                                }
-                            }
 
-                        } else {
-                            String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
-                            Log.e("AmapErr", errText);
-                            if (isFirstLatLng) {
-                                showShort(errText);
-                            }
+                    } else {
+                        String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
+                        Log.e("AmapErr", errText);
+                        if (isFirstLatLng) {
+                            showShort(errText);
                         }
                     }
                 }
+            }
 
-                if (checkJumpStatus.getBike_status() == 0) {
-                    mLocationClient.stopLocation();
-                }
+            if (checkJumpStatus.getBike_status() == 0) {
+                mLocationClient.stopLocation();
+            }
 
-                if (checkJumpStatus.getBike_status() == 4 && new UserService(MainActivity.this).getState().equals("0")) {
-                    mLocationClient.stopLocation();
-                }
-
-            } else {
-                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
-                        + amapLocation.getErrorCode() + ", errInfo:"
-                        + amapLocation.getErrorInfo());
+            if (checkJumpStatus.getBike_status() == 4 && new UserService(MainActivity.this).getState().equals("0")) {
+                mLocationClient.stopLocation();
             }
 
         }
@@ -267,12 +245,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         double lon2 = (Math.PI / 180) * end.longitude;
         double lat1 = (Math.PI / 180) * start.latitude;
         double lat2 = (Math.PI / 180) * end.latitude;
-
-        // double Lat1r = (Math.PI/180)*(gp1.getLatitudeE6()/1E6);
-        // double Lat2r = (Math.PI/180)*(gp2.getLatitudeE6()/1E6);
-        // double Lon1r = (Math.PI/180)*(gp1.getLongitudeE6()/1E6);
-        // double Lon2r = (Math.PI/180)*(gp2.getLongitudeE6()/1E6);
-
         // 地球半径
         double R = 6371;
 
@@ -414,9 +386,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     private void initview() {
         iv_pull = (ImageView) findViewById(R.id.iv_pull);
         ll_detail = (LinearLayout) findViewById(R.id.ll_detail);
-        state_0 = (RelativeLayout) findViewById(R.id.state_0);
+        RelativeLayout state_0 = (RelativeLayout) findViewById(R.id.state_0);
         finish_usecar = (TextView) findViewById(R.id.finish_usecar);
-        useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
+        RelativeLayout useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
 
         if (new UserService(MainActivity.this).getState().equals("1")) {
             state_0.setVisibility(View.GONE);
@@ -457,19 +429,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     }
 
-    //定时上传位置
-    private void setTimerTask() {
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Message message = new Message();
-                message.what = 1;
-                doActionHandler.sendMessage(message);
-            }
-        }, 60000, 60000/* 表示1000毫秒之後，每隔1000毫秒執行一次 */);
-    }
-
-
     /**
      * 实时上传位置
      */
@@ -500,11 +459,11 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
                                         showShort("上传成功");
-                                        kaluli.setText(uploadLocation.getCalories() + "卡");
+                                        kaluli.setText("" + uploadLocation.getCalories() + "卡");
                                         String distance = uploadLocation.getDistance();
                                         distance = distance.substring(0, distance.indexOf("."));
-                                        lengthBiycile.setText(distance + "米");
-                                        tvUse.setText("用车中" + checkJumpStatus.getBike_number());
+                                        lengthBiycile.setText("" + distance + "米");
+                                        tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                                     } else {
                                         tvUse.setText("车已锁");
                                         showShort("上传失败");
@@ -544,7 +503,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         if (v.getCode() == 1) {
                             new UserService(MainActivity.this).setValidateUser("1");
                             name.setText(v.getName());
-                            score.setText("信用分：" + v.getBody().getCredit_score());
+                            score.setText("信用分：" + v.getBody().getCredit_score() + "");
 //
 //                            if (v.getBody().getStatus() == 1) {
 //                                score.setText("手机已认证");
@@ -640,9 +599,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         //清除地图中的mark点
                         AMap aMap = mMapView.getMap();
                         aMap.clear();
-                        if (g.getCode() == 0) {
-
-                        } else {
+                        if (g.getCode() != 0) {
                             //循环添加自定义点mark
                             for (int i = 0; i < g.getBody().size(); i++) {
                                 LatLng latLng = new LatLng(g.getBody().get(i).getLat(), g.getBody().get(i).getLog());
@@ -686,9 +643,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                             startActivity(DepositActivity.class);
                         } else {
                             if (v.getVerify_status() == 0) {
-                                if (RealnameActivity.isrealname == 1) {
-
-                                } else {
+                                if (RealnameActivity.isrealname != 1) {
                                     startActivity(RealnameActivity.class);
                                 }
                             } else {
@@ -835,9 +790,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 }
             });
 
-            final CheckBox box = (CheckBox) view.findViewById(R.id.cb_msg);
-
-
             msg_btn_share.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -891,9 +843,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 }
             });
 
-            final CheckBox box = (CheckBox) view.findViewById(R.id.cb_msg);
-
-
             msg_btn_over.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -907,7 +856,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     List<Date> unList = new ArrayList<>();
     List<SharedBikeList.BodyBean> canList = new ArrayList<>();
-    private TextView tv_okmain, tv_cancel;
     private CheckBox cal_cb;
     private AlertDialog dialog;
 
@@ -978,8 +926,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.mybiycle_calendar, null, false);
         dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
-        tv_okmain = (TextView) view.findViewById(R.id.tv_ok);
-        tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
+        TextView tv_okmain = (TextView) view.findViewById(R.id.tv_ok);
+        TextView tv_cancel = (TextView) view.findViewById(R.id.tv_cancel);
         cal_cb = (CheckBox) view.findViewById(R.id.cal_cb);
         dialog.setCancelable(true);
         myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
@@ -1360,7 +1308,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         mListener = listener;
         if (mlocationClient == null) {
             mlocationClient = new AMapLocationClient(this);
-            mLocationOption = new AMapLocationClientOption();
+            AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
             //设置定位监听
             mlocationClient.setLocationListener(this);
             //设置为高精度定位模式
@@ -1368,7 +1316,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             //设置定位参数
             mlocationClient.setLocationOption(mLocationOption);
             mLocationOption.setOnceLocation(false);
-            /**
+            /*
              * 设置是否优先返回GPS定位结果，如果30秒内GPS没有返回定位结果则进行网络定位
              * 注意：只有在高精度模式下的单次定位有效，其他方式无效
              */
@@ -1516,28 +1464,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         startActivity(intent);
     }
 
-    private UMShareListener umShareListener = new UMShareListener() {
-        @Override
-        public void onStart(SHARE_MEDIA share_media) {
-            L.d("onStart");
-        }
-
-        @Override
-        public void onResult(SHARE_MEDIA share_media) {
-            L.d("onResult");
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            L.e("onError" + throwable);
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA share_media) {
-            L.d("onCancel");
-        }
-    };
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1618,23 +1544,18 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         return null;
     }
 
-    /**
-     * 自定义infowinfow窗口
-     */
-    private TextView tv_bicyclenum_info;
-    private TextView tv_distance_info;
-    private TextView tv_time_info;
-    private TextView tv_timerent_info;
-    private TextView tv_dayrent_info;
-    private TextView tv_longrent_info;
-    private TextView tv_tirentbt_info;
-    private TextView tv_darentbt_info;
     private TextView tv_lorentbt_info;
     private String bike_number;
 
     public void render(Marker marker, View view) {
         final GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
         //如果想修改自定义Infow中内容，请通过view找到它并修改
+        TextView tv_time_info;
+        TextView tv_timerent_info;
+        TextView tv_dayrent_info;
+        TextView tv_tirentbt_info;
+        TextView tv_darentbt_info;
+        TextView tv_longrent_info;
         if (data.getMybike() == 1 && data.getColor().equals("blue") && checkJumpStatus.getBike_status() == 4) {
             tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
             tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
@@ -1644,13 +1565,13 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
             tv_timerent_info.setText("共享收入");
             tv_dayrent_info.setText("共享设置");
-            tv_time_info.setText("山地车:" + data.getNumber());
-            tv_timerent_info.setText("地点:" + data.getAddress());
+            tv_time_info.setText("山地车:" + data.getNumber() + "");
+            tv_timerent_info.setText("地点:" + data.getAddress() + "");
             String valid_time = " ";
             tv_lorentbt_info.setVisibility(View.GONE);
             for (int a = 0; a < data.getValid_time().size(); a++) {
                 valid_time = valid_time + data.getValid_time().get(a).toString();
-                tv_dayrent_info.setText("共享时段:" + valid_time);
+                tv_dayrent_info.setText("共享时段:" + valid_time + "");
             }
             tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1698,8 +1619,10 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
         } else {
             //绿色 黄色车显示的infowindows
-            tv_bicyclenum_info = (TextView) view.findViewById(R.id.tv_bicyclenum_info);
-            tv_distance_info = (TextView) view.findViewById(R.id.tv_distance_info);
+            /*
+      自定义infowinfow窗口
+     */
+            TextView tv_bicyclenum_info = (TextView) view.findViewById(R.id.tv_bicyclenum_info);
             tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
             tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
             tv_dayrent_info = (TextView) view.findViewById(R.id.tv_dayrent_info);
@@ -1707,14 +1630,11 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
             tv_lorentbt_info = (TextView) view.findViewById(R.id.tv_lorentbt_info);
-            tv_bicyclenum_info.setText("车牌号：" + data.getNumber());
-//        tv_distance_info.setText("距离：" + data.getDistance() + "m");
-            tv_time_info.setText("在租时段" + data.getValid_time());
+            tv_bicyclenum_info.setText("车牌号：" + data.getNumber() + "");
+            tv_time_info.setText("在租时段" + data.getValid_time() + "");
             tv_timerent_info.setText("时租：" + data.getLease_info().get时租() + "元");
             tv_dayrent_info.setText("日租：" + data.getLease_info().get日租() + "元");
-            if (data.getColor().equals("yellow")) {
-
-            } else {
+            if (!data.getColor().equals("yellow")) {
                 tv_longrent_info.setText("长租：" + data.getLease_info().get月租() + "元/月 " + data.getLease_info().get季租()
                         + "元/3个月 \n" + data.getLease_info().get半年租() + "元/半年 " + data.getLease_info().get年租() + "元/一年");
             }
@@ -1882,11 +1802,10 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     //日租日历
     private void showAlert(final String i, List<String> list) {
-        final String bike_number = i;
 
         View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.useday_calendar, null, false);
         dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
-        tv_ok = (TextView) view.findViewById(R.id.tv_ok);
+        TextView tv_ok = (TextView) view.findViewById(R.id.tv_ok);
         tv_dates = (TextView) view.findViewById(R.id.tv_dates);
         dialog.setCancelable(true);
         myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
@@ -1923,7 +1842,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         }
                     }
 
-                    startActivity(PayActivity.class, "dates", s, "bike_number", bike_number);
+                    startActivity(PayActivity.class, "dates", s, "bike_number", i);
                     Log.d(TAG, s);
                     if (dialog.isShowing())
                         dialog.dismiss();
@@ -1938,7 +1857,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     }
 
     private MaterialCalendarView myCalendar;
-    private TextView tv_ok, tv_dates;
+    private TextView tv_dates;
 
     public void myCalendarInit() {
         myCalendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE);
@@ -2020,29 +1939,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         OneDayDecorator oneDayDecorator = new OneDayDecorator();//今天
         myCalendar.addDecorators(new MySelectorDecorator(this), new HighlightWeekendsDecorator(this), oneDayDecorator);
 
-//        signDataInit(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        // getMenuInflater().inflate(R.menu.drawer, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     //infowindow点击事件

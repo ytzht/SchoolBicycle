@@ -11,18 +11,14 @@ public class UserService {
 
     private Context context;
     private static final String USER_PREFS = "_member_";
-    private static final String ACCOUNT = "_account_";
     private static final String DeviceToken = "DeviceToken";
     private static final String ValidateUser = "_ValidateUser_";
     private static final String State = "state";
     private static final String tixian = "tixian";
     private static final String alert = "alert";
     private static final String Cookie = "Cookie";
-    private static final String UseTime = "UseTime";
     private static final String BikeNumber = "BikeNumber";
-    private static final String UseNewBike = "UseNewBike";
     private static final String COOKIE_PREFS = "CookiePrefsFile";
-
     private static final String ShowOneMark = "ShowOneMark";
     private static final String LatLon   = "LatLon";
 

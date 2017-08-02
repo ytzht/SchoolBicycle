@@ -54,6 +54,8 @@ public interface Apis {
 
     String depositRefund = "user/depositRefund";
 
+    String DiviceToken = "order/setDiviceToken";
+
     String withdraw = "user/withdraw";
 
     String FailureReporting = "user/failureReporting";
@@ -79,4 +81,12 @@ public interface Apis {
     String dayLeaseLists = "order/sharedBikeList";
 
     String CancelShareMyBike = "order/cancelShareMyBike";
+
+
+
+
+
+
+
+
 }

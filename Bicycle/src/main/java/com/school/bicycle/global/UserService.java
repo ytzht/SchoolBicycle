@@ -3,8 +3,6 @@ package com.school.bicycle.global;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.Date;
-
 /**
  * Created by ytzht on 2017/07/21 下午11:57
  */
@@ -14,14 +12,13 @@ public class UserService {
     private Context context;
     private static final String USER_PREFS = "_member_";
     private static final String ACCOUNT = "_account_";
-    private static final String PWD = "_pwd_";
+    private static final String DeviceToken = "DeviceToken";
     private static final String ValidateUser = "_ValidateUser_";
     private static final String State = "state";
     private static final String tixian = "tixian";
     private static final String alert = "alert";
     private static final String Cookie = "Cookie";
     private static final String UseTime = "UseTime";
-    private static final String UsingTime = "UsingTime";
     private static final String BikeNumber = "BikeNumber";
     private static final String UseNewBike = "UseNewBike";
     private static final String COOKIE_PREFS = "CookiePrefsFile";
@@ -60,6 +57,19 @@ public class UserService {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 ValidateUser, Context.MODE_PRIVATE);
         return memberPrefs.getString(ValidateUser, "0");
+
+    }
+    public void setDeviceToken(String validateUser) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                ValidateUser, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(DeviceToken, validateUser).apply();
+    }
+
+
+    public String getDeviceToken() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                ValidateUser, Context.MODE_PRIVATE);
+        return memberPrefs.getString(DeviceToken, "0");
 
     }
 
@@ -117,42 +127,6 @@ public class UserService {
         return memberPrefs.getString(Cookie, "0");
 
     }
-    public void setUseTime(long value) {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        memberPrefs.edit().putLong(UseTime,value).apply();
-    }
-
-    public long getUseTime() {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        return memberPrefs.getLong(UseTime, 0);
-
-    }
-    public void setUsingTime(long value) {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        memberPrefs.edit().putLong(UsingTime,value).apply();
-    }
-
-    public long getUsingTime() {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        return memberPrefs.getLong(UsingTime, new Date().getTime());
-
-    }
-    public void setUseNewBike(long value) {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        memberPrefs.edit().putLong(UseNewBike,value).apply();
-    }
-
-    public long getUseNewBike() {
-        SharedPreferences memberPrefs = context.getSharedPreferences(
-                USER_PREFS, Context.MODE_PRIVATE);
-        return memberPrefs.getLong(UseNewBike, 0);
-
-    }
     public void setBikeNumber(String value) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 USER_PREFS, Context.MODE_PRIVATE);
@@ -163,6 +137,18 @@ public class UserService {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 USER_PREFS, Context.MODE_PRIVATE);
         return memberPrefs.getString(BikeNumber, "0");
+
+    }
+    public void setBikeNumberTime(String number, long time) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        memberPrefs.edit().putLong(number,time).apply();
+    }
+
+    public long getBikeNumberTime(String number) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                USER_PREFS, Context.MODE_PRIVATE);
+        return memberPrefs.getLong(number, 0);
 
     }
 

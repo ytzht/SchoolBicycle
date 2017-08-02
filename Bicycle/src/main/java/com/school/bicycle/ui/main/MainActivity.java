@@ -288,7 +288,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     TimeCountDownTextView countDownView;
     TextView countdown1;
     long mHour, mMinute, mSecond;
-    UserService service;
     long maxTime = 600 * 1000;//设置倒计时的时长！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 
     private void initTimeDown() {
@@ -302,7 +301,11 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         L.d("锁 betweenTime" + betweenTime);
         if (betweenTime > maxTime) {
             L.d("1上次记录的时间比现在多十分钟以上，不管锁的状态反正是正计时");
-            recLen = betweenTime - maxTime;
+            if (service.getBikeNumberTime(bike_number) == 0){
+                recLen = 0;//不太可能出现的情况，除非清掉了sp，如果出现只能从0开始计时了
+            }else {
+                recLen = betweenTime - maxTime;
+            }
             initTime();//开始正计时
         } else {//分两种情况
             if (checkJumpStatus != null) {

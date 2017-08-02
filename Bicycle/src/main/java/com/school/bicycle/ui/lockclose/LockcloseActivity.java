@@ -72,7 +72,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
                 String location = getIntent().getStringExtra("location");
                 tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 DEVICE_ID = tm.getDeviceId();
-                new UserService(LockcloseActivity.this).setState("0");
+//                new UserService(LockcloseActivity.this).setState("0");
                 String cookie = new UserService(LockcloseActivity.this).getCookie();
 
                 OkHttpUtils

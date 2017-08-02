@@ -56,7 +56,7 @@ public class MyRoute_Activity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d(TAG, "onResponse: "+response);
+                        Log.d(TAG, "onResponse我的行程: "+response);
                         getMyRoute = gson.fromJson(response, GetMyRoute.class);
                         GetMyRoute_adapter getMyRouteAdapter = new GetMyRoute_adapter(MyRoute_Activity.this, getMyRoute.getBody());
                         getMyRouteList.setAdapter(getMyRouteAdapter);

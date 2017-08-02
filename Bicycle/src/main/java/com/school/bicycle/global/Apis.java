@@ -44,6 +44,8 @@ public interface Apis {
 
     String checkLongLease = "order/checkLongLease";
 
+    String sharedBikeList = "order/sharedBikeList";
+
     String checkBikeByNumber = "order/checkBikeByNumber";
 
     String overUseBike = "order/overUseBike";

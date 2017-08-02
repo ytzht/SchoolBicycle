@@ -45,6 +45,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
@@ -92,7 +93,6 @@ import com.school.bicycle.ui.register.RegisterActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.school.bicycle.ui.setup.Setup_Activity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
-import com.school.bicycle.utils.BindPushUtils;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
 import com.school.bicycle.utils.MySelectorDecorator;
 import com.school.bicycle.utils.MySelectorDecorators;
@@ -120,9 +120,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 
-public class MainActivity extends BaseActivity implements IMainView,
+public class MainActivity extends BaseActivity implements IMainView, AMapLocationListener,
         NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter,
-        AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.OnCameraChangeListener {
+        AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.OnCameraChangeListener, LocationSource {
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -180,65 +180,107 @@ public class MainActivity extends BaseActivity implements IMainView,
     String DEVICE_ID;
     ValidateUser v;
     private Timer mTimer;
+    private boolean isbiycle = false;
 
     //以前的定位点
     private LatLng oldLatLng;
     //是否是第一次定位
     private boolean isFirstLatLng;
+    private LocationSource.OnLocationChangedListener mListener;
 
 
-    public AMapLocationListener mLocationListener = new AMapLocationListener() {
-
-        @Override
-        public void onLocationChanged(AMapLocation amapLocation) {
-            if (mLocationListener != null && amapLocation != null) {
-                if (amapLocation != null) {
-                    if (amapLocation.getErrorCode() == 0) {
-                        //可在其中解析amapLocation获取相应内容。
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+        if (mListener != null && amapLocation != null) {
+            if (amapLocation != null) {
+                if (amapLocation.getErrorCode() == 0) {
+                    //可在其中解析amapLocation获取相应内容。
 //                        double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                        lat = amapLocation.getLatitude();//获取纬度
-                        lon = amapLocation.getLongitude();//获取经度
-                        Log.d("我在不停地定位=", "latitude:" + lat + "longitude" + lon);
-                        if (new UserService(MainActivity.this).getState().equals("1")) {
-                            LatLng newLatLng = new LatLng(lon, lat);
-                            if (isFirstLatLng) {
-                                //记录第一次的定位信息
-                                oldLatLng = newLatLng;
-                                isFirstLatLng = false;
-                            }
-                            //位置有变化
-                            if (oldLatLng != newLatLng) {
-                                Log.d("定位获得的经纬度=", "latitude:" + lat + "longitude" + lon);
-                                Log.e("Amap", amapLocation.getLatitude() + "," + amapLocation.getLongitude());
-                                setUpMap(oldLatLng, newLatLng);
-                                oldLatLng = newLatLng;
-                                Message message = new Message();
-                                message.what = 1;
-                                doActionHandler.sendMessage(message);
-                            } else {
-                                String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
-                                Log.e("AmapErr", errText);
-                                if (isFirstLatLng) {
-                                    showShort(errText);
+                    lat = amapLocation.getLatitude();//获取纬度
+                    lon = amapLocation.getLongitude();//获取经度
+//                    String latlng_free =  new UserService(MainActivity.this).getLatLon();
+//                    if (!latlng_free.equals("0")){
+//                        lat = Double.parseDouble(latlng_free.substring(0,latlng_free.indexOf(",")));
+//                        lon = Double.parseDouble(latlng_free.substring(latlng_free.indexOf(",")));
+//                    }else {
+//
+//                    }
+                    Log.d("我在不停地定位=", "latitude:" + lat + "longitude" + lon);
+                    if (new UserService(MainActivity.this).getState().equals("1")) {
+                        LatLng newLatLng = new LatLng(lat, lon);
+                        if (isFirstLatLng) {
+                            //记录第一次的定位信息
+                            oldLatLng = newLatLng;
+                            isFirstLatLng = false;
+                        }
+                        //位置有变化
+                        if (oldLatLng != newLatLng) {
+                            Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
+                            Log.e("Amap", amapLocation.getLatitude() + "," + amapLocation.getLongitude());
+                            if (getDistance(oldLatLng, newLatLng) > 20) {
+                                if (checkJumpStatus.getLock_status() == 0) {
+                                    setUpMap(oldLatLng, newLatLng);
+                                    new UserService(MainActivity.this).setLatLon(lat+","+lon);
+                                    oldLatLng = newLatLng;
+                                    Message message = new Message();
+                                    message.what = 1;
+                                    doActionHandler.sendMessage(message);
+                                    cameraUpdate = CameraUpdateFactory
+                                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+                                    aMap.moveCamera(cameraUpdate);
                                 }
+                            }
+
+                        } else {
+                            String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
+                            Log.e("AmapErr", errText);
+                            if (isFirstLatLng) {
+                                showShort(errText);
                             }
                         }
                     }
-
-                    if (checkJumpStatus.getBike_status() == 4 || checkJumpStatus.getBike_status() == 0) {
-                        mLocationClient.stopLocation();
-                    }
-
-                } else {
-                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                    Log.e("AmapError", "location Error, ErrCode:"
-                            + amapLocation.getErrorCode() + ", errInfo:"
-                            + amapLocation.getErrorInfo());
                 }
 
+                if (checkJumpStatus.getBike_status() == 0) {
+                    mLocationClient.stopLocation();
+                }
+
+                if (checkJumpStatus.getBike_status() == 4 && new UserService(MainActivity.this).getState().equals("0")) {
+                    mLocationClient.stopLocation();
+                }
+
+            } else {
+                //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                Log.e("AmapError", "location Error, ErrCode:"
+                        + amapLocation.getErrorCode() + ", errInfo:"
+                        + amapLocation.getErrorInfo());
             }
+
         }
-    };
+
+    }
+
+    //通过经纬度计算距离
+    public double getDistance(LatLng start, LatLng end) {
+
+        double lon1 = (Math.PI / 180) * start.longitude;
+        double lon2 = (Math.PI / 180) * end.longitude;
+        double lat1 = (Math.PI / 180) * start.latitude;
+        double lat2 = (Math.PI / 180) * end.latitude;
+
+        // double Lat1r = (Math.PI/180)*(gp1.getLatitudeE6()/1E6);
+        // double Lat2r = (Math.PI/180)*(gp2.getLatitudeE6()/1E6);
+        // double Lon1r = (Math.PI/180)*(gp1.getLongitudeE6()/1E6);
+        // double Lon2r = (Math.PI/180)*(gp2.getLongitudeE6()/1E6);
+
+        // 地球半径
+        double R = 6371;
+
+        // 两点间距离 km，如果想要米的话，结果*1000就可以了
+        double d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
+
+        return d * 1000;
+    }
 
 
     @Override
@@ -258,57 +300,99 @@ public class MainActivity extends BaseActivity implements IMainView,
         headImg = (ImageView) headerView.findViewById(R.id.iv_header);
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
-        countDownView = (TimeCountDownTextView) findViewById(R.id.countdown);
         countdown1 = (TextView) findViewById(R.id.countdown1);
-//        iMainPresenter.downloadMap(MainActivity.this, aMap);
+        countDownView = (TimeCountDownTextView) findViewById(R.id.countdown);
         isFirstLatLng = true;
         initview();
         initClickListener();
 //        initmap();
 //        LatLng target = new LatLng(lon, lat);
 //        initgetBikeMapList(target);
-
-
+//        iMainPresenter.downloadMap(MainActivity.this, aMap);
     }
 
     long recLen = 0;
     TimeCountDownTextView countDownView;
     TextView countdown1;
-    long mHour, mMinute, mSecond;
+    long mMinute, mSecond;
     UserService service;
-    long maxTime = 600 * 1000;//设置倒计时的时长！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+    long maxTime = 60 * 1000;//设置倒计时的时长！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 
     private void initTimeDown() {
 
 
         final UserService service = new UserService(MainActivity.this);
-        Date date = new Date();
-        long time = date.getHours() * 3600 * 1000 + date.getMinutes() * 60000 + date.getSeconds() * 1000;
 
-        long betweenTime = time - service.getBikeNumberTime(bike_number);
-        L.d("锁 betweenTime" + betweenTime);
+        long betweenTime = (new Date().getTime() - service.getUseTime()) / 100;
         if (betweenTime > maxTime) {
-            L.d("1上次记录的时间比现在多十分钟以上，不管锁的状态反正是正计时");
-            recLen = betweenTime - maxTime;
-            initTime();//开始正计时
-        } else {//分两种情况
+            L.d("上次记录的时间比现在多十分钟以上，说明:1.是上一个车，锁是锁住的。2.是这个车，锁是打开的，开始正计时。应该重新存值");
             if (checkJumpStatus != null) {
-                if (checkJumpStatus.getLock_status() == 1) {//关的锁
-                    betweenTime = maxTime - betweenTime;
-                    L.d("2锁是锁住的，本次用车不是第一次显示，开始从 " + betweenTime + " 倒计时，倒计时结束开始正计时");
-                    downTime(betweenTime);
-                } else {//开的锁，开始正计时
-                    L.d("3锁是打开的,这时候应该开始正计时，时间从记录的 " + recLen + " 开始，如果没记录，从现在0开始");
+                if (checkJumpStatus.getLock_status() == 1) {//
+                    if (!isOldBike) {
+                        L.d("1锁是锁住的，本次用车第一次显示，开始倒计时，倒计时结束开始正计时");
+                        downTime(maxTime);
+                    } else {
 
+                        betweenTime = (new Date().getTime() - new UserService(MainActivity.this).getUseNewBike()) / 100;
+                        L.d("锁 betweenTime" + betweenTime + " now " + new Date().getTime() + " getUseNewBike " + new UserService(MainActivity.this).getUseNewBike());
+                        if (betweenTime > maxTime) {
+                            betweenTime = maxTime;
+                        } else {
+                            betweenTime = maxTime - betweenTime;
+                        }
+                        L.d("1.5锁是锁住的，本次用车不是第一次显示，开始从 " + betweenTime + " 倒计时，倒计时结束开始正计时");
+                        downTime(betweenTime);
+
+                    }
+                } else {
+                    if ((new Date().getTime() - service.getUsingTime()) / 100 > maxTime) {
+                        recLen = 0;
+                    } else {
+                        recLen = (new Date().getTime() - service.getUsingTime()) / 100;
+                    }
+
+                    L.d("2锁是打开的,这时候应该开始正计时，时间从记录的 " + recLen + " 开始，如果没记录，从现在0开始");
+
+                    if (recLen == 0) {
+                        //之前没存过，存一下
+                        service.setUsingTime(new Date().getTime());
+                    }
                     initTime();//开始正计时
                 }
             }
 
+            service.setUseTime(new Date().getTime());
+
+        } else {//分两种情况
+
+            if (checkJumpStatus != null) {
+                if (checkJumpStatus.getLock_status() == 1) {//
+
+                    betweenTime = (new Date().getTime() - new UserService(MainActivity.this).getUseNewBike()) / 100;
+                    L.d("锁 betweenTime" + betweenTime + " now " + new Date().getTime() + " getUseNewBike " + new UserService(MainActivity.this).getUseNewBike());
+                    if (betweenTime > maxTime) {
+                        betweenTime = maxTime;
+                    } else {
+                        betweenTime = maxTime - betweenTime;
+                    }
+                    L.d("3锁是锁住的，本次用车不是第一次显示，开始从 " + betweenTime + " 倒计时，倒计时结束开始正计时");
+                    downTime(betweenTime);
+                } else {
+                    recLen = (new Date().getTime() - service.getUsingTime()) / 100;
+                    L.d("4锁是打开的,这时候应该开始正计时，时间从记录的 " + recLen + " 开始，如果没记录，从现在0开始");
+
+                    if (recLen == 0) {
+                        //之前没存过，存一下
+                        service.setUsingTime(new Date().getTime());
+                    }
+                    initTime();//开始正计时
+                }
+            }
+
+            service.setUseTime(new Date().getTime());
         }
 
     }
-
-    private boolean timeIsRun = false;
 
     private void downTime(long during_time) {
         countDownView.setCountDownTimes(during_time);//10min
@@ -316,6 +400,8 @@ public class MainActivity extends BaseActivity implements IMainView,
             @Override
             public void onFinish() {
                 //倒计时结束
+                new UserService(MainActivity.this).setUsingTime(new Date().getTime());
+
                 initTime();//开始正计时
             }
         });
@@ -324,50 +410,43 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     //用车计时
     private void initTime() {
-
         countDownView.setVisibility(View.GONE);
         countdown1.setVisibility(View.VISIBLE);
 
-        if (!timeIsRun) {//保证正计时一秒一秒的加
-            timeIsRun = true;
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    recLen = recLen + 1000;
-                    mHour = recLen / (1000 * 60 * 60);
-                    mMinute = recLen % (1000 * 60 * 60) / (1000 * 60);
-                    mSecond = (recLen % (1000 * 60)) / 1000;
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                recLen = recLen + 1000;
+                mMinute = recLen / (1000 * 60);
+                mSecond = (recLen % (1000 * 60)) / 1000;
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                            String min;
-                            if (mMinute < 10) {
-                                min = "0" + mMinute;
-                            } else {
-                                min = mMinute + "";
-                            }
-
-                            String sec;
-                            if (mSecond < 10) {
-                                sec = "0" + mSecond;
-                            } else {
-                                sec = "" + mSecond;
-                            }
-                            if (mHour == 0) {
-                                countdown1.setText(Html.fromHtml(String.format("%1$s:%2$s", min, sec)));
-                            } else {
-                                countdown1.setText(Html.fromHtml(String.format("%1$s:%2$s:%3$s", mHour, min, sec)));
-                            }
-                            L.d(countdown1.getText().toString());
+                        String min;
+                        if (mMinute < 10) {
+                            min = "0" + mMinute;
+                        } else {
+                            min = mMinute + "";
                         }
-                    });
 
-                }
-            }, 1000, 1000);       // timeTask
-        }
+                        String sec;
+                        if (mSecond < 10) {
+                            sec = "0" + mSecond;
+                        } else {
+                            sec = "" + mSecond;
+                        }
+
+                        countdown1.setText(Html.fromHtml(String.format("%1$s:%2$s", min, sec)));
+                        L.d(countdown1.getText().toString());
+                    }
+                });
+
+            }
+        }, 1000, 1000);       // timeTask
+
     }
 
     //更新界面
@@ -411,8 +490,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         // 绘制一个大地曲线
         aMap.addPolyline((new PolylineOptions())
                 .add(oldData, newData)
-                .geodesic(true).color(Color.GREEN));
-        L.d("我在画线！！！！");
+                .geodesic(true).color(getResources().getColor(R.color.org)));
+//        L.d("我在画线！！！！");
+        showShort("画线！！！！！！！");
 
     }
 
@@ -455,20 +535,18 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 @Override
                                 public void onResponse(String response, int id) {
                                     Log.d("定位获得的经纬度", response);
+
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
-                                        recLen = Long.parseLong(uploadLocation.getTime()) * 1000;
-//                                        showShort("上传成功");
+                                        showShort("上传成功");
                                         kaluli.setText(uploadLocation.getCalories() + "卡");
                                         String distance = uploadLocation.getDistance();
-//                                        str.substring(0, str.indexOf("#"));
                                         distance = distance.substring(0, distance.indexOf("."));
                                         lengthBiycile.setText(distance + "米");
-                                        tvUse.setText("用车中");
+                                        tvUse.setText("用车中" + checkJumpStatus.getBike_number());
                                     } else {
                                         tvUse.setText("车已锁");
-
-
+                                        showShort("上传失败");
                                     }
                                 }
                             });
@@ -525,6 +603,12 @@ public class MainActivity extends BaseActivity implements IMainView,
         if (aMap == null) {
             aMap = mMapView.getMap();
         }
+
+        //定位
+        aMap.setLocationSource(this);// 设置定位监听
+        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+        aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        // 设置定位的类型为定位模式 ，可以由定位 LOCATION_TYPE_LOCATE、跟随 LOCATION_TYPE_MAP_FOLLOW 或地图根据面向方向旋转 LOCATION_TYPE_MAP_ROTATE
         iMainPresenter = new MainPresenterCompl(getBaseContext(), this);
         iMainPresenter.initLocation(aMap);
         iMainPresenter.initUISettings(aMap);
@@ -539,53 +623,35 @@ public class MainActivity extends BaseActivity implements IMainView,
         aMap.setInfoWindowAdapter(this);
         aMap.setOnCameraChangeListener(this);
         aMap.setOnMarkerClickListener(this);
-        initdingwei();
     }
 
 
-    //初始化设置地图
+    //初始化连续定位地图
     private void lianxumap() {
         if (aMap == null) {
             aMap = mMapView.getMap();
         }
+        //定位
+        aMap.setLocationSource(this);// 设置定位监听
+        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+        aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        // 设置定位的类型为定位模式 ，可以由定位 LOCATION_TYPE_LOCATE、跟随 LOCATION_TYPE_MAP_FOLLOW 或地图根据面向方向旋转 LOCATION_TYPE_MAP_ROTATE
         iMainPresenter = new MainPresenterCompl(getBaseContext(), this);
         iMainPresenter.initLocation(aMap);
         iMainPresenter.initUISettings(aMap);
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
         myLocationStyle.interval(60000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW); //连续定位，且将视角移动到地图中心点。
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
+        // 设置定位的类型为定位模式 ，可以由定位 LOCATION_TYPE_LOCATE、跟随 LOCATION_TYPE_MAP_FOLLOW 或地图根据面向方向旋转 LOCATION_TYPE_MAP_ROTATE
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
-        aMap.setMyLocationEnabled(false);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         aMap.moveCamera(CameraUpdateFactory.zoomTo(17));//显示地图等级15级
         aMap.setInfoWindowAdapter(this);
         aMap.setOnCameraChangeListener(this);
         aMap.setOnMarkerClickListener(this);
-        initdingwei();
-    }
 
-    //初始化定位
-    private void initdingwei() {
-
-        mLocationClient = new AMapLocationClient(getApplicationContext());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(mLocationListener);
-        //初始化AMapLocationClientOption对象
-        mLocationOption = new AMapLocationClientOption();
-        //设置定位模式为AMapLocationMode.Battery_Saving，低功耗模式。
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
-        mLocationOption.setInterval(60000);
-        //给定位客户端对象设置定位参数
-        mLocationClient.setLocationOption(mLocationOption);
-        //启动定位
-        mLocationClient.startLocation();
-        /**
-         * 获取一次定位
-         */
-        //该方法默认为false，true表示只定位一次
-        mLocationOption.setOnceLocation(false);
     }
 
     //获取周围单车位置列表
@@ -659,7 +725,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                             startActivity(DepositActivity.class);
                         } else {
                             if (v.getVerify_status() == 0) {
-                                startActivity(RealnameActivity.class);
+                                if (RealnameActivity.isrealname == 1) {
+
+                                } else {
+                                    startActivity(RealnameActivity.class);
+                                }
                             } else {
                                 startActivity(UseBicycleActivity.class);
                             }
@@ -812,7 +882,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 public void onClick(View v) {
                     String cookie;
                     cookie = new UserService(MainActivity.this).getCookie();
-                    String url = Apis.Base + Apis.dayLeaseLists;
+                    String url = Apis.Base + Apis.sharedBikeList;
                     format = new SimpleDateFormat("yyyy-MM-dd");
                     OkHttpUtils
                             .post()
@@ -1054,10 +1124,20 @@ public class MainActivity extends BaseActivity implements IMainView,
         super.onDestroy();
         new UserService(MainActivity.this).setShowOneMark("0");
         mMapView.onDestroy();
-        if (null != mlocationClient) {
+        deactivate();
+//        mTimer.cancel();
+    }
+
+    /**
+     * 停止定位
+     */
+    public void deactivate() {
+        mListener = null;
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
             mlocationClient.onDestroy();
         }
-//        mTimer.cancel();
+        mlocationClient = null;
     }
 
     @Override
@@ -1072,7 +1152,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         initvalidateUser();
         initview();
 //        UpdateInfo();
-        BindPushUtils.bind(getBaseContext());//保存绑定推送
     }
 
 
@@ -1223,60 +1302,87 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void onResponse(String response, int id) {
                         Log.d("response跳转状态", response);
                         checkJumpStatus = gson.fromJson(response, CheckJumpStatus.class);
-
                         if (checkJumpStatus.getBike_status() == 0) {
+                            isbiycle = false;
                             new UserService(MainActivity.this).setState("0");
-                            new UserService(MainActivity.this).setShowOneMark("0");
+//                            new UserService(MainActivity.this).setShowOneMark("0");
                             //未租车状态
-                            LatLng target = new LatLng(lon, lat);
-                            initgetBikeMapList(target);
-                            initmap();
-                            initview();
-                        } else if (checkJumpStatus.getBike_status() == 1) {
-                            showOneCar(checkJumpStatus.getBody().get(0).getNumber());
-                            new UserService(MainActivity.this).setShowOneMark("1");
-                            new UserService(MainActivity.this).setState("1");
-                            bike_number = checkJumpStatus.getBike_number();
-
-//                            setTimerTask();
-                            initview();
-
-                            lianxumap();
-                            countdown.setVisibility(View.GONE);
-                        } else if (checkJumpStatus.getBike_status() == 2) {//时租中// TODO: 2017/7/31 倒计时相关 。。。
-                            showOneCar(checkJumpStatus.getBody().get(0).getNumber());
-                            new UserService(MainActivity.this).setShowOneMark("1");
-                            new UserService(MainActivity.this).setState("1");
-                            bike_number = checkJumpStatus.getBike_number();
-//                            setTimerTask();
-//                            lianxudingwei();
-
-                            if ((new UserService(MainActivity.this).getBikeNumber()).equals(bike_number)) {
-                                L.d("锁  又是这个车");
-                                isOldBike = true;
+                            if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
+                                initmap();
+                                initview();
                             } else {
-                                new UserService(MainActivity.this).setBikeNumber(bike_number);
-                                L.d("锁  新车是 " + bike_number);
-                                isOldBike = false;
+                                initmap();
+                                aMap.clear();
+                                initview();
+                                LatLng target = new LatLng(lat, lon);
+                                initgetBikeMapList(target);
                             }
-                            initTimeDown();
-                            lianxumap();
-                            countdown.setVisibility(View.VISIBLE);
-                            //日租中
-                            initview();
+                        } else if (checkJumpStatus.getBike_status() == 1) {
+
+                            if (isbiycle) {
+                                new UserService(MainActivity.this).setShowOneMark("1");
+                                new UserService(MainActivity.this).setState("1");
+                            } else {
+                                showOneCar(checkJumpStatus.getBody().get(0).getNumber());
+                                new UserService(MainActivity.this).setShowOneMark("1");
+                                new UserService(MainActivity.this).setState("1");
+                                bike_number = checkJumpStatus.getBike_number();
+                                //setTimerTask();
+                                //日租中
+                                isbiycle = true;
+                                initview();
+                                lianxumap();
+                                countdown.setVisibility(View.GONE);
+                            }
+
+
+                        } else if (checkJumpStatus.getBike_status() == 2) {
+
+                            if (isbiycle) {
+                                new UserService(MainActivity.this).setShowOneMark("1");
+                                new UserService(MainActivity.this).setState("1");
+                            } else {
+                                isbiycle = true;
+                                showOneCar(checkJumpStatus.getBody().get(0).getNumber());
+                                new UserService(MainActivity.this).setShowOneMark("1");
+                                new UserService(MainActivity.this).setState("1");
+                                bike_number = checkJumpStatus.getBike_number();
+                                lianxumap();
+                                countdown.setVisibility(View.VISIBLE);
+                                //时租中
+                                initview();
+                                if ((new UserService(MainActivity.this).getBikeNumber()).equals(bike_number)) {
+                                    L.d("锁  又是这个车");
+                                    isOldBike = true;
+                                } else {
+                                    new UserService(MainActivity.this).setBikeNumber(bike_number);
+                                    L.d("锁  新车是 " + bike_number);
+                                    new UserService(MainActivity.this).setUseNewBike(new Date().getTime());
+                                    isOldBike = false;
+                                }
+                            }
+
+//                            initTimeDown();
+
                         } else if (checkJumpStatus.getBike_status() == 3) {
                             //时租付款
                             initmap();
                             startActivity(OverPayActivity.class);
                         } else if (checkJumpStatus.getBike_status() == 4) {
-                            initmap();
+
                             bike_number = checkJumpStatus.getBike_number();
                             countdown.setVisibility(View.GONE);
                             if (checkJumpStatus.getLock_status() == 1) {
+                                initmap();
                                 new UserService(MainActivity.this).setState("0");
                             } else {
-                                new UserService(MainActivity.this).setState("1");
-                                showOneCar(checkJumpStatus.getBike_number());
+                                if (isbiycle) {
+                                    new UserService(MainActivity.this).setState("1");
+                                } else {
+                                    lianxumap();
+                                    new UserService(MainActivity.this).setState("1");
+                                    showOneCar(checkJumpStatus.getBike_number());
+                                }
 
                             }
                             initview();
@@ -1292,17 +1398,34 @@ public class MainActivity extends BaseActivity implements IMainView,
         deactivate();
     }
 
-    /**
-     * 停止定位
-     */
-    public void deactivate() {
-        mLocationListener = null;
-        if (mlocationClient != null) {
-            mlocationClient.stopLocation();
-            mlocationClient.onDestroy();
+    @Override
+    public void activate(OnLocationChangedListener listener) {
+        mListener = listener;
+        if (mlocationClient == null) {
+            mlocationClient = new AMapLocationClient(this);
+            mLocationOption = new AMapLocationClientOption();
+            //设置定位监听
+            mlocationClient.setLocationListener(this);
+            //设置为高精度定位模式
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            //设置定位参数
+            mlocationClient.setLocationOption(mLocationOption);
+            mLocationOption.setOnceLocation(false);
+            /**
+             * 设置是否优先返回GPS定位结果，如果30秒内GPS没有返回定位结果则进行网络定位
+             * 注意：只有在高精度模式下的单次定位有效，其他方式无效
+             */
+            mLocationOption.setGpsFirst(true);
+            // 设置发送定位请求的时间间隔,最小值为1000ms,10秒更新一次定位信息
+            mLocationOption.setInterval(10000);
+            // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+            // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+            // 在定位结束后，在合适的生命周期调用onDestroy()方法
+            // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+            mlocationClient.startLocation();
         }
-        mlocationClient = null;
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -1462,7 +1585,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-
     }
 
     View infoWindow = null;
@@ -1490,8 +1612,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void onResponse(String response, int id) {
                         L.d(response);
                         GetBikeMapList getBikeMapList = gson.fromJson(response, GetBikeMapList.class);
-                        AMap aMap = mMapView.getMap();
-                        aMap.clear();
+                        if (checkJumpStatus.getBike_status() != 4 && new UserService(MainActivity.this).getState().equals("1")) {
+                            AMap aMap = mMapView.getMap();
+                            aMap.clear();
+                        }
+
 //        bike_number = infoBean.getNumber();
                         LatLng latLng = new LatLng(getBikeMapList.getBody().get(0).getLat(),
                                 getBikeMapList.getBody().get(0).getLog());
@@ -1553,18 +1678,21 @@ public class MainActivity extends BaseActivity implements IMainView,
     public void render(Marker marker, View view) {
         final GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
         //如果想修改自定义Infow中内容，请通过view找到它并修改
-        if (checkJumpStatus.getBike_status() == 4) {
+        if (data.getMybike() == 1 && data.getColor().equals("blue") && checkJumpStatus.getBike_status() == 4) {
             tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
             tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
             tv_dayrent_info = (TextView) view.findViewById(R.id.tv_dayrent_info);
-//            tv_longrent_info = (TextView) view.findViewById(R.id.tv_longrent_info);
+            tv_longrent_info = (TextView) view.findViewById(R.id.tv_longrent_info);
             tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
+            tv_timerent_info.setText("共享收入");
+            tv_dayrent_info.setText("共享设置");
             tv_time_info.setText("山地车:" + data.getNumber());
             tv_timerent_info.setText("地点:" + data.getAddress());
-            String valid_time = "";
+            String valid_time = " ";
+            tv_lorentbt_info.setVisibility(View.GONE);
             for (int a = 0; a < data.getValid_time().size(); a++) {
-                valid_time = valid_time + data.getValid_time().get(a).toString();
+                valid_time = valid_time + data.getValid_time().get(a).toString() + " ";
                 tv_dayrent_info.setText("共享时段:" + valid_time);
             }
             tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
@@ -1623,6 +1751,9 @@ public class MainActivity extends BaseActivity implements IMainView,
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
             tv_lorentbt_info = (TextView) view.findViewById(R.id.tv_lorentbt_info);
             tv_bicyclenum_info.setText("车牌号：" + data.getNumber());
+            tv_timerent_info.setText("时租");
+            tv_dayrent_info.setText("日租");
+            tv_longrent_info.setText("长租");
 //        tv_distance_info.setText("距离：" + data.getDistance() + "m");
             tv_time_info.setText("在租时段" + data.getValid_time());
             tv_timerent_info.setText("时租：" + data.getLease_info().get时租() + "元");
@@ -1727,14 +1858,14 @@ public class MainActivity extends BaseActivity implements IMainView,
     @Override
     public View getInfoContents(Marker marker) {
         if (infoWindow == null) {
-            GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
-            if (checkJumpStatus.getBike_status() == 4 && data.getColor().equals("blue")) {
-                infoWindow = LayoutInflater.from(this).inflate(
-                        R.layout.custom_bicycle_window, null);
-            } else {
-                infoWindow = LayoutInflater.from(this).inflate(
-                        R.layout.custom_info_window, null);
-            }
+//            GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
+//            if (data.getMybike()==1 && data.getColor().equals("blue")&& checkJumpStatus.getBike_status()==4) {
+//                infoWindow = LayoutInflater.from(this).inflate(
+//                        R.layout.custom_bicycle_window, null);
+//            } else {
+            infoWindow = LayoutInflater.from(this).inflate(
+                    R.layout.custom_info_window, null);
+//            }
         }
         render(marker, infoWindow);
         return infoWindow;
@@ -1773,20 +1904,13 @@ public class MainActivity extends BaseActivity implements IMainView,
     @Override
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         LatLng target = cameraPosition.target;
-        Log.d("onCameraChange", target.latitude + "jinjin------" + target.longitude);
-        if (new UserService(MainActivity.this).getState().equals("1")) {
-            lianxumap();
-        } else {
-            String showOneMark = new UserService(MainActivity.this).getShowOneMark();
-            if (showOneMark.equals("1")) {
-                initview();
-            } else if (showOneMark.equals("0")) {
-                initgetBikeMapList(target);
-            }
-
+        Log.d("onCameraChange", target.latitude + "---jinjin------" + target.longitude);
+        String showOneMark = new UserService(MainActivity.this).getShowOneMark();
+        if (showOneMark.equals("1")) {
+            initview();
+        } else if (showOneMark.equals("0")) {
+            initgetBikeMapList(target);
         }
-
-
     }
 
 
@@ -1971,4 +2095,6 @@ public class MainActivity extends BaseActivity implements IMainView,
     public void onCameraChange(CameraPosition cameraPosition) {
 
     }
+
+
 }

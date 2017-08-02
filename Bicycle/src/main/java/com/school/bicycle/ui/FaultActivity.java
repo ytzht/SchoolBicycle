@@ -217,6 +217,8 @@ public class FaultActivity extends BaseToolBarActivity {
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
+
+                    result = result.substring(result.indexOf("#") + 1);
                     etInput.setText(result);
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(FaultActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();

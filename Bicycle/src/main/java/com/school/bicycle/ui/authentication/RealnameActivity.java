@@ -58,6 +58,7 @@ public class RealnameActivity extends BaseToolBarActivity {
     @BindView(R.id.rn_photo)
     ImageView rnPhoto;
     Bitmap photo;
+    public static int isrealname = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,6 +282,7 @@ public class RealnameActivity extends BaseToolBarActivity {
                                             public void onResponse(String response, int id) {
                                                 BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                                 showShort(baseResult.getMsg());
+                                                isrealname = 1;
                                             }
                                         });
                             }

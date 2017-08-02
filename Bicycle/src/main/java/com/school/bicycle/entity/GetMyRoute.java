@@ -70,6 +70,16 @@ public class GetMyRoute implements Serializable {
         private String bike_number;
         private String start_time;
         private String end_time;
+
+        public String getCreate_time() {
+            return create_time;
+        }
+
+        public void setCreate_time(String create_time) {
+            this.create_time = create_time;
+        }
+
+        private String create_time;
         private String time_span;
         private String total_fee;
         private String distance;

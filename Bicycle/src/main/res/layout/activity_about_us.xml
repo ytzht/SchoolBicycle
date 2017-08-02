@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/huise">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/ic_launcher"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:gravity="center_horizontal"
+                android:textSize="18dp"
+                android:text="建议"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="反馈建议"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/all_textc"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:text="viplecheng@163.com"
+                android:textSize="18dp"
+                android:gravity="right|center_vertical"
+                android:textColor="@color/all_textc"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/huise"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="企业网址"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/all_textc"
+               />
+            <TextView
+                android:layout_width="0dp"
+                android:text="www.xiaoyixinggo.com"
+                android:textSize="18dp"
+                android:gravity="right|center_vertical"
+                android:textColor="@color/all_textc"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/huise"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="服务热线"
+                android:textSize="18dp"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/all_textc"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:text="0535-2105657"
+                android:textSize="18dp"
+                android:gravity="right|center_vertical"
+                android:textColor="@color/chengse"
+                android:layout_height="wrap_content"
+                android:id="@+id/aboutus_phone"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+   
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="烟台乐橙网络有限公司"
+    android:textColor="#4c4c4c"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="30dp" />
+
+
+</RelativeLayout>

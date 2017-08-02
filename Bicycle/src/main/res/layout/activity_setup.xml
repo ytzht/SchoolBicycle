@@ -203,6 +203,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/setup_userLogout"
+        android:visibility="gone"
         android:layout_height="39dp">
 
         <TextView

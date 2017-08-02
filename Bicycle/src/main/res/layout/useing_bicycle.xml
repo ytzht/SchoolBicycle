@@ -43,7 +43,6 @@
     <TextView
         android:id="@+id/countdown1"
         android:layout_width="80dp"
-        android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"

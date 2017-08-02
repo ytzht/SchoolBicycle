@@ -21,10 +21,28 @@ public class UserService {
     private static final String COOKIE_PREFS = "CookiePrefsFile";
     private static final String ShowOneMark = "ShowOneMark";
     private static final String LatLon   = "LatLon";
+    private static final String usebiycle   = "usebiycle";
 
     public UserService(Context context) {
         this.context = context;
     }
+
+    //1为显示一个 0为显示所有
+    public void setusebiycle(String latlon) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                usebiycle, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(usebiycle, latlon).apply();
+    }
+
+
+    public String getusebiycle() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                usebiycle, Context.MODE_PRIVATE);
+        return memberPrefs.getString(usebiycle, "0");
+
+    }
+
+
     //1为显示一个 0为显示所有
     public void setLatLon(String latlon) {
         SharedPreferences memberPrefs = context.getSharedPreferences(

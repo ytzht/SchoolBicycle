@@ -6,6 +6,8 @@ import android.widget.RelativeLayout;
 
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.ui.AboutUsActivity;
+import com.school.bicycle.ui.setup_despositActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,8 +52,10 @@ public class Setup_Activity extends BaseToolBarActivity {
             case R.id.setup_RechargeProtocol:
                 break;
             case R.id.setup_desposit:
+                startActivity(setup_despositActivity.class);
                 break;
             case R.id.setup_aboutus:
+                startActivity(AboutUsActivity.class);
                 break;
             case R.id.setup_userLogout:
                 break;

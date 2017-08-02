@@ -4,13 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.school.bicycle.ui.AppLauncherActivity">
+    tools:context="com.school.bicycle.ui.setup_despositActivity">
 
-    <ImageView
-        android:id="@+id/image"
+    <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/qdy"
-        android:background="@color/burro_primary_ext" />
+        android:id="@+id/about_desponit"/>
 </RelativeLayout>

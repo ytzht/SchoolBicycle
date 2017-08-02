@@ -1,7 +1,6 @@
 package com.school.bicycle.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
-import com.school.bicycle.entity.QueryBikeListByBikeNumber;
+import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.QueryBikeListByDate;
 
 import java.util.List;
@@ -22,13 +21,13 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/4/13.
  */
 
-public class QuerytBikeListByDate_adapter extends BaseAdapter {
+public class Getlistbiycle_adapter extends BaseAdapter {
 
     private Context context;
-    private List<QueryBikeListByDate.BikeInfoBean> data;
+    private List<GetBikeMapList.BodyBean> data;
 
 
-    public QuerytBikeListByDate_adapter(Context context, List<QueryBikeListByDate.BikeInfoBean> data) {
+    public Getlistbiycle_adapter(Context context, List<GetBikeMapList.BodyBean> data) {
         this.context = context;
         this.data = data;
     }

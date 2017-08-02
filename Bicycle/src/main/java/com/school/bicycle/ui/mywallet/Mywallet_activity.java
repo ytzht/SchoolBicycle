@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
+import com.school.bicycle.RechargeActivity;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Wallet;
 import com.school.bicycle.global.Apis;
@@ -153,7 +154,7 @@ public class Mywallet_activity extends BaseToolBarActivity {
                 startActivity(WithdrawalsActivity.class, "getShare_income", wallet.getShare_income());
                 break;
             case R.id.mywallet_Recharge:
-
+                startActivity(RechargeActivity.class);
                 break;
         }
     }

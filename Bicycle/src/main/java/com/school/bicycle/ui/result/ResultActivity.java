@@ -13,11 +13,10 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.lockclose.LockcloseActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +52,7 @@ public class ResultActivity extends BaseToolBarActivity {
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final String bike_number = getIntent().getStringExtra("bike_number");
+                    String bike_number = getIntent().getStringExtra("bike_number");
                     String url = Apis.Base + Apis.leaseBicycle;
                     String cookie = new UserService(ResultActivity.this).getCookie();
                     OkHttpUtils
@@ -74,9 +73,6 @@ public class ResultActivity extends BaseToolBarActivity {
                                     BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                     if (baseResult.getCode() == 1) {
                                         //0表示不再用车中1表示用车中
-                                        Date date = new Date();
-                                        long time = date.getHours()*3600*1000 + date.getMinutes()*60000 + date.getSeconds()*1000;
-                                        new UserService(getBaseContext()).setBikeNumberTime(bike_number, time);
                                         startActivity(MainActivity.class,"bike_number","");
                                         finish();
                                     }else {

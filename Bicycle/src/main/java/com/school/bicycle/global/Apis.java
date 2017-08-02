@@ -16,6 +16,8 @@ public interface Apis {
 
     String getMyAppoint = "order/getMyAppoint";
 
+    String DiviceToken = "order/DiviceToken";
+
     String dayLeaseList = "order/dayLeaseList";
 
     String invite = "production/invite?phone=";
@@ -23,6 +25,8 @@ public interface Apis {
     String findNotPayRoute = "order/findNotPayRoute";
 
     String longLeaseOrder = "order/longLeaseOrder";
+
+    String rechargeOrder = "order/rechargeOrder";
 
     String submitLeaseOrder = "order/submitLeaseOrder";
 
@@ -56,8 +60,6 @@ public interface Apis {
 
     String depositRefund = "user/depositRefund";
 
-    String DiviceToken = "order/setDiviceToken";
-
     String withdraw = "user/withdraw";
 
     String FailureReporting = "user/failureReporting";
@@ -83,12 +85,4 @@ public interface Apis {
     String dayLeaseLists = "order/sharedBikeList";
 
     String CancelShareMyBike = "order/cancelShareMyBike";
-
-
-
-
-
-
-
-
 }

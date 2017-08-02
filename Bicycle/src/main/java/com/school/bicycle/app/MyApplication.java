@@ -8,7 +8,6 @@ import android.widget.Toast;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.http.APIFactory;
-import com.school.bicycle.utils.BindPushUtils;
 import com.school.bicycle.utils.PreferencesUtils;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
@@ -97,14 +96,12 @@ public class MyApplication extends MultiDexApplication {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回device token
-                L.d("umengPush success : " + deviceToken);
-                new UserService(getApplicationContext()).setDeviceToken(deviceToken);
-                BindPushUtils.bind(getApplicationContext());
+                L.d("deviceToken " + deviceToken);
             }
 
             @Override
             public void onFailure(String s, String s1) {
-                L.e("umengPush push onFailure " + s + " " + s1);
+                L.e("push onFailure " + s + " " + s1);
             }
         });
         mPushAgent.setDebugMode(BuildConfig.DEBUG);

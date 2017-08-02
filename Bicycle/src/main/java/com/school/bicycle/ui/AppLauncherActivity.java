@@ -51,21 +51,18 @@ public class AppLauncherActivity extends BaseActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_app_launcher);
 
-        TextView textView_version = (TextView) findViewById(R.id.textView_version);
-
         PackageManager packageManager = getPackageManager();
 
         try {
             PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(), 0);
             String version = packInfo.versionName;
 
-            textView_version.setText("版本号：" + version + "");
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        ImageView imageView = (ImageView) findViewById(R.id.image);
+
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.splash);
-        imageView.setAnimation(animation);
         animation.setFillAfter(true);
 
         SharedPreferences preferences = getSharedPreferences("first_open", Context.MODE_PRIVATE);

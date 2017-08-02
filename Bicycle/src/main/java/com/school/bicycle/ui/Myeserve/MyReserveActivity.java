@@ -1,6 +1,7 @@
 package com.school.bicycle.ui.Myeserve;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -15,6 +16,8 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.main.MainActivity;
+import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -67,7 +70,9 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
 
     @Override
     public void ondetialClick(View v) {
-
+        Intent it = new Intent(MyReserveActivity.this, MainActivity.class);
+        it.putExtra("bike_number",String.valueOf(myAppoint.getMy_appoint().get((Integer) v.getTag()).getNumber()));
+        startActivity(it);
 
     }
 

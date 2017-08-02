@@ -650,7 +650,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                     startActivity(RealnameActivity.class);
                                 }
                             } else {
-                                startActivity(UseBicycleActivity.class);
+                                startActivity(UseBicycleActivity.class,"lat",lat+"","lon",lon+"");
                             }
                         }
                     } else {
@@ -1526,15 +1526,21 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
                         markerOption.setFlat(true);//设置marker平贴地图效果
                         markerOption.visible(true);
-                        Marker marker = aMap.addMarker(markerOption.position(latLng));
-                        marker.setObject(getBikeMapList.getBody().get(0));
-                        cameraUpdate = CameraUpdateFactory
-                                .newCameraPosition(new CameraPosition(new LatLng(getBikeMapList.getBody().get(0).getLat(),
-                                        getBikeMapList.getBody().get(0).getLog()), 18, 0, 0));
-                        aMap.moveCamera(cameraUpdate);
-                        if (checkJumpStatus.getBike_status() == 0) {
-                            marker.showInfoWindow();
+                        if (!getBikeMapList.getBody().get(0).getColor().equals("red")){
+                            Marker marker = aMap.addMarker(markerOption.position(latLng));
+                            marker.setObject(getBikeMapList.getBody().get(0));
+                            cameraUpdate = CameraUpdateFactory
+                                    .newCameraPosition(new CameraPosition(new LatLng(getBikeMapList.getBody().get(0).getLat(),
+                                            getBikeMapList.getBody().get(0).getLog()), 18, 0, 0));
+                            aMap.moveCamera(cameraUpdate);
+                            if (checkJumpStatus.getBike_status() == 0) {
+                                marker.showInfoWindow();
+                            }
+                        }else {
+                            showShort("该车已被长租 请选择其他车辆！");
                         }
+
+
 
                     }
                 });
@@ -1645,6 +1651,10 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
                 tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
                 tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
+            }else {
+                tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+                tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+                tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.org));
             }
 
             //长租点击事件

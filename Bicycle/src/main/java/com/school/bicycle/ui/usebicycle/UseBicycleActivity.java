@@ -2,6 +2,7 @@ package com.school.bicycle.ui.usebicycle;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -16,12 +17,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
+import com.school.bicycle.adapter.Getlistbiycle_adapter;
 import com.school.bicycle.adapter.QuerytBikeListByDate_adapter;
+import com.school.bicycle.entity.GetBikeMapList;
 import com.school.bicycle.entity.QueryBikeListByBikeNumber;
 import com.school.bicycle.entity.QueryBikeListByDate;
 import com.school.bicycle.global.Apis;
@@ -69,6 +77,9 @@ public class UseBicycleActivity extends BaseToolBarActivity {
     @BindView(R.id.iv_usebiycle_bynum_biycleaddress)
     ImageView ivUsebiycleBynumBiycleaddress;
 
+
+    private boolean isfirst;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +87,8 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         ButterKnife.bind(this);
         setToolbarText("用车列表");
         initonclick();
+        isfirst = true;
+        initview();
         usebiycleBynum.setVisibility(View.GONE);
         llSearchBicyclenum.setVisibility(View.GONE);
         llSearchBicyclenumNum.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
@@ -152,22 +165,64 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         });
 
     }
+    GetBikeMapList g;
+    private void initview() {
+        String lat = getIntent().getStringExtra("lat");
+        String lon = getIntent().getStringExtra("lon");
+        String url = Apis.Base +
+                "order/getBikeMapList?locations="
+                + lon + "," + lat;
+        String cookie = new UserService(UseBicycleActivity.this).getCookie();
+        OkHttpUtils.get()
+                .url(url)
+                .addHeader("cookie", cookie)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        showShort("no");
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.d("获取周围单车位置列表response", response);
+                        g = gson.fromJson(response, GetBikeMapList.class);
+                        if (g.getCode() != 0) {
+                            Getlistbiycle_adapter g_adapter = new Getlistbiycle_adapter(getBaseContext(),g.getBody());
+                            lvShowUsebicycle.setAdapter(g_adapter);
+                            new UserService(UseBicycleActivity.this).setusebiycle("1");
+                        }
+                    }
+
+                });
+    }
 
     private void initonclick() {
         lvShowUsebicycle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (queryBikeListByDate.getBike_info().get(position).getColor().equals("red")){
-                    showShort("该车辆已经被长租，请查询其他车辆");
+
+                if (new UserService(UseBicycleActivity.this).getusebiycle().equals("1")){
+                    if (g.getBody().get(position).getColor().equals("red")){
+                        showShort("该车辆已经被长租，请查询其他车辆");
+                    }else {
+                        new UserService(UseBicycleActivity.this).setShowOneMark("1");
+                        Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
+                        it.putExtra("bike_number",g.getBody().get(position).getNumber());
+                        startActivity(it);
+                        finish();
+                    }
                 }else {
-                    new UserService(UseBicycleActivity.this).setShowOneMark("1");
-                    Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
-
-                    it.putExtra("bike_number",queryBikeListByDate.getBike_info().get(position).getNumber());
-                    startActivity(it);
-                    finish();
+                    if (queryBikeListByDate.getBike_info().get(position).getColor().equals("red")) {
+                        showShort("该车辆已经被长租，请查询其他车辆");
+                    } else {
+                        new UserService(UseBicycleActivity.this).setShowOneMark("1");
+                        Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
+                        it.putExtra("bike_number", queryBikeListByDate.getBike_info().get(position).getNumber());
+                        startActivity(it);
+                        finish();
+                    }
                 }
-
             }
         });
     }
@@ -185,7 +240,6 @@ public class UseBicycleActivity extends BaseToolBarActivity {
             case R.id.tv_date_use:
                 //按日期搜索
                 showAlert();
-
                 break;
 
             case R.id.ll_search_bicyclenum_sure:
@@ -213,7 +267,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
             public void onClick(View v) {
 
                 List<CalendarDay> selectedDates = myCalendar.getSelectedDates();
-
+                isfirst = false;
                 String s = "";
                 if (selectedDates.size() > 0) {
                     for (int i = 0; i < selectedDates.size(); i++) {
@@ -244,6 +298,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                 public void onResponse(String response, int id) {
                                     usebiycleBynum.setVisibility(View.GONE);
                                     lvShowUsebicycle.setVisibility(View.VISIBLE);
+                                    new UserService(UseBicycleActivity.this).setusebiycle("0");
                                     Log.d("response", response);
                                     queryBikeListByDate = gson.fromJson(response, QueryBikeListByDate.class);
                                     if (queryBikeListByDate.getCode() == 0) {

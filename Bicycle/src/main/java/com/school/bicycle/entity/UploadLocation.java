@@ -23,16 +23,6 @@ public class UploadLocation {
     private String calories;
     private String total_fee;
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    private String time;
-
     public int getCode() {
         return code;
     }

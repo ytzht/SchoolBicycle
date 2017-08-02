@@ -257,6 +257,8 @@ public class MainActivity extends BaseActivity implements IMainView,
         headImg = (ImageView) headerView.findViewById(R.id.iv_header);
         name = (TextView) headerView.findViewById(R.id.tv_name);
         score = (TextView) headerView.findViewById(R.id.tv_score);
+        countDownView = (TimeCountDownTextView) findViewById(R.id.countdown);
+        countdown1 = (TextView) findViewById(R.id.countdown1);
 //        iMainPresenter.downloadMap(MainActivity.this, aMap);
         isFirstLatLng = true;
         initview();
@@ -276,10 +278,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     long maxTime = 60 * 1000;//设置倒计时的时长！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 
     private void initTimeDown() {
-        if (countDownView != null)
-        countDownView = (TimeCountDownTextView) findViewById(R.id.countdown);
-        if (countdown1 != null)
-        countdown1 = (TextView) findViewById(R.id.countdown1);
+
 
         final UserService service = new UserService(MainActivity.this);
 

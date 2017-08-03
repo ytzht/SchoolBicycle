@@ -13,6 +13,16 @@
         <item name="android:background">@color/navpage</item>
     </style>
 
+    <style name="HooliganActivitystyle">
+        <item name="android:windowBackground">@color/chengse</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoDisplay">false</item>
+        <item name="android:windowDisablePreview">true</item>
+
+        
+    </style>
+
     <style name="BaseTheme.ToolBar" parent="Theme.AppCompat.Light.DarkActionBar"></style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="BaseTheme">

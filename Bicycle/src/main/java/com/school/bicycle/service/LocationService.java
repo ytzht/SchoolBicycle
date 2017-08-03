@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -40,8 +41,8 @@ public class LocationService extends Service implements AMapLocationListener {
     private Timer mTimer = null;
     private TimerTask mTimerTask = null;
     private boolean isStop = false;
-    public  String strIsLogin="1";
-    private Intent intent =null;
+    public String strIsLogin = "1";
+    private Intent intent = null;
     String st;
     private double latitude;
     private double longitude;
@@ -53,30 +54,8 @@ public class LocationService extends Service implements AMapLocationListener {
         intent = new Intent("com.example.broadcast");
         Intent startIntent = new Intent(this, jihuoservice.class);
         startService(startIntent);
-        acquireWakeLock();
     }
 
-    private void acquireWakeLock() {
-        if (null == wakeLock) {
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
-                    | PowerManager.ON_AFTER_RELEASE, getClass()
-                    .getCanonicalName());
-            if (null != wakeLock) {
-                //   Log.i(TAG, "call acquireWakeLock");
-                wakeLock.acquire();
-            }
-        }
-    }
-    PowerManager.WakeLock wakeLock;
-    // 释放设备电源锁
-    private void releaseWakeLock() {
-        if (null != wakeLock && wakeLock.isHeld()) {
-            //   Log.i(TAG, "call releaseWakeLock");
-            wakeLock.release();
-            wakeLock = null;
-        }
-    }
 
     private void init() {
         //初始化定位
@@ -95,16 +74,16 @@ public class LocationService extends Service implements AMapLocationListener {
     }
 
 
-
-        @Override
-        public void onLocationChanged(AMapLocation aMapLocation) {
-            // TODO Auto-generated method stub
-            latitude = aMapLocation.getLatitude();
-            longitude = aMapLocation.getLongitude();
-            Log.d("我在不停地定位LocationService=", "latitude:" + latitude + "longitude" + longitude);
-        }
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        // TODO Auto-generated method stub
+        latitude = aMapLocation.getLatitude();
+        longitude = aMapLocation.getLongitude();
+        Log.d("我在不停地定位LocationService=", "latitude:" + latitude + "longitude" + longitude);
+    }
 
     private final static int GRAY_SERVICE_ID = 1001;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        Toast.makeText(getApplicationContext(), "onStartCommand() executed",Toast.LENGTH_SHORT).show();
@@ -113,7 +92,22 @@ public class LocationService extends Service implements AMapLocationListener {
         if (!isStop) {
             startTimer();
         }
-        return super.onStartCommand(intent, flags, startId);
+        Notification.Builder builder = new Notification.Builder(this.getApplicationContext()); //获取一个Notification构造器
+        Intent nfIntent = new Intent(this, MainActivity.class);
+        nfIntent.putExtra("bike_number","");
+// 设置PendingIntent
+
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)).
+                setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher)).
+                setContentTitle("校易行").
+                setSmallIcon(R.mipmap.ic_launcher).setContentText("正在运行中")
+                .setWhen(System.currentTimeMillis());
+        Notification notification = builder.build(); // 获取构建好的Notification
+        notification.defaults = Notification.DEFAULT_SOUND; //设置为默认的声音
+        startForeground(110, notification);// 开始前台服务
+
+        return Service.START_STICKY;
+//        return super.onStartCommand(intent, flags, startId);
     }
 
     private void startTimer() {
@@ -128,14 +122,14 @@ public class LocationService extends Service implements AMapLocationListener {
                 public void run() {
                     do {
                         try {
-                            if (strIsLogin=="1"){
+                            if (strIsLogin == "1") {
                                 init();
                                 Message message = new Message();
                                 message.what = 1;
                                 handler.sendMessage(message);
                                 mLocationClient.startLocation();
                             }
-                            Thread.sleep(3000);//3秒后再次执行
+                            Thread.sleep(10000);//5秒后再次执行
                         } catch (InterruptedException e) {
                             // TODO Auto-generated catch block
                             return;
@@ -150,7 +144,6 @@ public class LocationService extends Service implements AMapLocationListener {
     }
 
 
-
     /**
      * 处理接fasong的数据
      */
@@ -159,7 +152,7 @@ public class LocationService extends Service implements AMapLocationListener {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    st = String.valueOf((float)(latitude)) + "," + String.valueOf((float)(longitude));
+                    st = String.valueOf((float) (latitude)) + "," + String.valueOf((float) (longitude));
                     intent.putExtra("Str", st);
                     sendBroadcast(intent);
                     break;
@@ -184,7 +177,8 @@ public class LocationService extends Service implements AMapLocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(), "onDestroy() executed",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "onDestroy() executed", Toast.LENGTH_SHORT).show();
+        stopForeground(true);// 停止前台服务--参数：表示是否移除之前的通知
         // 停止定时器
         if (isStop) {
             stopTimer();

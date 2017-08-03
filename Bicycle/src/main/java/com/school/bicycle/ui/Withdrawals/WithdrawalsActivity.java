@@ -43,7 +43,7 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
     private void initview() {
         Intent it = getIntent();
         String getShare_income = it.getStringExtra("getShare_income");
-        getShareIncomeWithdrawals.setText("本次可提现金额" + getShare_income + "元");
+        getShareIncomeWithdrawals.setText("本次可提现金额" + getShare_income + "元,满20元可提现");
     }
 
     @OnClick(R.id.ok_Withdrawals)

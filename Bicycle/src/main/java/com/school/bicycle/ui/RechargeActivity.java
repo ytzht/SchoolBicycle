@@ -1,4 +1,4 @@
-package com.school.bicycle;
+package com.school.bicycle.ui;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
-import com.school.bicycle.entity.GetLongLeaseInfo;
+import com.school.bicycle.R;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
 import com.school.bicycle.entity.Recharge;
@@ -21,9 +21,9 @@ import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.longtimeLease.LongTimeLeaseActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -264,7 +264,9 @@ public class RechargeActivity extends BaseToolBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        L.d("wxpay");
         if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
+            L.d("wxpay1");
             PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
             finish();
         }

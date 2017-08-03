@@ -19,10 +19,12 @@ import com.school.bicycle.entity.FindNotPayRoute;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
 import com.school.bicycle.entity.Pay_wallet;
+import com.school.bicycle.entity.WeiXinPayResultEvent;
 import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.lockclose.LockcloseActivity;
@@ -33,6 +35,8 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
@@ -80,7 +84,6 @@ public class OverPayActivity extends BaseToolBarActivity {
         setToolbarText("付款");
         String url = Apis.Base + Apis.findNotPayRoute;
         String cookie = new UserService(OverPayActivity.this).getCookie();
-
         OkHttpUtils
                 .get()
                 .url(url)
@@ -131,6 +134,9 @@ public class OverPayActivity extends BaseToolBarActivity {
                 pay_type = "wallet";
                 break;
             case R.id.confirm:
+                if (pay_type.isEmpty()){
+                    showShort("请选择一种支付方式");
+                }else {
                 String url = Apis.Base + Apis.submitLeaseOrder;
                 String cookie = new UserService(OverPayActivity.this).getCookie();
                 OkHttpUtils
@@ -193,7 +199,7 @@ public class OverPayActivity extends BaseToolBarActivity {
                             }
                         });
 
-
+                }
                 break;
         }
     }
@@ -224,11 +230,14 @@ public class OverPayActivity extends BaseToolBarActivity {
         }
     };
 
+
+
     @Override
     protected void onResume() {
-
         super.onResume();
+        L.d("wchat-0",PayCore.getInstance().mWeichatState+"");
         if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
+            L.d("wchat-1",PayCore.getInstance().mWeichatState+"");
             PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
             startActivity(ResultActivity.class,"type","returnbiycle");
             finish();
@@ -240,4 +249,7 @@ public class OverPayActivity extends BaseToolBarActivity {
         cbWe.setChecked(false);
         cbZfb.setChecked(false);
     }
+
+
+
 }

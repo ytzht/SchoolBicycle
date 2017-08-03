@@ -22,9 +22,26 @@ public class UserService {
     private static final String ShowOneMark = "ShowOneMark";
     private static final String LatLon   = "LatLon";
     private static final String usebiycle   = "usebiycle";
+    private static final String iscall   = "iscall";
 
     public UserService(Context context) {
         this.context = context;
+    }
+
+
+    //1为开启 0为关闭
+    public void setiscall(String latlon) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                usebiycle, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(iscall, latlon).apply();
+    }
+
+
+    public String getiscall() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                usebiycle, Context.MODE_PRIVATE);
+        return memberPrefs.getString(iscall, "0");
+
     }
 
     //1为显示一个 0为显示所有

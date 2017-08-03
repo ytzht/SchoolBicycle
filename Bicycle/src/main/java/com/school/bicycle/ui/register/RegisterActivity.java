@@ -19,6 +19,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.eposit.DepositActivity;
+import com.school.bicycle.ui.main.MainActivity;
 import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.utils.Forms;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -184,6 +185,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                                 @Override
                                 public void onResponse(Object response, int id) {
                                     new UserService(RegisterActivity.this).setCookie(s);
+                                    startActivity(MainActivity.class,"bike_number","");
                                     finish();
                                 }
 

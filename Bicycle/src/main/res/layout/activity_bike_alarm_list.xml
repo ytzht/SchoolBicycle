@@ -13,6 +13,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:id="@+id/back_call"
             android:src="@drawable/btn_arrow"/>
 
         <TextView
@@ -24,7 +25,12 @@
             android:text="震动报警"
             android:textColor="@color/white"
             android:textSize="18sp" />
-
+        <ImageView
+            android:id="@+id/callpolice"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical|right"
+            />
     </android.support.v7.widget.Toolbar>
 
     <ListView
@@ -35,5 +41,7 @@
         android:layout_below="@id/base_toolbar"
         android:id="@+id/list_callpolice"
         />
+
+
 
 </RelativeLayout>

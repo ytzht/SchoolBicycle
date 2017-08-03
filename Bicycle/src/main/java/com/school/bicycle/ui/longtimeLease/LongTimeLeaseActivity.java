@@ -20,25 +20,25 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
-import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.GetLongLeaseInfo;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
+import com.school.bicycle.entity.WeiXinPayResultEvent;
 import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
-import com.school.bicycle.ui.authentication.RealnameActivity;
-import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
@@ -116,6 +116,9 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
         month12.setBackgroundResource(R.drawable.bg_gray);
     }
 
+
+
+
     private void initlongtimeprice() {
 
         String url = getResources().getString(R.string.baseurl) + "order/getLongLeaseInfo";
@@ -185,34 +188,20 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
             case R.id.wx_icon:
                 break;
             case R.id.tv_okpay:
-                initpay();
-//                String url = Apis.Base + Apis.checkLongLease;
-//                String cookie = new UserService(LongTimeLeaseActivity.this).getCookie();
-//                OkHttpUtils
-//                        .post()
-//                        .url(url)
-//                        .addHeader("cookie",cookie)
-//                        .build()
-//                        .execute(new StringCallback() {
-//                            @Override
-//                            public void onError(Call call, Exception e, int id) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onResponse(String response, int id) {
-//                                Log.d("response",response);
-//                                BaseResult baseResult = gson.fromJson(response,BaseResult.class);
-//                                if (baseResult.getCode()==1){
-//                                    initpay();
-//                                    showShort(baseResult.getMsg());
-//                                }else {
-//                                    showShort(baseResult.getMsg());
-//                                }
-//
-//                            }
-//                        });
-
+                if (price.equals("")) {
+                    showShort("请选择长租时间");
+                } else {
+                    if (cbWx.isChecked() || cbZfb.isChecked()) {
+                        if (cbZfb.isChecked()) {
+                            pay_type = "zfb";
+                        } else {
+                            pay_type = "wx";
+                        }
+                        initpay();
+                    }else {
+                        showShort("请选择一种支付方式");
+                    }
+                }
                 break;
             case R.id.zfb_icon:
                 break;

@@ -16,7 +16,6 @@ import com.school.bicycle.entity.GetMyRoute;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.xingcheng_map_acvitity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -33,6 +32,8 @@ public class MyRoute_Activity extends BaseToolBarActivity {
     ListView getMyRouteList;
 
     GetMyRoute getMyRoute;
+    @BindView(R.id.myroute_te)
+    TextView myrouteTe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +46,6 @@ public class MyRoute_Activity extends BaseToolBarActivity {
 
     private void initview() {
 
-        TextView tv = new TextView(MyRoute_Activity.this);
-        tv.setText("暂无形程");
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(25); //设置字体大小
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        addContentView(tv, params);
-        getMyRouteList.setEmptyView(tv);
         String url = Apis.Base + Apis.getMyRoute;
         String cookie = new UserService(MyRoute_Activity.this).getCookie();
 
@@ -68,8 +62,16 @@ public class MyRoute_Activity extends BaseToolBarActivity {
                     public void onResponse(String response, int id) {
                         Log.d(TAG, "onResponse我的行程: " + response);
                         getMyRoute = gson.fromJson(response, GetMyRoute.class);
-                        GetMyRoute_adapter getMyRouteAdapter = new GetMyRoute_adapter(MyRoute_Activity.this, getMyRoute.getBody());
-                        getMyRouteList.setAdapter(getMyRouteAdapter);
+                        if (getMyRoute.getBody().size()==0){
+                            myrouteTe.setVisibility(View.VISIBLE);
+                            getMyRouteList.setVisibility(View.GONE);
+                        }else {
+                            getMyRouteList.setVisibility(View.VISIBLE);
+                            myrouteTe.setVisibility(View.GONE);
+                            GetMyRoute_adapter getMyRouteAdapter = new GetMyRoute_adapter(MyRoute_Activity.this, getMyRoute.getBody());
+                            getMyRouteList.setAdapter(getMyRouteAdapter);
+                        }
+
 
                     }
                 });

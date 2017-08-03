@@ -23,6 +23,7 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.BikeAlarmListActivity;
 import com.school.bicycle.ui.MyRoute.MyRoute_Activity;
 import com.school.bicycle.ui.Myeserve.MyReserveActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
@@ -166,6 +167,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_mypolice_mybiycle:
                 //报警
+                startActivity(BikeAlarmListActivity.class);
                 break;
         }
     }

@@ -61,7 +61,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
-import com.school.bicycle.RechargeActivity;
+import com.school.bicycle.ui.RechargeActivity;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.DayleaseList;
@@ -438,11 +438,11 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("定位获得的经纬度", response);
+                                    Log.d("实时上传", response);
 
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
-                                        showShort("上传成功");
+//                                        showShort("上传成功");
                                         kaluli.setText("" + uploadLocation.getCalories() + "卡");
                                         String distance = uploadLocation.getDistance();
                                         distance = distance.substring(0, distance.indexOf("."));
@@ -1061,10 +1061,14 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         oldLatLng = newLatLng;
                         isFirstLatLng = false;
                     }
+
                     //位置有变化
                     if (oldLatLng != newLatLng && oldLatLng != null && newLatLng != null) {
+                        cameraUpdate = CameraUpdateFactory
+                                .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
+                        aMap.moveCamera(cameraUpdate);
                         Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
-                        if (getDistance(oldLatLng, newLatLng) > 20 && getDistance(oldLatLng, newLatLng) < 30) {
+                        if (getDistance(oldLatLng, newLatLng) > 20 && getDistance(oldLatLng, newLatLng) < 100) {
                             if (checkJumpStatus.getLock_status() == 0) {
 //                                setUpMap(oldLatLng, newLatLng);
                                 new UserService(MainActivity.this).setLatLon(lat + "," + lon);
@@ -1072,9 +1076,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                 Message message = new Message();
                                 message.what = 1;
                                 doActionHandler.sendMessage(message);
-                                cameraUpdate = CameraUpdateFactory
-                                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-                                aMap.moveCamera(cameraUpdate);
+//                                cameraUpdate = CameraUpdateFactory
+//                                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+//                                aMap.moveCamera(cameraUpdate);
                             }
                         }
                     }
@@ -1112,8 +1116,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     @Override
     protected void onResume() {
-
-
         super.onResume();
         mMapView.onResume();
 //        if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
@@ -1123,7 +1125,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //        }
         initvalidateUser();
         initview();
-
 //        UpdateInfo();
         BindPushUtils.bind(getBaseContext());//保存绑定推送
         IntentFilter filter = new IntentFilter();
@@ -1314,6 +1315,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                 //setTimerTask();
                                 //日租中
                                 isbiycle = true;
+                                tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                                 initview();
                                 lianxumap();
                                 countdown.setVisibility(View.GONE);
@@ -1332,6 +1334,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                 new UserService(MainActivity.this).setState("1");
                                 bike_number = checkJumpStatus.getBike_number();
                                 lianxumap();
+                                tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                                 countdown.setVisibility(View.VISIBLE);
                                 //时租中
                                 initview();
@@ -1359,6 +1362,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                 if (isbiycle) {
                                     new UserService(MainActivity.this).setState("1");
                                 } else {
+                                    tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                                     lianxumap();
                                     new UserService(MainActivity.this).setState("1");
                                     showOneCar(checkJumpStatus.getBike_number());
@@ -1735,7 +1739,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             if (data.getColor().equals("blue")) {
                 tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
                 tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
-                tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
+                tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.org));
             } else {
                 tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.org));
                 tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.org));
@@ -1829,14 +1833,14 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     @Override
     public View getInfoContents(Marker marker) {
         if (infoWindow == null) {
-            GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
-            if (checkJumpStatus.getBike_status() == 4 && data.getColor().equals("blue")) {
-                infoWindow = LayoutInflater.from(this).inflate(
-                        R.layout.custom_bicycle_window, null);
-            } else {
+//            GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
+//            if (checkJumpStatus.getBike_status() == 4 && data.getColor().equals("blue")) {
+//                infoWindow = LayoutInflater.from(this).inflate(
+//                        R.layout.custom_bicycle_window, null);
+//            } else {
                 infoWindow = LayoutInflater.from(this).inflate(
                         R.layout.custom_info_window, null);
-            }
+//            }
         }
         render(marker, infoWindow);
         return infoWindow;

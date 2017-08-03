@@ -18,6 +18,7 @@ import com.school.bicycle.entity.DayLeaseOrder;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
 import com.school.bicycle.entity.Pay_wallet;
+import com.school.bicycle.entity.WeiXinPayResultEvent;
 import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
@@ -33,6 +34,9 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,6 +90,7 @@ public class PayActivity extends BaseToolBarActivity {
                             PaymentAmount.setText(dayLeaseOrder.getPrice());
                         } else {
                             showShort(dayLeaseOrder.getMsg());
+                            finish();
                         }
 
                     }
@@ -112,7 +117,12 @@ public class PayActivity extends BaseToolBarActivity {
                 pay_type = "wallet";
                 break;
             case R.id.pay_sure:
-                initpay();
+                if (pay_type.isEmpty()){
+                    showShort("请选择一种支付方式");
+                }else {
+                    initpay();
+                }
+
                 break;
         }
     }
@@ -130,6 +140,7 @@ public class PayActivity extends BaseToolBarActivity {
             finish();
         }
     }
+
 
     private void initpay() {
         String url = Apis.Base + Apis.submitDayLeaseMoney;

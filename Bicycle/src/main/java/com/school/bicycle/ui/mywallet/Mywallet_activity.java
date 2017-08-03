@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
-import com.school.bicycle.RechargeActivity;
+import com.school.bicycle.ui.RechargeActivity;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Wallet;
 import com.school.bicycle.global.Apis;
@@ -17,7 +17,6 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.Withdrawals.WithdrawalsActivity;
-import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;

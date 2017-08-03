@@ -8,14 +8,20 @@ import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
+import com.school.bicycle.entity.WeiXinPayResultEvent;
 import com.school.bicycle.global.Apis;
+import com.school.bicycle.global.BaseEvent;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +51,9 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
         String getShare_income = it.getStringExtra("getShare_income");
         getShareIncomeWithdrawals.setText("本次可提现金额" + getShare_income + "元,满20元可提现");
     }
+
+
+
 
     @OnClick(R.id.ok_Withdrawals)
     public void onViewClicked() {

@@ -1,9 +1,11 @@
 package com.school.bicycle.ui.lockclose;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -56,15 +58,28 @@ public class LockcloseActivity extends BaseToolBarActivity {
         ButterKnife.bind(this);
         setToolbarText("锁车");
     }
+    /**
+     * 调用拨号界面
+     *
+     * @param phone 电话号码
+     */
+    private void call(String phone) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
     @OnClick({R.id.lock_refresh, R.id.lock_no, R.id.lock_kefu, R.id.lock_ok})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.lock_refresh:
+                showShort("正在重新定位锁的位置和状态");
                 break;
             case R.id.lock_no:
+                finish();
                 break;
             case R.id.lock_kefu:
+                call("057187063728");
                 break;
             case R.id.lock_ok:
                 String url = Apis.Base + Apis.overUseBike;

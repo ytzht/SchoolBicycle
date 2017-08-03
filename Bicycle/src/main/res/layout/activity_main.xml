@@ -27,11 +27,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:id="@+id/state_0"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="35dp"
         >
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/btn_colse2x"
+            android:id="@+id/dinwgei"
+            android:layout_alignParentBottom="true"
+           android:layout_marginLeft="20dp"
+            android:layout_marginBottom="80dp"
+            />
 
         <ImageView
             android:id="@+id/fab_refresh"

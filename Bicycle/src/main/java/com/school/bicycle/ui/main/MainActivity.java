@@ -1912,19 +1912,18 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         dialog.setCancelable(true);
         myCalendar = (MaterialCalendarView) view.findViewById(R.id.calendar_md);
         myCalendarInit();//初始化日历
-        list = new ArrayList<>();
-        list.clear();
-        for (int j = 0; j < list.size(); j++) {
-            try {
-                Date date = format.parse(list.get(j));
-                unlist.add(date);
-                myCalendar.addDecorators(new MySelectorDecorators(MainActivity.this), new SelectDecorator(MainActivity.this, date));
+        if (list != null) {
+            for (int j = 0; j < list.size(); j++) {
+                try {
+                    Date date = format.parse(list.get(j));
+                    unlist.add(date);
+                    myCalendar.addDecorators(new MySelectorDecorators(MainActivity.this), new SelectDecorator(MainActivity.this, date));
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
-
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2005,8 +2004,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         myCalendar.setDateSelected(date, true);
                         if (unlist.size() > 0) {
                             for (int i = 0; i < unlist.size(); i++) {
-                                if (unlist.get(i) == date.getDate()) {
+                                if (unlist.get(i).getTime() == date.getDate().getTime()) {
                                     myCalendar.setDateSelected(date, false);
+
                                 }
                             }
                         }
@@ -2016,6 +2016,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         myCalendar.setDateSelected(date, false);
                     }
 
+                    List<CalendarDay> selectedDates = myCalendar.getSelectedDates();
 
                     if (selectedDates.size() > 0) {
                         String s = "";
@@ -2032,6 +2033,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         Log.d(TAG, "onDateSelected: " + s);
                         tv_dates.setText(s);
 
+                    }else {
+                        tv_dates.setText("");
                     }
                 }
 //                init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);

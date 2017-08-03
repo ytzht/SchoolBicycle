@@ -301,9 +301,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         L.d("锁 betweenTime" + betweenTime);
         if (betweenTime > maxTime) {
             L.d("1上次记录的时间比现在多十分钟以上，不管锁的状态反正是正计时");
-            if (service.getBikeNumberTime(bike_number) == 0){
+            if (service.getBikeNumberTime(bike_number) == 0) {
                 recLen = 0;//不太可能出现的情况，除非清掉了sp，如果出现只能从0开始计时了
-            }else {
+            } else {
                 recLen = betweenTime - maxTime;
             }
             initTime();//开始正计时
@@ -650,7 +650,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                     startActivity(RealnameActivity.class);
                                 }
                             } else {
-                                startActivity(UseBicycleActivity.class,"lat",lat+"","lon",lon+"");
+                                startActivity(UseBicycleActivity.class, "lat", lat + "", "lon", lon + "");
                             }
                         }
                     } else {
@@ -690,7 +690,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 new UserService(MainActivity.this).setShowOneMark("0");
                 cameraUpdate = CameraUpdateFactory
                         .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-                aMap.moveCamera(cameraUpdate);
+                if (aMap != null) aMap.moveCamera(cameraUpdate);
             }
         });
 
@@ -700,13 +700,14 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             public void onClick(View v) {
                 String location = lon + "," + lat;
                 Log.d("location===", location);
-
-                if (checkJumpStatus.getBike_status() == 0) {
-                    startActivity(ZxingActivity.class, "location", location, "status", "0");
-                } else {
-                    startActivity(ZxingActivity.class, "location", location, "status", "1");
-                }
+                if (checkJumpStatus != null) {
+                    if (checkJumpStatus.getBike_status() == 0) {
+                        startActivity(ZxingActivity.class, "location", location, "status", "0");
+                    } else {
+                        startActivity(ZxingActivity.class, "location", location, "status", "1");
+                    }
 //                startActivity(ZxingActivity.class, "location", location);
+                }
             }
         });
 
@@ -1526,7 +1527,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
                         markerOption.setFlat(true);//设置marker平贴地图效果
                         markerOption.visible(true);
-                        if (!getBikeMapList.getBody().get(0).getColor().equals("red")){
+                        if (!getBikeMapList.getBody().get(0).getColor().equals("red")) {
                             Marker marker = aMap.addMarker(markerOption.position(latLng));
                             marker.setObject(getBikeMapList.getBody().get(0));
                             cameraUpdate = CameraUpdateFactory
@@ -1536,10 +1537,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                             if (checkJumpStatus.getBike_status() == 0) {
                                 marker.showInfoWindow();
                             }
-                        }else {
+                        } else {
                             showShort("该车已被长租 请选择其他车辆！");
                         }
-
 
 
                     }
@@ -1651,7 +1651,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
                 tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
                 tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
-            }else {
+            } else {
                 tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.org));
                 tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.org));
                 tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.org));

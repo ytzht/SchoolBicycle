@@ -56,7 +56,7 @@ public class openbynum_Activity extends BaseToolBarActivity {
                 }
                 break;
             case R.id.linear2_openbynum:
-                startActivity(openbynum_Activity.class, "location", location,"status",status);
+                startActivity(ZxingActivity.class, "location", location,"status",status);
                 finish();
                 break;
             case R.id.tv_bynum_now:

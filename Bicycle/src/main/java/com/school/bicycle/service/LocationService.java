@@ -53,30 +53,9 @@ public class LocationService extends Service implements AMapLocationListener {
         intent = new Intent("com.example.broadcast");
         Intent startIntent = new Intent(this, jihuoservice.class);
         startService(startIntent);
-        acquireWakeLock();
     }
 
-    private void acquireWakeLock() {
-        if (null == wakeLock) {
-            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
-                    | PowerManager.ON_AFTER_RELEASE, getClass()
-                    .getCanonicalName());
-            if (null != wakeLock) {
-                //   Log.i(TAG, "call acquireWakeLock");
-                wakeLock.acquire();
-            }
-        }
-    }
-    PowerManager.WakeLock wakeLock;
-    // 释放设备电源锁
-    private void releaseWakeLock() {
-        if (null != wakeLock && wakeLock.isHeld()) {
-            //   Log.i(TAG, "call releaseWakeLock");
-            wakeLock.release();
-            wakeLock = null;
-        }
-    }
+
 
     private void init() {
         //初始化定位
@@ -113,7 +92,8 @@ public class LocationService extends Service implements AMapLocationListener {
         if (!isStop) {
             startTimer();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return Service.START_STICKY;
+//        return super.onStartCommand(intent, flags, startId);
     }
 
     private void startTimer() {
@@ -135,7 +115,7 @@ public class LocationService extends Service implements AMapLocationListener {
                                 handler.sendMessage(message);
                                 mLocationClient.startLocation();
                             }
-                            Thread.sleep(3000);//3秒后再次执行
+                            Thread.sleep(10000);//5秒后再次执行
                         } catch (InterruptedException e) {
                             // TODO Auto-generated catch block
                             return;

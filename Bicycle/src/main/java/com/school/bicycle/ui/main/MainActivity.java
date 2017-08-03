@@ -122,7 +122,7 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 
 public class MainActivity extends BaseActivity implements IMainView, AMapLocationListener,
-        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter,
+        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter, AMap.OnMapClickListener,
         AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.OnCameraChangeListener, LocationSource {
 
     @BindView(R.id.map)
@@ -187,6 +187,13 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //                        double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
                 lat = amapLocation.getLatitude();//获取纬度
                 lon = amapLocation.getLongitude();//获取经度
+                if (isFirstLatLng) {
+                    isFirstLatLng = false;
+                    cameraUpdate = CameraUpdateFactory
+                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+                    aMap.moveCamera(cameraUpdate);
+                }
+
 //                    String latlng_free =  new UserService(MainActivity.this).getLatLon();
 //                    if (!latlng_free.equals("0")){
 //                        lat = Double.parseDouble(latlng_free.substring(0,latlng_free.indexOf(",")));
@@ -1025,33 +1032,35 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 Log.i("FSD", "get the broadcast from Service...");
                 str = intent.getStringExtra("Str");
                 mHandler.sendMessage(mHandler.obtainMessage());
-                lon = Double.parseDouble(str.substring(str.indexOf(",")+1));
-                lat = Double.parseDouble(str.substring(0,str.indexOf(",")));
-                if (new UserService(MainActivity.this).getState().equals("1")) {
-                    LatLng newLatLng = new LatLng(lat, lon);
-                    if (isFirstLatLng) {
-                        //记录第一次的定位信息
-                        oldLatLng = newLatLng;
-                        isFirstLatLng = false;
-                    }
-                    //位置有变化
-                    if (oldLatLng != newLatLng) {
-                        Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
-                        if (getDistance(oldLatLng, newLatLng) > 20) {
-                            if (checkJumpStatus.getLock_status() == 0) {
-                                setUpMap(oldLatLng, newLatLng);
-                                new UserService(MainActivity.this).setLatLon(lat + "," + lon);
-                                oldLatLng = newLatLng;
-                                Message message = new Message();
-                                message.what = 1;
-                                doActionHandler.sendMessage(message);
-                                cameraUpdate = CameraUpdateFactory
-                                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-                                aMap.moveCamera(cameraUpdate);
+                lon = Double.parseDouble(str.substring(str.indexOf(",") + 1));
+                lat = Double.parseDouble(str.substring(0, str.indexOf(",")));
+
+                    if (new UserService(MainActivity.this).getState().equals("1")) {
+                        LatLng newLatLng = new LatLng(lat, lon);
+                        if (isFirstLatLng) {
+                            //记录第一次的定位信息
+                            oldLatLng = newLatLng;
+                            isFirstLatLng = false;
+                        }
+                        //位置有变化
+                        if (oldLatLng != newLatLng&&oldLatLng!=null&&newLatLng!=null) {
+                            Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
+                            if (getDistance(oldLatLng, newLatLng) > 20) {
+                                if (checkJumpStatus.getLock_status() == 0) {
+                                    setUpMap(oldLatLng, newLatLng);
+                                    new UserService(MainActivity.this).setLatLon(lat + "," + lon);
+                                    oldLatLng = newLatLng;
+                                    Message message = new Message();
+                                    message.what = 1;
+                                    doActionHandler.sendMessage(message);
+                                    cameraUpdate = CameraUpdateFactory
+                                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+                                    aMap.moveCamera(cameraUpdate);
+                                }
                             }
                         }
                     }
-                }
+
             } else {
                 Log.i("FSD", "the action is not intent.getAction");
             }
@@ -1067,7 +1076,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            }
+        }
     };
 
     /**
@@ -1613,10 +1622,10 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
             tv_timerent_info.setText("共享收入");
             tv_dayrent_info.setText("共享设置");
+            tv_lorentbt_info.setVisibility(View.GONE);
             tv_time_info.setText("山地车:" + data.getNumber() + "");
             tv_timerent_info.setText("地点:" + data.getAddress() + "");
             String valid_time = " ";
-            tv_lorentbt_info.setVisibility(View.GONE);
             for (int a = 0; a < data.getValid_time().size(); a++) {
                 valid_time = valid_time + data.getValid_time().get(a).toString();
                 tv_dayrent_info.setText("共享时段:" + valid_time + "");
@@ -1700,9 +1709,10 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!data.getColor().equals("green")) {
-                        showShort("该车辆已被长租");
-                    } else {
+
+                    if (checkJumpStatus.getBike_status() != 0) {
+                        showShort("处于用车状态");
+                    } else  {
                         if (checkJumpStatus.getBike_status() == 4) {
                             showShort("您已经是长租用户");
                         } else {
@@ -1721,10 +1731,15 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                     if (checkJumpStatus.getBike_status() == 4) {
                         showShort("您是长租用户");
                     } else {
-                        if (data.getColor().equals("green") || data.getColor().equals("yellow")) {
-                            bike_number = data.getNumber();
-                            startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
+                        if (new UserService(MainActivity.this).getState().equals("1")){
+                            showShort("处于用车状态");
+                        }else {
+                            if (data.getColor().equals("green") || data.getColor().equals("yellow")) {
+                                bike_number = data.getNumber();
+                                startActivity(ResultActivity.class, "type", "time", "bike_number", bike_number);
+                            }
                         }
+
 
                     }
 
@@ -1798,9 +1813,12 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     }
 
+    Marker currentMarker;
+
     //mark点击事件
     @Override
     public boolean onMarkerClick(Marker marker) {
+        currentMarker = marker;
         Log.d("mark dian", "true");
         final GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
         if (v != null) {
@@ -1996,12 +2014,21 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     //infowindow点击事件
     @Override
     public void onInfoWindowClick(Marker marker) {
-
+        if (marker.isInfoWindowShown()) {
+            marker.hideInfoWindow();//这个是隐藏infowindow窗口的方法
+        }
     }
 
 
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
 
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        if (currentMarker.isInfoWindowShown()) {
+            currentMarker.hideInfoWindow();//这个是隐藏infowindow窗口的方法
+        }
     }
 }

@@ -283,6 +283,7 @@ public class RealnameActivity extends BaseToolBarActivity {
                                                 BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                                 showShort(baseResult.getMsg());
                                                 isrealname = 1;
+                                                finish();
                                             }
                                         });
                             }

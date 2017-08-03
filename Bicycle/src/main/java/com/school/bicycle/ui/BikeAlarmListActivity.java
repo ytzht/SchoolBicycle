@@ -11,5 +11,6 @@ public class BikeAlarmListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_alarm_list);
+        // TODO: 2017/8/2 震动警报
     }
 }

@@ -1,10 +1,13 @@
 package com.school.bicycle.ui.main;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -72,6 +75,7 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.service.LocationService;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
@@ -190,40 +194,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //                    }else {
 //
 //                    }
-                Log.d("我在不停地定位=", "latitude:" + lat + "longitude" + lon);
-                if (new UserService(MainActivity.this).getState().equals("1")) {
-                    LatLng newLatLng = new LatLng(lat, lon);
-                    if (isFirstLatLng) {
-                        //记录第一次的定位信息
-                        oldLatLng = newLatLng;
-                        isFirstLatLng = false;
-                    }
-                    //位置有变化
-                    if (oldLatLng != newLatLng) {
-                        Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
-                        Log.e("Amap", amapLocation.getLatitude() + "," + amapLocation.getLongitude());
-                        if (getDistance(oldLatLng, newLatLng) > 20) {
-                            if (checkJumpStatus.getLock_status() == 0) {
-                                setUpMap(oldLatLng, newLatLng);
-                                new UserService(MainActivity.this).setLatLon(lat + "," + lon);
-                                oldLatLng = newLatLng;
-                                Message message = new Message();
-                                message.what = 1;
-                                doActionHandler.sendMessage(message);
-                                cameraUpdate = CameraUpdateFactory
-                                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-                                aMap.moveCamera(cameraUpdate);
-                            }
-                        }
+                Log.d("我在不停地定位Mainacvitity=", "latitude:" + lat + "longitude" + lon);
 
-                    } else {
-                        String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
-                        Log.e("AmapErr", errText);
-                        if (isFirstLatLng) {
-                            showShort(errText);
-                        }
-                    }
-                }
             }
 
             if (checkJumpStatus.getBike_status() == 0) {
@@ -240,17 +212,14 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     //通过经纬度计算距离
     public double getDistance(LatLng start, LatLng end) {
-
         double lon1 = (Math.PI / 180) * start.longitude;
         double lon2 = (Math.PI / 180) * end.longitude;
         double lat1 = (Math.PI / 180) * start.latitude;
         double lat2 = (Math.PI / 180) * end.latitude;
         // 地球半径
         double R = 6371;
-
         // 两点间距离 km，如果想要米的话，结果*1000就可以了
         double d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
-
         return d * 1000;
     }
 
@@ -1036,9 +1005,69 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         super.onDestroy();
         new UserService(MainActivity.this).setShowOneMark("0");
         mMapView.onDestroy();
+        Intent stopIntent = new Intent(this, LocationService.class);
+        stopService(stopIntent);
+        unregisterReceiver(receiver);
         deactivate();
 //        mTimer.cancel();
     }
+
+    private static final String BroadcastAction = "com.example.broadcast";
+    /**
+     * 创建 BroadcastReceiver
+     */
+    String str;
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadcastAction.equals(intent.getAction())) {
+                Log.i("FSD", "get the broadcast from Service...");
+                str = intent.getStringExtra("Str");
+                mHandler.sendMessage(mHandler.obtainMessage());
+                lon = Double.parseDouble(str.substring(str.indexOf(",")+1));
+                lat = Double.parseDouble(str.substring(0,str.indexOf(",")));
+                if (new UserService(MainActivity.this).getState().equals("1")) {
+                    LatLng newLatLng = new LatLng(lat, lon);
+                    if (isFirstLatLng) {
+                        //记录第一次的定位信息
+                        oldLatLng = newLatLng;
+                        isFirstLatLng = false;
+                    }
+                    //位置有变化
+                    if (oldLatLng != newLatLng) {
+                        Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
+                        if (getDistance(oldLatLng, newLatLng) > 20) {
+                            if (checkJumpStatus.getLock_status() == 0) {
+                                setUpMap(oldLatLng, newLatLng);
+                                new UserService(MainActivity.this).setLatLon(lat + "," + lon);
+                                oldLatLng = newLatLng;
+                                Message message = new Message();
+                                message.what = 1;
+                                doActionHandler.sendMessage(message);
+                                cameraUpdate = CameraUpdateFactory
+                                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+                                aMap.moveCamera(cameraUpdate);
+                            }
+                        }
+                    }
+                }
+            } else {
+                Log.i("FSD", "the action is not intent.getAction");
+            }
+        }
+    };
+
+    /**
+     * 处理 广播接收到的数据
+     */
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler() {
+        @SuppressLint("HandlerLeak")
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            }
+    };
 
     /**
      * 停止定位
@@ -1054,6 +1083,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     @Override
     protected void onResume() {
+
+
         super.onResume();
         mMapView.onResume();
 //        if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
@@ -1063,8 +1094,15 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //        }
         initvalidateUser();
         initview();
+
 //        UpdateInfo();
         BindPushUtils.bind(getBaseContext());//保存绑定推送
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastAction);
+        registerReceiver(receiver, filter);
+        Intent startIntent = new Intent(this, LocationService.class);
+        startService(startIntent);
+
     }
 
 
@@ -1332,6 +1370,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
             mlocationClient.startLocation();
         }
+        mlocationClient.startLocation();
     }
 
 

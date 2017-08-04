@@ -204,7 +204,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                 if (new UserService(UseBicycleActivity.this).getusebiycle().equals("1")){
                     if (g.getBody().get(position).getColor().equals("red")){
-                        showShort("该车辆已经被长租，请查询其他车辆");
+                        showShort("该车辆已经预约，请查询其他车辆");
                     }else {
                         new UserService(UseBicycleActivity.this).setShowOneMark("1");
                         Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);
@@ -214,7 +214,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                     }
                 }else {
                     if (queryBikeListByDate.getBike_info().get(position).getColor().equals("red")) {
-                        showShort("该车辆已经被长租，请查询其他车辆");
+                        showShort("该车辆已经预约，请查询其他车辆");
                     } else {
                         new UserService(UseBicycleActivity.this).setShowOneMark("1");
                         Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);

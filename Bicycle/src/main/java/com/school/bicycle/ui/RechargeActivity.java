@@ -57,6 +57,8 @@ public class RechargeActivity extends BaseToolBarActivity {
     CheckBox cbZfb;
     @BindView(R.id.tv_okpay)
     TextView tvOkpay;
+    @BindView(R.id.tex_show)
+    TextView texShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +67,14 @@ public class RechargeActivity extends BaseToolBarActivity {
         ButterKnife.bind(this);
         setToolbarText("充值");
         initlongtimeprice();
+        texShow.setText("请选择充值金额");
         initview();
     }
 
     String pro_id;
     String price = "";
     String pay_type;
+
     @OnClick({R.id.month1, R.id.month3, R.id.month6, R.id.month12, R.id.cb_wx, R.id.cb_zfb, R.id.tv_okpay})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -111,17 +115,21 @@ public class RechargeActivity extends BaseToolBarActivity {
                 break;
         }
     }
+
     private void initview() {
         month1.setBackgroundResource(R.drawable.bg_gray);
         month3.setBackgroundResource(R.drawable.bg_gray);
         month6.setBackgroundResource(R.drawable.bg_gray);
         month12.setBackgroundResource(R.drawable.bg_gray);
     }
+
     private void initvheck() {
         cbZfb.setChecked(false);
         cbWx.setChecked(false);
     }
+
     Recharge recharge;
+
     private void initlongtimeprice() {
 
         String url = getResources().getString(R.string.baseurl) + "order/rechPro";
@@ -130,7 +138,7 @@ public class RechargeActivity extends BaseToolBarActivity {
         OkHttpUtils
                 .get()
                 .url(url)
-                .addHeader("cookie",cookie)
+                .addHeader("cookie", cookie)
                 .build()
                 .execute(new StringCallback() {
 
@@ -144,17 +152,19 @@ public class RechargeActivity extends BaseToolBarActivity {
                         Log.d("response", response);
                         recharge = gson.fromJson(response, Recharge.class);
                         if (recharge.getCode() == 1) {
-                            month1.setText(recharge.getRecharge().get(0).getPrice()+"元");
-                            month3.setText(recharge.getRecharge().get(1).getPrice()+"元");
-                            month6.setText(recharge.getRecharge().get(2).getPrice()+"元");
-                            month12.setText(recharge.getRecharge().get(3).getPrice()+"元");
+                            month1.setText(recharge.getRecharge().get(0).getPrice() + "元");
+                            month3.setText(recharge.getRecharge().get(1).getPrice() + "元");
+                            month6.setText(recharge.getRecharge().get(2).getPrice() + "元");
+                            month12.setText(recharge.getRecharge().get(3).getPrice() + "元");
                         } else {
 
                         }
                     }
                 });
     }
+
     String info;
+
     private void initpay() {
         if (price.equals("")) {
             showShort("请选择长租时间");
@@ -166,12 +176,12 @@ public class RechargeActivity extends BaseToolBarActivity {
                     pay_type = "wx";
                 }
                 String url = Apis.Base + Apis.rechargeOrder;
-                Log.d("充值支付", price + " " + pay_type + " " + pro_id + " "  );
+                Log.d("充值支付", price + " " + pay_type + " " + pro_id + " ");
                 String cookie = new UserService(RechargeActivity.this).getCookie();
                 OkHttpUtils
                         .post()
                         .url(url)
-                        .addHeader("cookie",cookie)
+                        .addHeader("cookie", cookie)
                         .addParams("price", price)
                         .addParams("pay_type", pay_type)
                         .addParams("price", price)
@@ -188,12 +198,12 @@ public class RechargeActivity extends BaseToolBarActivity {
                                 Log.d("response", response);
                                 if (pay_type.equals("wx")) {
                                     Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
-                                    if (wxpayinfo.getCode()==1){
-                                        WxPayParams wxPayParams =gson.fromJson(wxpayinfo.getPay_info(),WxPayParams.class);
+                                    if (wxpayinfo.getCode() == 1) {
+                                        WxPayParams wxPayParams = gson.fromJson(wxpayinfo.getPay_info(), WxPayParams.class);
                                         final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
                                         msgApi.registerApp(wxPayParams.appid);
                                         PayReq request = new PayReq();
-                                        request.appId =wxPayParams.appid;
+                                        request.appId = wxPayParams.appid;
                                         request.partnerId = wxPayParams.partnerid;
                                         request.prepayId = wxPayParams.prepayid;
                                         request.packageValue = "Sign=WXPay";
@@ -201,7 +211,7 @@ public class RechargeActivity extends BaseToolBarActivity {
                                         request.timeStamp = wxPayParams.timestamp;
                                         request.sign = wxPayParams.sign;
                                         msgApi.sendReq(request);
-                                    }else {
+                                    } else {
                                         showShort(wxpayinfo.getMsg());
                                     }
 
@@ -222,10 +232,11 @@ public class RechargeActivity extends BaseToolBarActivity {
                                                 mHandler.sendMessage(message);
                                             }
                                         }.start();
-                                    }else {
+                                    } else {
                                         showShort(payInfo.getMsg());
                                     }
-                                }}
+                                }
+                            }
                         });
 
             } else {

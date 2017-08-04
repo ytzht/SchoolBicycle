@@ -11,6 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/tex_show"
         android:text="请选择您的长租时长:" />
 
     <LinearLayout

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="10dp"
+    android:background="@color/huise">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@drawable/bg_calendar">
+        <RelativeLayout
+            android:layout_width="113dp"
+            android:layout_height="90dp"
+            android:id="@+id/relativeLayout6">
+            <ImageView
+                android:layout_width="113dp"
+                android:layout_height="90dp"
+                android:src="@drawable/ico_coupon_blue"
+                android:id="@+id/coupon_color"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lin_jiage"
+                android:orientation="horizontal"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:gravity="right"
+                    android:text="¥"
+                    android:paddingRight="5dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:id="@+id/dikou"
+                    android:textSize="40dp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:textColor="@color/white"
+                android:id="@+id/manyong"
+                android:layout_below="@+id/lin_jiage"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="3dp" />
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-08-01 00:00:00"
+            android:id="@+id/time_coupon"
+            android:paddingLeft="8dp"
+            android:textSize="13dp"
+            android:textColor="@color/blackHint"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/relativeLayout6"
+            android:layout_toEndOf="@+id/relativeLayout6" />
+    </RelativeLayout>
+
+</LinearLayout>

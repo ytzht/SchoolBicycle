@@ -205,7 +205,8 @@
         <activity android:name=".ui.setup_despositActivity" />
         <activity android:name=".ui.RechargeActivity" />
         <activity android:name=".ui.BikeAlarmListActivity" />
-        <activity android:name=".ui.ShareincomeActivity"></activity>
+        <activity android:name=".ui.ShareincomeActivity" />
+        <activity android:name=".ui.Mycoupon_Activity"></activity>
     </application>
 
 </manifest>

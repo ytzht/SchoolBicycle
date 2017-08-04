@@ -48,10 +48,8 @@ public class BikeAlarmListActivity extends AppCompatActivity {
     private void initview() {
         String iscall = new UserService(BikeAlarmListActivity.this).getiscall();
         if (iscall.equals("0")){
-
             callpolice.setImageDrawable(getResources().getDrawable(R.drawable.callclose));
         }else {
-
             callpolice.setImageDrawable(getResources().getDrawable(R.drawable.calloppen));
         }
 
@@ -59,7 +57,8 @@ public class BikeAlarmListActivity extends AppCompatActivity {
         String cookie = new UserService(BikeAlarmListActivity.this).getCookie();
 
         OkHttpUtils.post()
-                .url(url).addHeader("cookie", cookie)
+                .url(url)
+                .addHeader("cookie", cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override

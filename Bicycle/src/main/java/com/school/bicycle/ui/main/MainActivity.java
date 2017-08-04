@@ -28,6 +28,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,6 +62,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
+import com.school.bicycle.ui.Mycoupon_Activity;
 import com.school.bicycle.ui.RechargeActivity;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CheckJumpStatus;
@@ -390,6 +392,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         } else {
 
         }
+//        if (new UserService(MainActivity.this).getCookie().equals("0")){
+//            startActivity(RegisterActivity.class);
+//        }
         if (new UserService(MainActivity.this).getValidateUser().equals("0")) {
             name.setText("未登录");
             score.setText("");
@@ -621,6 +626,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                    startActivity(RegisterActivity.class);
+                }
                 if (v != null) {
                     if (new UserService(MainActivity.this).getValidateUser().equals("1")) {
                         if (v.getDeposit_status() == 0) {
@@ -659,7 +667,12 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         headImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(User_Activity.class);
+                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                    startActivity(RegisterActivity.class);
+                }else {
+                    startActivity(User_Activity.class);
+                }
+
             }
         });
 
@@ -667,6 +680,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                    startActivity(RegisterActivity.class);
+                }
                 L.d("未用车状态下刷新"+zhonglat+"纬度",zhonglon+"经度");
                 LatLng latLng = new LatLng(zhonglon,zhonglat);
                 initgetBikeMapList(latLng);
@@ -682,6 +698,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         dinwgei.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 //重新定位并重新请求当前位置周边车辆信息
                 new UserService(MainActivity.this).setShowOneMark("0");
                 cameraUpdate = CameraUpdateFactory
@@ -694,6 +711,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         fabQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                    startActivity(RegisterActivity.class);
+                }
                 String location = lon + "," + lat;
                 Log.d("location===", location);
                 if (checkJumpStatus != null) {
@@ -706,7 +726,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 }
             }
         });
-
+        //用车点击隐藏
         iv_pull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -749,6 +769,48 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         });
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            // 创建退出对话框
+            android.app.AlertDialog isExit = new android.app.AlertDialog.Builder(this).create();
+            // 设置对话框标题
+            isExit.setTitle("系统提示");
+            // 设置对话框消息
+            isExit.setMessage("确定要退出吗");
+            // 添加选择按钮并注册监听
+            isExit.setButton("确定", listener);
+            isExit.setButton2("取消", listener);
+            // 显示对话框
+            isExit.show();
+
+        }
+
+        return false;
+
+    }
+
+    /**监听对话框里面的button点击事件*/
+    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
+    {
+        public void onClick(DialogInterface dialog, int which)
+        {
+            switch (which)
+            {
+                case android.app.AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
+                    finish();
+                    break;
+                case android.app.AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     //显示停车提示
     private void showTips() {
         View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.msg_lockclose_alert, null, false);
@@ -756,106 +818,106 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         TextView msg_txt = (TextView) view.findViewById(R.id.msg_txt);
         TextView msg_btn_share = (TextView) view.findViewById(R.id.msg_btn_share);
         TextView msg_btn_over = (TextView) view.findViewById(R.id.msg_btn_over);
-        if (checkJumpStatus.getBike_status() == 4) {
-            msg_btn_over.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String url = Apis.Base + Apis.overLongLeaseBike;
-                    OkHttpUtils
-                            .post()
-                            .url(url)
-                            .addHeader("cookie", new UserService(MainActivity.this).getCookie())
-                            .addParams("bike_number", checkJumpStatus.getBike_number())
-                            .build()
-                            .execute(new StringCallback() {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
+        if (checkJumpStatus != null) {
+            if (checkJumpStatus.getBike_status() == 4) {
+                msg_btn_over.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String url = Apis.Base + Apis.overLongLeaseBike;
+                        OkHttpUtils
+                                .post()
+                                .url(url)
+                                .addHeader("cookie", new UserService(MainActivity.this).getCookie())
+                                .addParams("bike_number", checkJumpStatus.getBike_number())
+                                .build()
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onResponse(String response, int id) {
-                                    Log.d("response提示锁状态", response);
+                                    @Override
+                                    public void onResponse(String response, int id) {
+                                        Log.d("response提示锁状态", response);
 //
-                                    Lockstatus lockstatus = gson.fromJson(response, Lockstatus.class);
-                                    if (lockstatus.getCode() == 1) {
-                                        if (lockstatus.getLock_status() == 1) {
-                                            new UserService(MainActivity.this).setState("0");
-                                            initview();
-                                            LatLng latLng = new LatLng(lon, lat);
-                                            initgetBikeMapList(latLng);
-                                            if (dialog.isShowing()) dialog.dismiss();
-                                        } else {
-                                            showLong("请注意车辆安全，锁没有锁上！");
+                                        Lockstatus lockstatus = gson.fromJson(response, Lockstatus.class);
+                                        if (lockstatus.getCode() == 1) {
+                                            if (lockstatus.getLock_status() == 1) {
+                                                new UserService(MainActivity.this).setState("0");
+                                                initview();
+                                                LatLng latLng = new LatLng(lon, lat);
+                                                initgetBikeMapList(latLng);
+                                                if (dialog.isShowing()) dialog.dismiss();
+                                            } else {
+                                                showLong("请注意车辆安全，锁没有锁上！");
+                                            }
                                         }
                                     }
-                                }
-                            });
-                }
-            });
+                                });
+                    }
+                });
 
-            msg_btn_share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String cookie;
-                    cookie = new UserService(MainActivity.this).getCookie();
-                    String url = Apis.Base + Apis.sharedBikeList;
-                    format = new SimpleDateFormat("yyyy-MM-dd");
-                    OkHttpUtils
-                            .post()
-                            .url(url)
-                            .addHeader("cookie", cookie)
+                msg_btn_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String cookie;
+                        cookie = new UserService(MainActivity.this).getCookie();
+                        String url = Apis.Base + Apis.sharedBikeList;
+                        format = new SimpleDateFormat("yyyy-MM-dd");
+                        OkHttpUtils
+                                .post()
+                                .url(url)
+                                .addHeader("cookie", cookie)
 //                .addParams("bike_number", bike_number)
-                            .build()
-                            .execute(new StringCallback() {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                }
-
-                                @Override
-                                public void onResponse(String response, int id) {
-                                    L.d(response);
-                                    SharedBikeList d = gson.fromJson(response, SharedBikeList.class);
-                                    if (d.getCode() == 1) {
-                                        unList.clear();
-                                        canList.clear();
-                                        showAlertshare(d.getBody());
-                                        if (dialog.isShowing()) dialog.dismiss();
-
-                                    } else {
-                                        showShort(d.getMsg());
+                                .build()
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
                                     }
 
-                                }
-                            });
+                                    @Override
+                                    public void onResponse(String response, int id) {
+                                        L.d(response);
+                                        SharedBikeList d = gson.fromJson(response, SharedBikeList.class);
+                                        if (d.getCode() == 1) {
+                                            unList.clear();
+                                            canList.clear();
+                                            showAlertshare(d.getBody());
+                                            if (dialog.isShowing()) dialog.dismiss();
 
-                }
-            });
-        } else {
+                                        } else {
+                                            showShort(d.getMsg());
+                                        }
 
-            msg_txt.setText("车辆归回原处才可结束用车，由用户不当操作造成的财产损失将追究法律责任。");
-            msg_btn_share.setText("确定");
-            msg_btn_over.setText("返回");
-            //确定点击
-            msg_btn_share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    bike_number = checkJumpStatus.getBike_number();
-                    startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
-                            lon + "," + lat, "status", "4");
-                    if (dialog.isShowing()) dialog.dismiss();
-                }
-            });
+                                    }
+                                });
 
-            msg_btn_over.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (dialog.isShowing()) dialog.dismiss();
-                }
-            });
+                    }
+                });
+            } else {
+
+                msg_txt.setText("车辆归回原处才可结束用车，由用户不当操作造成的财产损失将追究法律责任。");
+                msg_btn_share.setText("确定");
+                msg_btn_over.setText("返回");
+                //确定点击
+                msg_btn_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        bike_number = checkJumpStatus.getBike_number();
+                        startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
+                                lon + "," + lat, "status", "4");
+                        if (dialog.isShowing()) dialog.dismiss();
+                    }
+                });
+
+                msg_btn_over.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (dialog.isShowing()) dialog.dismiss();
+                    }
+                });
+            }
         }
-
-//
     }
 
     List<Date> unList = new ArrayList<>();
@@ -1123,11 +1185,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     protected void onResume() {
         super.onResume();
         mMapView.onResume();
-//        if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
-//
-//        } else {
+
         checkJumpStatus();
-//        }
+
         initvalidateUser();
         initview();
 //        UpdateInfo();
@@ -1161,8 +1221,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 showOneCar(bikenum);
             }
         }
-
-
     }
 
     boolean isWifi = false;
@@ -1441,108 +1499,163 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.my_bicycle) {
-            if (v != null) {
-                if (v.getCode() == 1) {
-                    if (v.getDeposit_status() == 1) {
-                        if (v.getVerify_status() == 1) {
-                            startActivity(MyBicycleActivity.class);
-                        } else {
-                            startActivity(RealnameActivity.class);
-                        }
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                startActivity(MyBicycleActivity.class);
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
 
-                    } else {
-                        startActivity(RechargeActivity.class);
+                        } else {
+                            startActivity(RechargeActivity.class);
+                        }
                     }
                 }
             }
+
         } else if (id == R.id.my_wallet) {
-            if (v != null) {
-                if (v.getCode() == 1) {
-                    if (v.getDeposit_status() == 1) {
-                        if (v.getVerify_status() == 1) {
-                            startActivity(Mywallet_activity.class);
-                        } else {
-                            startActivity(RealnameActivity.class);
-                        }
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                startActivity(Mywallet_activity.class);
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
 
-                    } else {
-                        startActivity(RechargeActivity.class);
+                        } else {
+                            startActivity(RechargeActivity.class);
+                        }
                     }
                 }
             }
+
 
         } else if (id == R.id.my_invitation) {
-            if (v != null) {
-                if (v.getCode() == 1) {
-                    if (v.getDeposit_status() == 1) {
-                        if (v.getVerify_status() == 1) {
-                            startActivity(IvfriendsActivity.class);
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                startActivity(IvfriendsActivity.class);
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
                         } else {
-                            startActivity(RealnameActivity.class);
+                            startActivity(RechargeActivity.class);
                         }
-                    } else {
-                        startActivity(RechargeActivity.class);
-                    }
-                }
-            }
-        } else if (id == R.id.my_fault) {
-            if (v != null) {
-                if (v.getCode() == 1) {
-                    if (v.getDeposit_status() == 1) {
-                        if (v.getVerify_status() == 1) {
-                            startActivity(FaultActivity.class);
-                        } else {
-                            startActivity(RealnameActivity.class);
-                        }
-                    } else {
-                        startActivity(RechargeActivity.class);
                     }
                 }
             }
 
-        } else if (id == R.id.my_tel) {
-            if (v != null) {
-                if (v.getCode() == 1) {
-                    if (v.getDeposit_status() == 1) {
-                        if (v.getVerify_status() == 1) {
-                            call("0535-2105657");
+        } else if (id == R.id.my_fault) {
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                startActivity(FaultActivity.class);
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
                         } else {
-                            startActivity(RealnameActivity.class);
+                            startActivity(RechargeActivity.class);
                         }
-                    } else {
-                        startActivity(RechargeActivity.class);
                     }
                 }
             }
-        } else if (id == R.id.my_news) {
-            if (v != null) {
-                if (v.getCode() == 1) {
-                    if (v.getDeposit_status() == 1) {
-                        if (v.getVerify_status() == 1) {
-                            startActivity(InformationActivity.class);
+
+
+        } else if (id == R.id.my_tel) {
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                call("0535-2105657");
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
                         } else {
-                            startActivity(RealnameActivity.class);
+                            startActivity(RechargeActivity.class);
                         }
-                    } else {
-                        startActivity(RechargeActivity.class);
                     }
                 }
+            }
+
+        } else if (id == R.id.my_news) {
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                startActivity(InformationActivity.class);
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
+                        } else {
+                            startActivity(RechargeActivity.class);
+                        }
+                    }
+                }
+
             }
 
         } else if (id == R.id.my_set) {
-            if (v != null) {
-                if (v.getCode() == 1) {
-                    if (v.getDeposit_status() == 1) {
-                        if (v.getVerify_status() == 1) {
-                            startActivity(Setup_Activity.class);
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                startActivity(Setup_Activity.class);
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
                         } else {
-                            startActivity(RealnameActivity.class);
+                            startActivity(RechargeActivity.class);
                         }
-                    } else {
-                        startActivity(RechargeActivity.class);
                     }
                 }
             }
+
+
+        }else if (id == R.id.my_kaquan) {
+            if (new UserService(MainActivity.this).getCookie().equals("0")){
+                startActivity(RegisterActivity.class);
+            }else {
+                if (v != null) {
+                    if (v.getCode() == 1) {
+                        if (v.getDeposit_status() == 1) {
+                            if (v.getVerify_status() == 1) {
+                                startActivity(Mycoupon_Activity.class);
+                            } else {
+                                startActivity(RealnameActivity.class);
+                            }
+                        } else {
+                            startActivity(RechargeActivity.class);
+                        }
+                    }
+                }
+            }
+
 
         }
 
@@ -1632,7 +1745,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                 marker.showInfoWindow();
                             }
                         } else {
-                            showShort("该车已被长租 请选择其他车辆！");
+                            showShort("该车辆已经预约，请点击立即用车查看其它车辆！");
                         }
 
 

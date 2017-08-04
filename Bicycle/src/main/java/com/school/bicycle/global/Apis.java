@@ -32,6 +32,10 @@ public interface Apis {
 
     String bikeAlarmList = "order/bikeAlarmList";
 
+    String cashCoupon = "order/cashCoupon";
+
+    String myCoupon = "order/myCoupon";
+
     String submitLeaseOrder = "order/submitLeaseOrder";
 
     String getMyRoute = "order/getMyRoute";

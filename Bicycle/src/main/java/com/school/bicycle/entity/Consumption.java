@@ -56,7 +56,7 @@ public class Consumption {
         private String order_no;
         private int user_id;
         private String order_status;
-        private int total_fee;
+        private double total_fee;
 
         public int getCid() {
             return cid;
@@ -90,11 +90,11 @@ public class Consumption {
             this.order_status = order_status;
         }
 
-        public int getTotal_fee() {
+        public double getTotal_fee() {
             return total_fee;
         }
 
-        public void setTotal_fee(int total_fee) {
+        public void setTotal_fee(double total_fee) {
             this.total_fee = total_fee;
         }
     }

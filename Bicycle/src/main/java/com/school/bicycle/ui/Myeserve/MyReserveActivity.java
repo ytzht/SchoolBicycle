@@ -37,7 +37,7 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_reserve);
         ButterKnife.bind(this);
-        setToolbarText("我的预约");
+        setToolbarText("我的预定");
         initview();
     }
     Myreserve_adapter myreserve_adapter;

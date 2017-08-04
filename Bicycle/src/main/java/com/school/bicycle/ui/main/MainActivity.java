@@ -1662,7 +1662,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

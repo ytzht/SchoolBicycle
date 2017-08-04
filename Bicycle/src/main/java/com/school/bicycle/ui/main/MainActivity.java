@@ -684,7 +684,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                     startActivity(RegisterActivity.class);
                 }
                 L.d("未用车状态下刷新"+zhonglat+"纬度",zhonglon+"经度");
-                LatLng latLng = new LatLng(zhonglon,zhonglat);
+                LatLng latLng = new LatLng(zhonglat,zhonglon);
                 initgetBikeMapList(latLng);
 //                //重新定位并重新请求当前位置周边车辆信息
 //                new UserService(MainActivity.this).setShowOneMark("0");
@@ -1137,7 +1137,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
                         if (getDistance(oldLatLng, newLatLng) > 20 && getDistance(oldLatLng, newLatLng) < 100) {
                             if (checkJumpStatus.getLock_status() == 0) {
-//                                setUpMap(oldLatLng, newLatLng);
+                                setUpMap(oldLatLng, newLatLng);
                                 new UserService(MainActivity.this).setLatLon(lat + "," + lon);
                                 oldLatLng = newLatLng;
                                 Message message = new Message();

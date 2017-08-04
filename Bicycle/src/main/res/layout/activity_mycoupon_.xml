@@ -46,12 +46,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/lin_ed"
-        android:layout_below="@+id/myka_toolbar"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/myka_toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:paddingLeft="10dp"
-                android:focusable="true"
+                android:focusable="false"
                 android:focusableInTouchMode="true"
                 android:id="@+id/mycoupon_ed"
                 android:background="@null" />

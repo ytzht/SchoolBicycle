@@ -310,6 +310,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
     private boolean timeIsRun = false;
 
     private void downTime(long during_time) {
+        countDownView.setVisibility(View.VISIBLE);
+        countdown1.setVisibility(View.GONE);
         countDownView.setCountDownTimes(during_time);//10min
         countDownView.setOnCountDownFinishListener(new TimeCountDownTextView.onCountDownFinishListener() {
             @Override

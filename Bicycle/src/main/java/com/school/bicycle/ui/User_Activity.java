@@ -12,6 +12,8 @@ import com.school.bicycle.entity.User;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.eposit.DepositActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -38,6 +40,10 @@ public class User_Activity extends BaseToolBarActivity {
     TextView depositStatusUser;
 
     User user;
+    @BindView(R.id.realname_go)
+    TextView realnameGo;
+    @BindView(R.id.yajin_go)
+    TextView yajinGo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,27 +75,31 @@ public class User_Activity extends BaseToolBarActivity {
                         if (user.getCode() == 1) {
                             userName.setText(user.getName());
                             userPhone.setText(user.getPhone());
-                            if (user.getDeposit_status()==1){
+                            if (user.getDeposit_status() == 1) {
                                 depositStatusUser.setText("押金充值成功");
-                            }else {
+                            } else {
                                 depositStatusUser.setText("未付押金");
                             }
-                            if (user.getVerify_status()==1){
+                            if (user.getVerify_status() == 1) {
                                 verifyStatusUser.setText("已实名认证");
-                            }else {
+                            } else {
                                 verifyStatusUser.setText("未实名认证");
                             }
 
                         }
                     }
                 });
+    }
 
-
-        //退出登录
-        Signout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+    @OnClick({R.id.user_name, R.id.user_changephone, R.id.Signout, R.id.verify_status_user, R.id.deposit_status_user, R.id.realname_go, R.id.yajin_go})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.user_name:
+                break;
+            case R.id.user_changephone:
+                //更换手机号
+                break;
+            case R.id.Signout:
                 String url = Apis.Base + Apis.userLogout;
                 OkHttpUtils.get()
                         .url(url)
@@ -113,32 +123,22 @@ public class User_Activity extends BaseToolBarActivity {
                                 }
                             }
                         });
-            }
-        });
-        userChangephone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-    }
-
-    @OnClick({R.id.user_name, R.id.user_changephone, R.id.Signout,R.id.verify_status_user, R.id.deposit_status_user})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.user_name:
-                break;
-            case R.id.user_changephone:
-                break;
-            case R.id.Signout:
                 break;
             case R.id.verify_status_user:
                 break;
             case R.id.deposit_status_user:
                 break;
+            case R.id.realname_go:
+                if (user.getVerify_status() != 1) {
+                    startActivity(RealnameActivity.class);
+                }
+                break;
+            case R.id.yajin_go:
+                if (user.getDeposit_status() != 1) {
+                    startActivity(DepositActivity.class);
+                }
+                break;
         }
     }
-
 
 }

@@ -389,20 +389,12 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             state_0.setVisibility(View.VISIBLE);
             useing_biycle_lay.setVisibility(View.GONE);
             toolbar.setTitle("首页");
-        } else if (new UserService(MainActivity.this).getState().equals("2")) {
-
-        } else {
-
         }
-//        if (new UserService(MainActivity.this).getCookie().equals("0")){
-//            startActivity(RegisterActivity.class);
-//        }
-        if (new UserService(MainActivity.this).getValidateUser().equals("0")) {
+        if (new UserService(MainActivity.this).getCookie().equals("0")) {
             name.setText("未登录");
             score.setText("");
-            startActivity(RegisterActivity.class);
+//            startActivity(RegisterActivity.class);
         }
-
     }
 
 
@@ -446,7 +438,6 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                 @Override
                                 public void onResponse(String response, int id) {
                                     Log.d("实时上传", response);
-
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
 //                                        showShort("上传成功");
@@ -628,11 +619,10 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         btnUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                if (new UserService(MainActivity.this).getCookie().equals("0")) {
                     startActivity(RegisterActivity.class);
-                }
-                if (v != null) {
-                    if (new UserService(MainActivity.this).getValidateUser().equals("1")) {
+                } else {
+                    if (v != null) {
                         if (v.getDeposit_status() == 0) {
                             startActivity(DepositActivity.class);
                         } else {
@@ -644,11 +634,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                 startActivity(UseBicycleActivity.class, "lat", lat + "", "lon", lon + "");
                             }
                         }
-                    } else {
-                        startActivity(RegisterActivity.class);
                     }
-                } else {
-                    startActivity(RegisterActivity.class);
                 }
             }
         });
@@ -669,9 +655,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         headImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                if (new UserService(MainActivity.this).getCookie().equals("0")) {
                     startActivity(RegisterActivity.class);
-                }else {
+                } else {
                     startActivity(User_Activity.class);
                 }
 
@@ -682,11 +668,11 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                if (new UserService(MainActivity.this).getCookie().equals("0")) {
                     startActivity(RegisterActivity.class);
                 }
-                L.d("未用车状态下刷新"+zhonglat+"纬度",zhonglon+"经度");
-                LatLng latLng = new LatLng(zhonglat,zhonglon);
+                L.d("未用车状态下刷新" + zhonglat + "纬度", zhonglon + "经度");
+                LatLng latLng = new LatLng(zhonglat, zhonglon);
                 initgetBikeMapList(latLng);
 //                //重新定位并重新请求当前位置周边车辆信息
 //                new UserService(MainActivity.this).setShowOneMark("0");
@@ -713,18 +699,19 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         fabQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (new UserService(MainActivity.this).getCookie().equals("0")){
+                if (new UserService(MainActivity.this).getCookie().equals("0")) {
                     startActivity(RegisterActivity.class);
-                }
-                String location = lon + "," + lat;
-                Log.d("location===", location);
-                if (checkJumpStatus != null) {
-                    if (checkJumpStatus.getBike_status() == 0) {
-                        startActivity(ZxingActivity.class, "location", location, "status", "0");
-                    } else {
-                        startActivity(ZxingActivity.class, "location", location, "status", "1");
+                } else {
+
+                    String location = lon + "," + lat;
+                    Log.d("location===", location);
+                    if (checkJumpStatus != null) {
+                        if (checkJumpStatus.getBike_status() == 0) {
+                            startActivity(ZxingActivity.class, "location", location, "status", "0");
+                        } else {
+                            startActivity(ZxingActivity.class, "location", location, "status", "1");
+                        }
                     }
-//                startActivity(ZxingActivity.class, "location", location);
                 }
             }
         });
@@ -745,12 +732,13 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             public void onClick(View v) {
 
                 UserService s = new UserService(MainActivity.this);
-                if (s.getAlert().equals("0")) {
-                    showTips();     //出弹窗吧
-                } else {
-                    //已经勾过不再提示，直接跳
+                if (checkJumpStatus != null) {
+                    if (s.getAlert().equals("0")) {
+                        showTips();     //出弹窗吧
+                    } else {
+                        //已经勾过不再提示，直接跳
 //                    mTimer.cancel();
-                    if(checkJumpStatus!=null){
+
                         if (checkJumpStatus.getBike_status() == 1) {
                             //日租
                             bike_number = checkJumpStatus.getBike_number();
@@ -773,10 +761,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK )
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             // 创建退出对话框
             android.app.AlertDialog isExit = new android.app.AlertDialog.Builder(this).create();
             // 设置对话框标题
@@ -795,13 +781,12 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     }
 
-    /**监听对话框里面的button点击事件*/
-    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
-    {
-        public void onClick(DialogInterface dialog, int which)
-        {
-            switch (which)
-            {
+    /**
+     * 监听对话框里面的button点击事件
+     */
+    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
                 case android.app.AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
                     finish();
                     break;
@@ -1134,7 +1119,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                     //位置有变化
                     if (oldLatLng != newLatLng && oldLatLng != null && newLatLng != null) {
                         cameraUpdate = CameraUpdateFactory
-                                .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
+                                .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 13, 0, 0));
                         aMap.moveCamera(cameraUpdate);
                         Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
                         if (getDistance(oldLatLng, newLatLng) > 20 && getDistance(oldLatLng, newLatLng) < 100) {
@@ -1501,9 +1486,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.my_bicycle) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1521,9 +1506,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             }
 
         } else if (id == R.id.my_wallet) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1542,9 +1527,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
 
         } else if (id == R.id.my_invitation) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1561,9 +1546,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             }
 
         } else if (id == R.id.my_fault) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1581,9 +1566,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
 
         } else if (id == R.id.my_tel) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1600,9 +1585,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             }
 
         } else if (id == R.id.my_news) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1620,9 +1605,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             }
 
         } else if (id == R.id.my_set) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1639,10 +1624,10 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             }
 
 
-        }else if (id == R.id.my_kaquan) {
-            if (new UserService(MainActivity.this).getCookie().equals("0")){
+        } else if (id == R.id.my_kaquan) {
+            if (new UserService(MainActivity.this).getCookie().equals("0")) {
                 startActivity(RegisterActivity.class);
-            }else {
+            } else {
                 if (v != null) {
                     if (v.getCode() == 1) {
                         if (v.getDeposit_status() == 1) {
@@ -1856,15 +1841,23 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 tv_longrent_info.setText("长租：" + data.getLease_info().get月租() + "元/月 " + data.getLease_info().get季租()
                         + "元/3个月 \n" + data.getLease_info().get半年租() + "元/半年 " + data.getLease_info().get年租() + "元/一年");
             }
-            if (data.getColor().equals("blue")) {
-                tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
-                tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
-                tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.org));
-            } else {
-                tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+            final String num = data.getNumber().substring(1, 2);
+
+            if (num.equals("12")) {
                 tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.org));
                 tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+                tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
             }
+            if (data.getColor().equals("blue")) {
+                tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
+                tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+                tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.blackSec));
+            } else {
+                tv_tirentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+                tv_darentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+                tv_lorentbt_info.setTextColor(this.getResources().getColor(R.color.org));
+            }
+
 
             //长租点击事件
             tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
@@ -1877,7 +1870,12 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         if (checkJumpStatus.getBike_status() == 4) {
                             showShort("您已经是长租用户");
                         } else {
-                            startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
+                            if (num.equals("12")) {
+                                showShort("双人车不可长租");
+                            } else {
+                                startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
+                            }
+
                         }
 
                     }
@@ -1958,8 +1956,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //                infoWindow = LayoutInflater.from(this).inflate(
 //                        R.layout.custom_bicycle_window, null);
 //            } else {
-                infoWindow = LayoutInflater.from(this).inflate(
-                        R.layout.custom_info_window, null);
+            infoWindow = LayoutInflater.from(this).inflate(
+                    R.layout.custom_info_window, null);
 //            }
         }
         render(marker, infoWindow);
@@ -1975,27 +1973,29 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         currentMarker = marker;
         Log.d("mark dian", "true");
         final GetBikeMapList.BodyBean data = (GetBikeMapList.BodyBean) marker.getObject();
-        if (v != null) {
-            if (v.getCode() == 1) {
-                if (v.getDeposit_status() == 1) {
-                    if (v.getVerify_status() == 1) {
-                        if (data.getColor().equals("blue")) {
-                            getInfoContents(marker);
-                            marker.showInfoWindow();
+        if (!new UserService(MainActivity.this).getCookie().equals("0")) {
+            if (v != null) {
+                if (v.getCode() == 1) {
+                    if (v.getDeposit_status() == 1) {
+                        if (v.getVerify_status() == 1) {
+                            if (data.getColor().equals("blue")) {
+                                getInfoContents(marker);
+                                marker.showInfoWindow();
+                            } else {
+                                getInfoContents(marker);
+                                marker.showInfoWindow();
+                            }
                         } else {
-                            getInfoContents(marker);
-                            marker.showInfoWindow();
+                            startActivity(RealnameActivity.class);
                         }
                     } else {
-                        startActivity(RealnameActivity.class);
+                        startActivity(DepositActivity.class);
                     }
-                }else {
-                    startActivity(DepositActivity.class);
                 }
             }
+        } else {
+            startActivity(RegisterActivity.class);
         }
-
-
         return true;
     }
 
@@ -2159,7 +2159,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                         Log.d(TAG, "onDateSelected: " + s);
                         tv_dates.setText(s);
 
-                    }else {
+                    } else {
                         tv_dates.setText("");
                     }
                 }
@@ -2188,7 +2188,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if (currentMarker.isInfoWindowShown()) {
+        if (currentMarker!=null) {
             currentMarker.hideInfoWindow();//这个是隐藏infowindow窗口的方法
         }
     }

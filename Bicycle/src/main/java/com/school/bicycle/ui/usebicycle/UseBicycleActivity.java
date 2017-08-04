@@ -126,18 +126,34 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                         usebiycleBynumBiyclenum.setText("车牌号：" + queryBikeListByBikeNumber.getBike_info().getNumber());
                                         usebiycleBynumBiycleaddress.setText(queryBikeListByBikeNumber.getBike_info().getAddress());
 
+                                        String num = queryBikeListByBikeNumber.getBike_info().getNumber().substring(1, 2);
+
+
+
                                         if (queryBikeListByBikeNumber.getBike_info().getColor().equals("yellow")) {
                                             ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_yellow);
                                             usebiycleBynumBiycletime.setText("共享时间：" + queryBikeListByBikeNumber.getBike_info().getValid_time());
                                         } else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("green")) {
-                                            ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_green);
+                                            if (num.equals("12")){
+                                                ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_doublebicycle_green);
+                                            }else {
+                                                ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_green);
+                                            }
                                             usebiycleBynumBiycletime.setText("随时可用");
                                         }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("red")) {
-                                            ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_red);
+                                            if (num.equals("12")){
+                                                ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_doublebicycle_red);
+                                            }else {
+                                                ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_red);
+                                            }
                                             usebiycleBynumBiycletime.setText("该车辆已经预约，请查询其他车辆");
                                         }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("blue")) {
-                                            ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_blue);
-                                            usebiycleBynumBiycletime.setText("这是您的长租车辆，随时扫码使用");
+                                            if (num.equals("12")){
+                                                ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_doublebicycle_blue);
+                                            }else {
+                                                ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_blue);
+                                            }
+                                            usebiycleBynumBiycletime.setText("这是您的预定车辆，随时扫码使用");
                                         }
                                     }
                                     usebiycleBynum.setOnClickListener(new View.OnClickListener() {

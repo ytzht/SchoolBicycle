@@ -79,7 +79,7 @@ public class Getlistbiycle_adapter extends BaseAdapter {
                 viewHolde.tvSharingtimeAda.setText("已被长租");
             } else if (data.get(i).getColor().equals("blue")) {
                 viewHolde.ivBicycleAda.setImageResource(R.drawable.ico_bicycle_blue);
-                viewHolde.tvSharingtimeAda.setText("这是您的长租车辆，随时扫码使用");
+                viewHolde.tvSharingtimeAda.setText("这是您的预定车辆，随时扫码使用");
             }
         }
 

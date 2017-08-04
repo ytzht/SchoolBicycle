@@ -13,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
 
 
@@ -61,6 +64,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="实名认证"
+                android:id="@+id/realname_go"
                 android:gravity="center_vertical"
                 android:layout_weight="1"/>
 
@@ -84,6 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="押金提交"
+                android:id="@+id/yajin_go"
                 android:gravity="center_vertical"
                 android:layout_weight="1"/>
 

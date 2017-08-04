@@ -60,7 +60,7 @@ public class Mywallet_activity extends BaseToolBarActivity {
         setContentView(R.layout.my_wallet);
         setToolbarText("我的钱包");
         ButterKnife.bind(this);
-        initview();
+
     }
 
     private void initview() {
@@ -95,6 +95,7 @@ public class Mywallet_activity extends BaseToolBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        initview();
         String tixian = new UserService(Mywallet_activity.this).gettixian();
         if(tixian.equals("1")){
             new UserService(Mywallet_activity.this).settixian("0");

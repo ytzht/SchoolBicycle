@@ -17,6 +17,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.main.MainActivity;
+import com.school.bicycle.ui.mybicycle.MyBicycleActivity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -41,6 +42,7 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
         initview();
     }
     Myreserve_adapter myreserve_adapter;
+
     private void initview() {
         String url = Apis.Base + Apis.getMyAppoint;
         String cookie = new UserService(MyReserveActivity.this).getCookie();
@@ -89,9 +91,11 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String url = Apis.Base + Apis.cancelMyAppoint;
+                String cookie = new UserService(MyReserveActivity.this).getCookie();
                 OkHttpUtils
                         .post()
                         .url(url)
+                        .addHeader("cookie", cookie)
                         .addParams("aid", String.valueOf(myAppoint.getMy_appoint().get((Integer) view.getTag()).getAid()))
                         .build()
                         .execute(new StringCallback() {

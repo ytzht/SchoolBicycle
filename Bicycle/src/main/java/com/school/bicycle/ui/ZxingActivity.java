@@ -2,6 +2,8 @@ package com.school.bicycle.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,11 @@ public class ZxingActivity extends BaseToolBarActivity {
     private CaptureFragment captureFragment;
 
 
+    private CameraManager manager;
+    private Camera camera = null;
+    private Camera.Parameters parameters = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,23 +52,6 @@ public class ZxingActivity extends BaseToolBarActivity {
     }
 
     public static boolean isOpen = false;
-
-//    private void initView() {
-//        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linear2);
-//        linearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!isOpen) {
-//                    CodeUtils.isLightEnable(true);
-//                    isOpen = true;
-//                } else {
-//                    CodeUtils.isLightEnable(false);
-//                    isOpen = false;
-//                }
-//
-//            }
-//        });
-//    }
 
 
     /**
@@ -104,6 +94,41 @@ public class ZxingActivity extends BaseToolBarActivity {
         }
     };
 
+
+
+    /**
+     * 打开闪光灯
+     *
+     * @return
+     */
+    private void open() {
+        try {
+            camera = Camera.open();
+            camera.startPreview();
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(parameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 关闭闪光灯
+     *
+     * @return
+     */
+    private void close() {
+        try {
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(parameters);
+            camera.release();
+            camera = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @OnClick({R.id.inbiycle_num, R.id.linear2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -115,10 +140,10 @@ public class ZxingActivity extends BaseToolBarActivity {
                 break;
             case R.id.linear2:
                 if (!isOpen) {
-
+                    open();
                     isOpen = true;
                 } else {
-                    CodeUtils.isLightEnable(false);
+                    close();
                     isOpen = false;
                 }
                 break;

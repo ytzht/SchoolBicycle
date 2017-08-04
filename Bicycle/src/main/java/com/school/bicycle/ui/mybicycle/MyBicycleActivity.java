@@ -77,7 +77,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
         ButterKnife.bind(this);
         setToolbarText("我的车辆");
         cookie = new UserService(MyBicycleActivity.this).getCookie();
-        initview();
+
 
     }
 
@@ -111,6 +111,12 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                     }
                 });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initview();
     }
 
     private AlertDialog dialog;

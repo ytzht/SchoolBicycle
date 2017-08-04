@@ -33,7 +33,7 @@ import java.util.TimerTask;
 public class LocationService extends Service implements AMapLocationListener {
 
 
-    //声明mLocationOption对象，定位参数
+    //声明mLocationOption对象， 定位参数
     public AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     //声明AMapLocationClient类对象
@@ -67,7 +67,7 @@ public class LocationService extends Service implements AMapLocationListener {
 //        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
-        mLocationOption.setInterval(1000);
+        mLocationOption.setInterval(3000);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //启动定位
@@ -129,7 +129,7 @@ public class LocationService extends Service implements AMapLocationListener {
                                 handler.sendMessage(message);
                                 mLocationClient.startLocation();
                             }
-                            Thread.sleep(10000);//5秒后再次执行
+                            Thread.sleep(5000);//5秒后再次执行
                         } catch (InterruptedException e) {
                             // TODO Auto-generated catch block
                             return;

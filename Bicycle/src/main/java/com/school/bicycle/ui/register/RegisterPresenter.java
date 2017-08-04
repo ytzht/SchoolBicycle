@@ -29,6 +29,6 @@ public class RegisterPresenter implements IRegisterPresenter {
 
     @Override
     public void getCode(String phone) {
-        iRegisterView.sendCode("已发送短信验证码");
+//        iRegisterView.sendCode("已发送短信验证码");
     }
 }

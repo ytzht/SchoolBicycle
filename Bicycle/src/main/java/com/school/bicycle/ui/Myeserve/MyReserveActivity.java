@@ -40,7 +40,7 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
         setToolbarText("我的预约");
         initview();
     }
-
+    Myreserve_adapter myreserve_adapter;
     private void initview() {
         String url = Apis.Base + Apis.getMyAppoint;
         String cookie = new UserService(MyReserveActivity.this).getCookie();
@@ -59,10 +59,13 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
                         Log.d("response我的预约", response);
                         myAppoint = gson.fromJson(response, MyAppoint.class);
                         if (myAppoint.getCode() == 1) {
-                            Myreserve_adapter myreserve_adapter = new Myreserve_adapter(MyReserveActivity.this, myAppoint.getMy_appoint(), MyReserveActivity.this);
+                            myreserve_adapter = new Myreserve_adapter(MyReserveActivity.this, myAppoint.getMy_appoint(), MyReserveActivity.this);
+                            myreserveList.setVisibility(View.VISIBLE);
                             myreserveList.setAdapter(myreserve_adapter);
                         } else {
+                            myreserveList.setVisibility(View.GONE);
                             showShort(myAppoint.getMsg());
+
                         }
                     }
                 });
@@ -103,7 +106,10 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
                                 if (baseResult.getCode()==1){
                                     showShort(baseResult.getMsg());
                                     initview();
+                                    myreserve_adapter.notifyDataSetChanged();
                                     myreserveList.refreshDrawableState();
+                                    //刷新listview
+
                                 }else {
                                     showShort("取消失败");
                                 }

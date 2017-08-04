@@ -13,6 +13,7 @@ import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -139,6 +140,10 @@ public class ResultActivity extends BaseToolBarActivity {
                     finish();
                 }
             });
+        }else if (type.equals("timestop")){
+            teResResult.setText("还 车 成 功");
+            btResNext.setText("去结算");
+           startActivity(OverPayActivity.class);
         }else {
             // TODO: 2017/7/24 用于设置各个界面跳转到当前界面 该界面的显示
         }

@@ -3,6 +3,7 @@ package com.school.bicycle.ui;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -47,12 +48,14 @@ public class BikeAlarmListActivity extends AppCompatActivity {
     private void initview() {
         String iscall = new UserService(BikeAlarmListActivity.this).getiscall();
         if (iscall.equals("0")){
+
             callpolice.setImageDrawable(getResources().getDrawable(R.drawable.callclose));
         }else {
+
             callpolice.setImageDrawable(getResources().getDrawable(R.drawable.calloppen));
         }
 
-        String url = Apis.Base + Apis.getMyRoute;
+        String url = Apis.Base + Apis.bikeAlarmList;
         String cookie = new UserService(BikeAlarmListActivity.this).getCookie();
 
         OkHttpUtils.post()
@@ -66,9 +69,9 @@ public class BikeAlarmListActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-
+                        Log.d("报警啊！",response);
                         BikeAlarmList b  = new Gson().fromJson(response,BikeAlarmList.class);
-                        if (b.getAlarm_list().size()==0){
+                        if (b.getCode()==0){
                             Toast.makeText(getBaseContext(),"暂无车辆报警信息",Toast.LENGTH_SHORT).show();
                         }
 
@@ -80,15 +83,19 @@ public class BikeAlarmListActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_call:
-                String iscall = new UserService(BikeAlarmListActivity.this).getiscall();
-                if (iscall.equals("0")){
-                    callpolice.setImageDrawable(getResources().getDrawable(R.drawable.calloppen));
-                }else {
-                    callpolice.setImageDrawable(getResources().getDrawable(R.drawable.callclose));
-                }
+                finish();
                 break;
             case R.id.callpolice:
-                finish();
+                String iscall = new UserService(BikeAlarmListActivity.this).getiscall();
+                if (iscall.equals("0")){
+                    new UserService(BikeAlarmListActivity.this).setiscall("1");
+                    callpolice.setImageResource(R.drawable.calloppen);
+//                    callpolice.setImageDrawable(getResources().getDrawable(R.drawable.calloppen));
+                }else {
+                    new UserService(BikeAlarmListActivity.this).setiscall("0");
+                    callpolice.setImageResource(R.drawable.callclose);
+//                    callpolice.setImageDrawable(getResources().getDrawable(R.drawable.callclose));
+                }
                 break;
         }
     }

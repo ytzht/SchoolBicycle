@@ -1,6 +1,8 @@
 package com.school.bicycle.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,12 +14,12 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.ui.lockopen.LockOpenActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
-
+import android.hardware.Camera;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.school.bicycle.ui.ZxingActivity.isOpen;
+
 
 public class openbynum_Activity extends BaseToolBarActivity {
 
@@ -29,6 +31,10 @@ public class openbynum_Activity extends BaseToolBarActivity {
     LinearLayout linear2Openbynum;
     @BindView(R.id.tv_bynum_now)
     TextView tvBynumNow;
+    private CameraManager manager;
+    private Camera camera = null;
+    private Camera.Parameters parameters = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +43,46 @@ public class openbynum_Activity extends BaseToolBarActivity {
         ButterKnife.bind(this);
         setToolbarText("号码开锁");
         String location = getIntent().getStringExtra("location");
+        manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+    }
+
+    /**
+     * 打开闪光灯
+     *
+     * @return
+     */
+    private void open() {
+        try {
+            camera = Camera.open();
+            camera.startPreview();
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(parameters);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 关闭闪光灯
+     *
+     * @return
+     */
+    private void close() {
+        try {
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(parameters);
+            camera.release();
+            camera = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
 
+
+    public static boolean isOpen = false;
     @OnClick({R.id.linear1_openbynum, R.id.linear2_openbynum, R.id.tv_bynum_now})
     public void onViewClicked(View view) {
         String location = getIntent().getStringExtra("location");
@@ -48,10 +90,10 @@ public class openbynum_Activity extends BaseToolBarActivity {
         switch (view.getId()) {
             case R.id.linear1_openbynum:
                 if (!isOpen) {
-                    CodeUtils.isLightEnable(true);
+                   open();
                     isOpen = true;
                 } else {
-                    CodeUtils.isLightEnable(false);
+                  close();
                     isOpen = false;
                 }
                 break;
@@ -71,7 +113,6 @@ public class openbynum_Activity extends BaseToolBarActivity {
                         startActivity(LockOpenActivity.class, "lock_code", num, "location", location);
                         finish();
                     }
-
                 }
 
                 break;

@@ -12,7 +12,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="20dp"
             android:id="@+id/back_call"
             android:src="@drawable/btn_arrow"/>
 
@@ -30,6 +30,7 @@
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical|right"
+            android:paddingRight="10dp"
             />
     </android.support.v7.widget.Toolbar>
 

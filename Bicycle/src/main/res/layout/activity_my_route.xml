@@ -18,6 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="暂无行程"
+        android:gravity="center"
+        android:textColor="@color/all_textc"
+        android:textSize="18dp"
         android:id="@+id/myroute_te"
         android:visibility="gone"/>
 

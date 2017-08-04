@@ -107,6 +107,8 @@ public class OverPayActivity extends BaseToolBarActivity {
                             tvYe.setText(findNotPayRoute.getBalance());
                             price=findNotPayRoute.getTotal_fee();
                             bike_number=findNotPayRoute.getBike_number();
+                        }else {
+                           showShort(findNotPayRoute.getMsg());
                         }
                     }
                 });

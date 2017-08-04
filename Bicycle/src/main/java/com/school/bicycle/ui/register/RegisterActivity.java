@@ -1,10 +1,13 @@
 package com.school.bicycle.ui.register;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,6 +18,7 @@ import com.school.bicycle.R;
 import com.school.bicycle.app.MyApplication;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Login;
+import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
@@ -35,7 +39,7 @@ import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.Response;
 
-public class RegisterActivity extends BaseToolBarActivity implements IRegisterView {
+public class RegisterActivity extends BaseActivity implements IRegisterView {
 
     @BindView(R.id.et_phone)
     EditText etPhone;
@@ -57,17 +61,54 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        setToolbarText("注册");
-
-
         iRegisterPresenter = new RegisterPresenter(getBaseContext(), this);
         initClick();
-
         initHandler();
-
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            // 创建退出对话框
+            AlertDialog isExit = new AlertDialog.Builder(this).create();
+            // 设置对话框标题
+            isExit.setTitle("系统提示");
+            // 设置对话框消息
+            isExit.setMessage("确定要退出吗");
+            // 添加选择按钮并注册监听
+            isExit.setButton("确定", listener);
+            isExit.setButton2("取消", listener);
+            // 显示对话框
+            isExit.show();
+
+        }
+
+        return false;
+
+    }
+
+    /**监听对话框里面的button点击事件*/
+    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
+    {
+        public void onClick(DialogInterface dialog, int which)
+        {
+            switch (which)
+            {
+                case AlertDialog.BUTTON_POSITIVE:// "确认"按钮退出程序
+                    new UserService(RegisterActivity.this).setover("1");
+                    finish();
+                    break;
+                case AlertDialog.BUTTON_NEGATIVE:// "取消"第二个按钮取消对话框
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     private void initHandler() {
         handler = new Handler();
@@ -200,7 +241,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
 
     @Override
     public void isPhone(boolean b) {
-        if (!b) {
+        if (b) {
             showShort("请输入正确的手机号码");
         } else {
             iRegisterPresenter.getCode(etPhone.getText().toString());
@@ -209,7 +250,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
 
     @Override
     public void goNext() {
-        showShort("下一步");
+
     }
 
     @Override

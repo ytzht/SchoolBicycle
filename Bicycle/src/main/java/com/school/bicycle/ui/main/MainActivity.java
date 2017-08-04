@@ -667,6 +667,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                L.d("未用车状态下刷新"+zhonglat+"纬度",zhonglon+"经度");
                 LatLng latLng = new LatLng(zhonglon,zhonglat);
                 initgetBikeMapList(latLng);
 //                //重新定位并重新请求当前位置周边车辆信息
@@ -727,18 +728,22 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 } else {
                     //已经勾过不再提示，直接跳
 //                    mTimer.cancel();
-                    if (checkJumpStatus.getBike_status() == 1) {
-                        bike_number = checkJumpStatus.getBike_number();
-                        startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
-                                lon + "," + lat, "status", "1");
-                    } else if (checkJumpStatus.getBike_status() == 2) {
-                        bike_number = checkJumpStatus.getBike_number();
-                        startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
-                                lon + "," + lat, "status", "2");
-                    } else if (checkJumpStatus.getBike_status() == 4) {
-                        showTips();
+                    if(checkJumpStatus!=null){
+                        if (checkJumpStatus.getBike_status() == 1) {
+                            //日租
+                            bike_number = checkJumpStatus.getBike_number();
+                            startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
+                                    lon + "," + lat, "status", "1");
+                        } else if (checkJumpStatus.getBike_status() == 2) {
+                            //时租
+                            bike_number = checkJumpStatus.getBike_number();
+                            startActivity(LockcloseActivity.class, "bike_number", bike_number, "location",
+                                    lon + "," + lat, "status", "2");
+                        } else if (checkJumpStatus.getBike_status() == 4) {
+                            //长租
+                            showTips();
+                        }
                     }
-
                 }
             }
         });
@@ -1500,7 +1505,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                 if (v.getCode() == 1) {
                     if (v.getDeposit_status() == 1) {
                         if (v.getVerify_status() == 1) {
-                            call("057187063728");
+                            call("0535-2105657");
                         } else {
                             startActivity(RealnameActivity.class);
                         }
@@ -1869,6 +1874,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                     } else {
                         startActivity(RealnameActivity.class);
                     }
+                }else {
+                    startActivity(DepositActivity.class);
                 }
             }
         }

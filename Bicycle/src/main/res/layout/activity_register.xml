@@ -6,8 +6,23 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context="com.school.bicycle.ui.register.RegisterActivity">
-
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/denglu_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ToolbarPopupTheme" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </android.support.v7.widget.Toolbar>
     <RelativeLayout
+        android:layout_below="@+id/denglu_toolbar"
         android:id="@+id/rl_phone"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="12dp"

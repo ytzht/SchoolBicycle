@@ -177,7 +177,7 @@ public class LocationService extends Service implements AMapLocationListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(), "onDestroy() executed", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "onDestroy() executed", Toast.LENGTH_SHORT).show();
         stopForeground(true);// 停止前台服务--参数：表示是否移除之前的通知
         // 停止定时器
         if (isStop) {

@@ -17,8 +17,11 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <application
         android:name=".app.MyApplication"
@@ -112,7 +115,6 @@
             android:finishOnTaskLaunch="false"
             android:launchMode="singleInstance"
             android:theme="@style/HooliganActivitystyle" />
-
         <activity
             android:name=".ui.AppLauncherActivity"
             android:theme="@style/BaseTheme.Volunteer.Launcher">
@@ -202,7 +204,8 @@
         <activity android:name=".ui.AboutUsActivity" />
         <activity android:name=".ui.setup_despositActivity" />
         <activity android:name=".ui.RechargeActivity" />
-        <activity android:name=".ui.BikeAlarmListActivity"></activity>
+        <activity android:name=".ui.BikeAlarmListActivity" />
+        <activity android:name=".ui.ShareincomeActivity"></activity>
     </application>
 
 </manifest>

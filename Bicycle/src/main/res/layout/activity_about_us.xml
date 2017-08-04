@@ -28,8 +28,9 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:gravity="center_horizontal"
+                android:id="@+id/about_us"
                 android:textSize="18dp"
-                android:text="建议"/>
+                android:text="校易行校园单车，针对大学师生用户群体而开发,提供校园绿色出行，周边游玩，组织户外骑行等服务；同时提供单人车、双人车品类，以不同的用车方式，便利大学师生的中短途、长短期出行。"/>
 
         </LinearLayout>
         <LinearLayout

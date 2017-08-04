@@ -23,12 +23,27 @@ public class UserService {
     private static final String LatLon   = "LatLon";
     private static final String usebiycle   = "usebiycle";
     private static final String iscall   = "iscall";
+    private static final String over   = "over";
+
+
 
     public UserService(Context context) {
         this.context = context;
     }
+    //1为确定 0为否
+    public void setover(String latlon) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                over, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(over, latlon).apply();
+    }
 
 
+    public String getover() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                over, Context.MODE_PRIVATE);
+        return memberPrefs.getString(over, "0");
+
+    }
     //1为开启 0为关闭
     public void setiscall(String latlon) {
         SharedPreferences memberPrefs = context.getSharedPreferences(

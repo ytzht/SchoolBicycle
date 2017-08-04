@@ -115,7 +115,7 @@ public class ZxingActivity extends BaseToolBarActivity {
                 break;
             case R.id.linear2:
                 if (!isOpen) {
-                    CodeUtils.isLightEnable(true);
+
                     isOpen = true;
                 } else {
                     CodeUtils.isLightEnable(false);

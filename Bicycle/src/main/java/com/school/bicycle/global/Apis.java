@@ -18,6 +18,8 @@ public interface Apis {
 
     String DiviceToken = "order/DiviceToken";
 
+    String aboutUs = "order/aboutUs";
+
     String dayLeaseList = "order/dayLeaseList";
 
     String invite = "production/invite?phone=";
@@ -27,6 +29,8 @@ public interface Apis {
     String longLeaseOrder = "order/longLeaseOrder";
 
     String rechargeOrder = "order/rechargeOrder";
+
+    String bikeAlarmList = "order/bikeAlarmList";
 
     String submitLeaseOrder = "order/submitLeaseOrder";
 

@@ -26,6 +26,7 @@ import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.BikeAlarmListActivity;
 import com.school.bicycle.ui.MyRoute.MyRoute_Activity;
 import com.school.bicycle.ui.Myeserve.MyReserveActivity;
+import com.school.bicycle.ui.ShareincomeActivity;
 import com.school.bicycle.utils.HighlightWeekendsDecorator;
 import com.school.bicycle.utils.MySelectorDecorator;
 import com.school.bicycle.utils.MySelectorDecorators;
@@ -123,6 +124,7 @@ public class MyBicycleActivity extends BaseToolBarActivity {
                 break;
             case R.id.re_Income_mybiycle:
                 //共享收入
+                startActivity(ShareincomeActivity.class);
                 break;
             case R.id.re_myTrip_mybiycle:
                 //我的行程

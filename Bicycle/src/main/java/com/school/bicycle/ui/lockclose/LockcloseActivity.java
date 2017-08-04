@@ -58,6 +58,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
         ButterKnife.bind(this);
         setToolbarText("锁车");
     }
+
     /**
      * 调用拨号界面
      *
@@ -79,7 +80,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
                 finish();
                 break;
             case R.id.lock_kefu:
-                call("057187063728");
+                call("0535-2105657");
                 break;
             case R.id.lock_ok:
                 String url = Apis.Base + Apis.overUseBike;
@@ -87,13 +88,12 @@ public class LockcloseActivity extends BaseToolBarActivity {
                 String location = getIntent().getStringExtra("location");
                 tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 DEVICE_ID = tm.getDeviceId();
-//                new UserService(LockcloseActivity.this).setState("0");
                 String cookie = new UserService(LockcloseActivity.this).getCookie();
 
                 OkHttpUtils
                         .post()
                         .url(url)
-                        .addHeader("cookie",cookie)
+                        .addHeader("cookie", cookie)
                         .addParams("location", location)
                         .addParams("imei", DEVICE_ID)
                         .addParams("diu", DEVICE_ID)
@@ -107,26 +107,26 @@ public class LockcloseActivity extends BaseToolBarActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Log.d("response",response);
-                                BaseResult baseResult = gson.fromJson(response,BaseResult.class);
-                                if (baseResult.getCode()==1){
+                                Log.d("response", response);
+                                BaseResult baseResult = gson.fromJson(response, BaseResult.class);
+                                if (baseResult.getCode() == 1) {
                                     int status = Integer.parseInt(getIntent().getStringExtra("status"));
-                                    if (status==1){
+                                    if (status == 1) {
                                         new UserService(LockcloseActivity.this).setShowOneMark("0");
+                                        startActivity(ResultActivity.class, "type", "date");
                                         finish();
                                         //日租停车
-                                    }else if (status==2){
-                                        startActivity(ResultActivity.class,"type","date");
-//                                    new UserService(LockcloseActivity.this).setState("0");
+                                    } else if (status == 2) {
+                                        startActivity(ResultActivity.class, "type", "timestop");
+                                        new UserService(LockcloseActivity.this).setState("0");
                                         finish();
                                         //时租停车
-                                    }else if (status==4){
+                                    } else if (status == 4) {
                                         finish();
                                     }
-                                }else {
+                                } else {
                                     showShort(baseResult.getMsg());
                                 }
-
 
 
                             }
@@ -134,12 +134,13 @@ public class LockcloseActivity extends BaseToolBarActivity {
                 break;
         }
     }
+
     /**
      * LocationListern监听器
      * 参数：地理位置提供器、监听位置变化的时间间隔、位置变化的距离间隔、LocationListener监听器
      */
 
-    LocationListener locationListener =  new LocationListener() {
+    LocationListener locationListener = new LocationListener() {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle arg2) {
@@ -165,7 +166,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(locationManager!=null){
+        if (locationManager != null) {
             //移除监听器
             locationManager.removeUpdates(locationListener);
         }

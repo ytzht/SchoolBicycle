@@ -134,7 +134,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                             usebiycleBynumBiycletime.setText("随时可用");
                                         }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("red")) {
                                             ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_red);
-                                            usebiycleBynumBiycletime.setText("已被长租");
+                                            usebiycleBynumBiycletime.setText("该车辆已经预约，请查询其他车辆");
                                         }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("blue")) {
                                             ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_blue);
                                             usebiycleBynumBiycletime.setText("这是您的长租车辆，随时扫码使用");
@@ -144,7 +144,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                         @Override
                                         public void onClick(View view) {
                                             if (queryBikeListByBikeNumber.getBike_info().getColor().equals("red")){
-                                                showShort("该车辆已经被长租，请查询其他车辆");
+                                                showShort("该车辆已经预约，请查询其他车辆");
                                             }else {
                                                 new UserService(UseBicycleActivity.this).setShowOneMark("1");
                                                 Intent it = new Intent(UseBicycleActivity.this, MainActivity.class);

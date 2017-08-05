@@ -49,7 +49,7 @@ public class ResultActivity extends BaseToolBarActivity {
         String type = it.getStringExtra("type");
         if (type.endsWith("time")) {
             teResResult.setText("点击确定后预定该车，进入用车界\n面十分钟后或扫码" +
-                    "开锁后开始计费\n,\n还车请归还到原车位，否则系统将\n无法结束计费");
+                    "开锁后开始计时\n,\n还车请归还到原车位，否则系统将\n无法结束计时");
             btResNext.setText("确定");
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override

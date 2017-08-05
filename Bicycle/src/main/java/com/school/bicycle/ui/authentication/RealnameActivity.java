@@ -169,46 +169,6 @@ public class RealnameActivity extends BaseToolBarActivity {
                 }
             }
         }
-//        File appDir = new File(Environment.getExternalStorageDirectory(), "business");
-//        if (!appDir.exists()) {
-//            appDir.mkdir();
-//        }
-//        String fileName = "storephoto.jpg";
-//        String path = Environment.getExternalStorageDirectory() + "siness/" + fileName;
-//        File file = new File(path);
-//        try {
-//            FileOutputStream fos = new FileOutputStream(file);
-//            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-//            fos.flush();
-//            fos.close();
-//            Log.d("", "saveImage: " + path);
-
-//            OkHttpUtils.post()//
-//                    .addFile("image", "storephoto.png", file)
-//                    .url(url)
-//                    .build()//
-//                    .execute(new StringCallback() {
-//                        @Override
-//                        public void onError(Call call, Exception e, int id) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onResponse(String response, int id) {
-//                            CampusCardImage campusCardImage = gson.fromJson(response,CampusCardImage.class);
-//                            if (campusCardImage.getCode()==0){
-//                                showShort(campusCardImage.getMsg());
-//                            }else {
-//                                showShort("图片上传成功");
-//                                Log.d("url=",campusCardImage.get_Image_ur());
-//                            }
-//                        }
-//                    });
-//
-//        } catch (IOException e) {
-//            Log.d("e:",e.toString());
-//            e.printStackTrace();
-//        }
     }
 
     /**

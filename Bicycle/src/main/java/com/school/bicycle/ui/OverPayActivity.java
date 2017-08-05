@@ -1,5 +1,6 @@
 package com.school.bicycle.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,18 +9,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
-import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.FindNotPayRoute;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
 import com.school.bicycle.entity.Pay_wallet;
-import com.school.bicycle.entity.WeiXinPayResultEvent;
 import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
@@ -27,8 +27,6 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.lockclose.LockcloseActivity;
-import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -36,8 +34,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.greenrobot.eventbus.EventBus;
-
+import java.io.Serializable;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -76,6 +73,12 @@ public class OverPayActivity extends BaseToolBarActivity {
     String price;
     String bike_number;
 
+    @BindView(R.id.youhuiquan)
+    LinearLayout youhuiquan;
+    FindNotPayRoute findNotPayRoute;
+    public static String cid = "";
+    public static String cidprice = "0";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +90,7 @@ public class OverPayActivity extends BaseToolBarActivity {
         OkHttpUtils
                 .get()
                 .url(url)
-                .addHeader("cookie",cookie)
+                .addHeader("cookie", cookie)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -97,18 +100,18 @@ public class OverPayActivity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        Log.d("response_overpay",response);
-                        FindNotPayRoute findNotPayRoute = gson.fromJson(response,FindNotPayRoute.class);
-                        if (findNotPayRoute.getCode()==1){
+                        Log.d("response_overpay", response);
+                        findNotPayRoute = gson.fromJson(response, FindNotPayRoute.class);
+                        if (findNotPayRoute.getCode() == 1) {
                             byTime.setText(findNotPayRoute.getTime_span());
                             byDistance.setText(findNotPayRoute.getDistance());
                             byExpend.setText(findNotPayRoute.getCalories());
                             byPay.setText(findNotPayRoute.getTotal_fee());
                             tvYe.setText(findNotPayRoute.getBalance());
-                            price=findNotPayRoute.getTotal_fee();
-                            bike_number=findNotPayRoute.getBike_number();
-                        }else {
-                           showShort(findNotPayRoute.getMsg());
+                            price = findNotPayRoute.getTotal_fee();
+                            bike_number = findNotPayRoute.getBike_number();
+                        } else {
+                            showShort(findNotPayRoute.getMsg());
                         }
                     }
                 });
@@ -117,9 +120,20 @@ public class OverPayActivity extends BaseToolBarActivity {
     }
 
     String info;
-    @OnClick({R.id.cb_we, R.id.cb_zfb, R.id.cb_wallet, R.id.confirm})
+
+    @OnClick({R.id.cb_we, R.id.cb_zfb, R.id.cb_wallet, R.id.confirm,R.id.youhuiquan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+
+            case R.id.youhuiquan:
+                if (findNotPayRoute.getCoupon().size()==0){
+                    showShort("暂无可用的优惠券");
+                }else {
+                    Intent intent = new Intent(this, Mycoupon_chooles_Activity.class);
+                    intent.putExtra("findNotPayRoute", findNotPayRoute);
+                    startActivity(intent);
+                }
+                break;
             case R.id.cb_we:
                 initview();
                 cbWe.setChecked(true);
@@ -136,70 +150,72 @@ public class OverPayActivity extends BaseToolBarActivity {
                 pay_type = "wallet";
                 break;
             case R.id.confirm:
-                if (pay_type.isEmpty()){
+                if (pay_type.isEmpty()) {
                     showShort("请选择一种支付方式");
-                }else {
-                String url = Apis.Base + Apis.submitLeaseOrder;
-                String cookie = new UserService(OverPayActivity.this).getCookie();
-                OkHttpUtils
-                        .post()
-                        .url(url)
-                        .addHeader("cookie",cookie)
-                        .addParams("price",price)
-                        .addParams("bike_number",bike_number)
-                        .addParams("pay_type",pay_type)
-                        .build()
-                        .execute(new StringCallback() {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
+                } else {
+                    String url = Apis.Base + Apis.submitLeaseOrder;
+                    String cookie = new UserService(OverPayActivity.this).getCookie();
+                    Log.d("cid的值",cid);
+                    OkHttpUtils
+                            .post()
+                            .url(url)
+                            .addHeader("cookie", cookie)
+                            .addParams("price", price)
+                            .addParams("bike_number", bike_number)
+                            .addParams("pay_type", pay_type)
+                            .addParams("cid", cid)
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
 
-                            }
-
-                            @Override
-                            public void onResponse(String response, int id) {
-                                Log.d("response", response);
-                                if (pay_type.equals("wx")) {
-                                    Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
-                                    WxPayParams wxPayParams = gson.fromJson(wxpayinfo.getPay_info(), WxPayParams.class);
-                                    final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
-                                    msgApi.registerApp(wxPayParams.appid);
-                                    PayReq request = new PayReq();
-                                    request.appId = wxPayParams.appid;
-                                    request.partnerId = wxPayParams.partnerid;
-                                    request.prepayId = wxPayParams.prepayid;
-                                    request.packageValue = "Sign=WXPay";
-                                    request.nonceStr = wxPayParams.noncestr;
-                                    request.timeStamp = wxPayParams.timestamp;
-                                    request.sign = wxPayParams.sign;
-                                    msgApi.sendReq(request);
-                                } else if (pay_type.equals("zfb")) {
-                                    final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
-                                    info = response;
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            super.run();
-                                            PayTask payTask = new PayTask(OverPayActivity.this);
-                                            Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
-                                            Message message = mHandler.obtainMessage();
-                                            message.what = 200;
-                                            message.obj = result;
-                                            mHandler.sendMessage(message);
-                                        }
-                                    }.start();
-
-                                } else {
-                                    Pay_wallet p = gson.fromJson(response, Pay_wallet.class);
-                                    if (p.getCode() == 1) {
-                                        showShort(p.getMsg());
-                                        finish();
-                                    } else {
-                                        showShort(p.getMsg());
-                                    }
                                 }
 
-                            }
-                        });
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    Log.d("response", response);
+                                    if (pay_type.equals("wx")) {
+                                        Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
+                                        WxPayParams wxPayParams = gson.fromJson(wxpayinfo.getPay_info(), WxPayParams.class);
+                                        final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
+                                        msgApi.registerApp(wxPayParams.appid);
+                                        PayReq request = new PayReq();
+                                        request.appId = wxPayParams.appid;
+                                        request.partnerId = wxPayParams.partnerid;
+                                        request.prepayId = wxPayParams.prepayid;
+                                        request.packageValue = "Sign=WXPay";
+                                        request.nonceStr = wxPayParams.noncestr;
+                                        request.timeStamp = wxPayParams.timestamp;
+                                        request.sign = wxPayParams.sign;
+                                        msgApi.sendReq(request);
+                                    } else if (pay_type.equals("zfb")) {
+                                        final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
+                                        info = response;
+                                        new Thread() {
+                                            @Override
+                                            public void run() {
+                                                super.run();
+                                                PayTask payTask = new PayTask(OverPayActivity.this);
+                                                Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
+                                                Message message = mHandler.obtainMessage();
+                                                message.what = 200;
+                                                message.obj = result;
+                                                mHandler.sendMessage(message);
+                                            }
+                                        }.start();
+
+                                    } else {
+                                        Pay_wallet p = gson.fromJson(response, Pay_wallet.class);
+                                        if (p.getCode() == 1) {
+                                            showShort(p.getMsg());
+                                            finish();
+                                        } else {
+                                            showShort(p.getMsg());
+                                        }
+                                    }
+
+                                }
+                            });
 
                 }
                 break;
@@ -221,7 +237,7 @@ public class OverPayActivity extends BaseToolBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(ResultActivity.class,"type","returnbiycle");
+                        startActivity(ResultActivity.class, "type", "returnbiycle");
                         finish();
                     }
                 });
@@ -233,15 +249,15 @@ public class OverPayActivity extends BaseToolBarActivity {
     };
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        L.d("wchat-0",PayCore.getInstance().mWeichatState+"");
+        tvAs.setText("-￥"+cidprice);
+        L.d("wchat-0", PayCore.getInstance().mWeichatState + "");
         if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
-            L.d("wchat-1",PayCore.getInstance().mWeichatState+"");
+            L.d("wchat-1", PayCore.getInstance().mWeichatState + "");
             PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
-            startActivity(ResultActivity.class,"type","returnbiycle");
+            startActivity(ResultActivity.class, "type", "returnbiycle");
             finish();
         }
     }
@@ -251,7 +267,5 @@ public class OverPayActivity extends BaseToolBarActivity {
         cbWe.setChecked(false);
         cbZfb.setChecked(false);
     }
-
-
 
 }

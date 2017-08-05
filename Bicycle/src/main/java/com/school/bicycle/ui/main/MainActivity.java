@@ -124,9 +124,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 
-public class MainActivity extends BaseActivity implements IMainView, AMapLocationListener,
-        NavigationView.OnNavigationItemSelectedListener, AMap.InfoWindowAdapter, AMap.OnMapClickListener,
-        AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.OnCameraChangeListener, LocationSource {
+public class MainActivity extends BaseActivity implements IMainView,
+        AMapLocationListener,
+        NavigationView.OnNavigationItemSelectedListener,
+        AMap.InfoWindowAdapter,
+        AMap.OnMapClickListener,
+        AMap.OnMarkerClickListener,
+        AMap.OnInfoWindowClickListener,
+        AMap.OnCameraChangeListener,
+        LocationSource {
 
     @BindView(R.id.map)
     MapView mMapView;
@@ -440,7 +446,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                                     Log.d("实时上传", response);
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
-//                                        showShort("上传成功");
+                                        showShort("上传成功");
                                         kaluli.setText("" + uploadLocation.getCalories() + "卡");
                                         String distance = uploadLocation.getDistance();
                                         distance = distance.substring(0, distance.indexOf("."));
@@ -493,7 +499,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //                                score.setText("手机未认证");
 //                            }
                         } else {
-                            startActivity(RegisterActivity.class);
+//                            startActivity(RegisterActivity.class);
                         }
                     }
                 });
@@ -805,6 +811,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         TextView msg_txt = (TextView) view.findViewById(R.id.msg_txt);
         TextView msg_btn_share = (TextView) view.findViewById(R.id.msg_btn_share);
         TextView msg_btn_over = (TextView) view.findViewById(R.id.msg_btn_over);
+        ImageView close_showtips = (ImageView) view.findViewById(R.id.close_showtips);
         if (checkJumpStatus != null) {
             if (checkJumpStatus.getBike_status() == 4) {
                 msg_btn_over.setOnClickListener(new View.OnClickListener() {
@@ -829,18 +836,25 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 //
                                         Lockstatus lockstatus = gson.fromJson(response, Lockstatus.class);
                                         if (lockstatus.getCode() == 1) {
-                                            if (lockstatus.getLock_status() == 1) {
-                                                new UserService(MainActivity.this).setState("0");
-                                                initview();
-                                                LatLng latLng = new LatLng(lon, lat);
-                                                initgetBikeMapList(latLng);
-                                                if (dialog.isShowing()) dialog.dismiss();
-                                            } else {
-                                                showLong("请注意车辆安全，锁没有锁上！");
-                                            }
+                                            new UserService(MainActivity.this).setState("0");
+                                            initview();
+                                            LatLng latLng = new LatLng(lon, lat);
+                                            initgetBikeMapList(latLng);
+                                            if (dialog.isShowing()) dialog.dismiss();
+                                        } else {
+                                            showShort(lockstatus.getMsg());
                                         }
                                     }
                                 });
+                    }
+                });
+                //关闭弹窗
+                close_showtips.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (dialog.isShowing()){
+                            dialog.dismiss();
+                        }
                     }
                 });
 
@@ -1104,6 +1118,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             if (BroadcastAction.equals(intent.getAction())) {
                 Log.i("FSD", "get the broadcast from Service...");
                 str = intent.getStringExtra("Str");
+                Log.i("FSD", str);
                 mHandler.sendMessage(mHandler.obtainMessage());
                 lon = Double.parseDouble(str.substring(str.indexOf(",") + 1));
                 lat = Double.parseDouble(str.substring(0, str.indexOf(",")));
@@ -1117,12 +1132,12 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
                     }
 
                     //位置有变化
-                    if (oldLatLng != newLatLng && oldLatLng != null && newLatLng != null) {
+                    if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
                         cameraUpdate = CameraUpdateFactory
                                 .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 13, 0, 0));
                         aMap.moveCamera(cameraUpdate);
                         Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
-                        if (getDistance(oldLatLng, newLatLng) > 20 && getDistance(oldLatLng, newLatLng) < 100) {
+                        if (getDistance(oldLatLng, newLatLng) > 10 && getDistance(oldLatLng, newLatLng) < 100) {
                             if (checkJumpStatus.getLock_status() == 0) {
                                 setUpMap(oldLatLng, newLatLng);
                                 new UserService(MainActivity.this).setLatLon(lat + "," + lon);
@@ -1747,7 +1762,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         return null;
     }
 
-    private TextView tv_lorentbt_info;
+
     private String bike_number;
 
     public void render(Marker marker, View view) {
@@ -1759,6 +1774,8 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
         TextView tv_tirentbt_info;
         TextView tv_darentbt_info;
         TextView tv_longrent_info;
+        TextView tv_lorentbt_info;
+
         if (data.getMybike() == 1 && data.getColor().equals("blue") && checkJumpStatus.getBike_status() == 4) {
             tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
             tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
@@ -1766,8 +1783,9 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_longrent_info = (TextView) view.findViewById(R.id.tv_longrent_info);
             tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
-            tv_timerent_info.setText("共享收入");
-            tv_dayrent_info.setText("共享设置");
+            tv_lorentbt_info = (TextView) view.findViewById(R.id.tv_lorentbt_info);
+            tv_tirentbt_info.setText("共享收入");
+            tv_darentbt_info.setText("共享设置");
             tv_lorentbt_info.setVisibility(View.GONE);
             tv_time_info.setText("山地车:" + data.getNumber() + "");
             tv_timerent_info.setText("地点:" + data.getAddress() + "");
@@ -1830,9 +1848,14 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
             tv_dayrent_info = (TextView) view.findViewById(R.id.tv_dayrent_info);
             tv_longrent_info = (TextView) view.findViewById(R.id.tv_longrent_info);
+
             tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
             tv_lorentbt_info = (TextView) view.findViewById(R.id.tv_lorentbt_info);
+            tv_tirentbt_info.setText("时租");
+            tv_darentbt_info.setText("日租");
+            tv_lorentbt_info.setText("长租");
+
             tv_bicyclenum_info.setText("车牌号：" + data.getNumber() + "");
             tv_time_info.setText("在租时段" + data.getValid_time() + "");
             tv_timerent_info.setText("时租：" + data.getLease_info().get时租() + "元");
@@ -1863,15 +1886,14 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_lorentbt_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if (checkJumpStatus.getBike_status() != 0) {
-                        showShort("处于用车状态");
+                    if (checkJumpStatus.getBike_status() == 4) {
+                        showShort("您已经是长租用户");
                     } else {
-                        if (checkJumpStatus.getBike_status() == 4) {
-                            showShort("您已经是长租用户");
+                        if (num.equals("12")) {
+                            showShort("双人车不可长租");
                         } else {
-                            if (num.equals("12")) {
-                                showShort("双人车不可长租");
+                            if (checkJumpStatus.getBike_status() != 0) {
+                                showShort("处于用车状态");
                             } else {
                                 startActivity(LongTimeLeaseActivity.class, "biyclenum", data.getNumber());
                             }
@@ -1909,37 +1931,38 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
             tv_darentbt_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    if (checkJumpStatus.getBike_status() == 4) {
-//                        showShort("您是长租用户");
-//                    } else {
-                    String url = Apis.Base + Apis.dayLeaseList;
-                    String cookie = new UserService(MainActivity.this).getCookie();
-                    format = new SimpleDateFormat("yyyy-MM-dd");
-                    bike_number = data.getNumber();
-                    OkHttpUtils
-                            .post()
-                            .url(url)
-                            .addHeader("cookie", cookie)
-                            .addParams("bike_number", bike_number)
-                            .build()
-                            .execute(new StringCallback() {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
+                    if (checkJumpStatus.getBike_status() == 4) {
+                        showShort("您是长租用户");
+                    } else {
+                        String url = Apis.Base + Apis.dayLeaseList;
+                        String cookie = new UserService(MainActivity.this).getCookie();
+                        format = new SimpleDateFormat("yyyy-MM-dd");
+                        bike_number = data.getNumber();
+                        OkHttpUtils
+                                .post()
+                                .url(url)
+                                .addHeader("cookie", cookie)
+                                .addParams("bike_number", bike_number)
+                                .build()
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
 
-                                }
-
-                                @Override
-                                public void onResponse(String response, int id) {
-                                    L.d(response);
-                                    DayleaseList d = gson.fromJson(response, DayleaseList.class);
-                                    if (d.getCode() == 1) {
-                                        showAlert(data.getNumber(), d.getBody());
-                                    } else {
-                                        showShort(d.getMsg());
                                     }
 
-                                }
-                            });
+                                    @Override
+                                    public void onResponse(String response, int id) {
+                                        L.d(response);
+                                        DayleaseList d = gson.fromJson(response, DayleaseList.class);
+                                        if (d.getCode() == 1) {
+                                            showAlert(data.getNumber(), d.getBody());
+                                        } else {
+                                            showShort(d.getMsg());
+                                        }
+
+                                    }
+                                });
+                    }
                 }
             });
         }
@@ -2188,7 +2211,7 @@ public class MainActivity extends BaseActivity implements IMainView, AMapLocatio
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if (currentMarker!=null) {
+        if (currentMarker != null) {
             currentMarker.hideInfoWindow();//这个是隐藏infowindow窗口的方法
         }
     }

@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:text="恭喜你，充值成功"
         android:textSize="17dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         android:id="@+id/te_res_result"
         android:textColor="@color/dps_textc"
         android:layout_below="@+id/iv_res_result"

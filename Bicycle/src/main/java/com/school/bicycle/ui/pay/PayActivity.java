@@ -1,5 +1,6 @@
 package com.school.bicycle.ui.pay;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -7,18 +8,17 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
-import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.DayLeaseOrder;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
 import com.school.bicycle.entity.Pay_wallet;
-import com.school.bicycle.entity.WeiXinPayResultEvent;
 import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
@@ -26,18 +26,17 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.authentication.RealnameActivity;
+import com.school.bicycle.ui.Mycoupon_chooles_Activity;
+import com.school.bicycle.ui.Mycoupon_choolesday_Activity;
 import com.school.bicycle.ui.result.ResultActivity;
-import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,6 +55,17 @@ public class PayActivity extends BaseToolBarActivity {
     @BindView(R.id.pay_sure)
     TextView paySure;
     String pay_type = "";
+    @BindView(R.id.tv_has_day)
+    TextView tvHasDay;
+    @BindView(R.id.tv_cut_day)
+    TextView tvCutDay;
+    @BindView(R.id.youhuiquan)
+    LinearLayout youhuiquan;
+    @BindView(R.id.tv_need_day)
+    TextView tvNeedDay;
+
+    DayLeaseOrder dayLeaseOrder;
+    public  static  int cid = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +82,7 @@ public class PayActivity extends BaseToolBarActivity {
 
         OkHttpUtils
                 .post()
-                .url(url).addHeader("cookie",cookie)
+                .url(url).addHeader("cookie", cookie)
                 .addParams("dates", getIntent().getStringExtra("dates"))
                 .addParams("bike_number", getIntent().getStringExtra("bike_number"))
                 .build()
@@ -85,9 +95,9 @@ public class PayActivity extends BaseToolBarActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response", response);
-                        DayLeaseOrder dayLeaseOrder = gson.fromJson(response, DayLeaseOrder.class);
+                        dayLeaseOrder = gson.fromJson(response, DayLeaseOrder.class);
                         if (dayLeaseOrder.getCode() == 1) {
-                            PaymentAmount.setText(dayLeaseOrder.getPrice());
+                            PaymentAmount.setText(dayLeaseOrder.getPrice()+"");
                         } else {
                             showShort(dayLeaseOrder.getMsg());
                             finish();
@@ -98,9 +108,25 @@ public class PayActivity extends BaseToolBarActivity {
     }
 
 
-    @OnClick({R.id.cbwechat_pay, R.id.cbali_pay, R.id.cbwallet_pay, R.id.pay_sure})
+    @OnClick({R.id.cbwechat_pay, R.id.cbali_pay, R.id.cbwallet_pay, R.id.pay_sure,R.id.youhuiquan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+
+            case R.id.youhuiquan:
+                if (dayLeaseOrder.getCoupon()!=null){
+                    if (dayLeaseOrder.getCoupon().size()==0){
+                        showShort("暂无可用的优惠券");
+                    }else {
+                        Intent intent = new Intent(this, Mycoupon_choolesday_Activity.class);
+                        intent.putExtra("dayLeaseOrder", dayLeaseOrder);
+                        startActivity(intent);
+                    }
+                }else {
+                    showShort("暂无可用的优惠券");
+                }
+
+
+                break;
             case R.id.cbwechat_pay:
                 initcheckbox();
                 cbwechatPay.setChecked(true);
@@ -117,12 +143,11 @@ public class PayActivity extends BaseToolBarActivity {
                 pay_type = "wallet";
                 break;
             case R.id.pay_sure:
-                if (pay_type.isEmpty()){
+                if (pay_type.isEmpty()) {
                     showShort("请选择一种支付方式");
-                }else {
+                } else {
                     initpay();
                 }
-
                 break;
         }
     }
@@ -132,11 +157,37 @@ public class PayActivity extends BaseToolBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        L.d("wchat-0",PayCore.getInstance().mWeichatState+"");
+
+        if (cid!=0){
+            tvHasDay.setText("已选一张");
+        }
+
+        if (dayLeaseOrder!=null){
+            if (dayLeaseOrder.getCode() == 1) {
+                if (dayLeaseOrder.getCoupon().size()==0){
+                    showShort("暂无可用的优惠券");
+                }else {
+                    for (int i = 0;i<dayLeaseOrder.getCoupon().size();i++){
+                        if (dayLeaseOrder.getCoupon().get(i).getUsercou_id() ==cid){
+                            if (dayLeaseOrder.getCoupon().get(i).getCou_type().equals("折扣")){
+                                tvCutDay.setText("-￥"+(dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount()));
+                                tvNeedDay.setText(dayLeaseOrder.getPrice()-
+                                        (dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount())+"");
+                            }else {
+                                tvCutDay.setText("-￥"+dayLeaseOrder.getCoupon().get(i).getCou_cut());
+                                tvNeedDay.setText(dayLeaseOrder.getPrice()-dayLeaseOrder.getCoupon().get(i).getCou_cut()+"");
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        L.d("wchat-0", PayCore.getInstance().mWeichatState + "");
         if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
-            L.d("wchat-1",PayCore.getInstance().mWeichatState+"");
+            L.d("wchat-1", PayCore.getInstance().mWeichatState + "");
             PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
-            startActivity(ResultActivity.class,"type","date");
+            startActivity(ResultActivity.class, "type", "date");
             finish();
         }
     }
@@ -148,9 +199,10 @@ public class PayActivity extends BaseToolBarActivity {
         OkHttpUtils
                 .post()
                 .url(url)
-                .addHeader("cookie",cookie)
+                .addHeader("cookie", cookie)
                 .addParams("price", PaymentAmount.getText().toString())
                 .addParams("pay_type", pay_type)
+                .addParams("cid", cid+"")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -193,12 +245,11 @@ public class PayActivity extends BaseToolBarActivity {
                             }.start();
 
                         } else {
-                            Pay_wallet p = gson.fromJson(response,Pay_wallet.class);
-                            if (p.getCode()==1){
-//                                showShort(p.getMsg());
-                                startActivity(ResultActivity.class,"type","date");
+                            Pay_wallet p = gson.fromJson(response, Pay_wallet.class);
+                            if (p.getCode() == 1) {
+                                startActivity(ResultActivity.class, "type", "date");
                                 finish();
-                            }else {
+                            } else {
                                 showShort(p.getMsg());
                             }
                         }
@@ -224,7 +275,7 @@ public class PayActivity extends BaseToolBarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(ResultActivity.class,"type","date");
+                        startActivity(ResultActivity.class, "type", "date");
                         finish();
                     }
                 });
@@ -240,6 +291,7 @@ public class PayActivity extends BaseToolBarActivity {
         cbwalletPay.setChecked(false);
         cbwechatPay.setChecked(false);
     }
+
 
 
 }

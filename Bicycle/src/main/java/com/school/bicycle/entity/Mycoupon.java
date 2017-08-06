@@ -1,18 +1,19 @@
 package com.school.bicycle.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/8/4.
  */
 
-public class Mycoupon {
+public class Mycoupon implements Serializable{
 
 
     /**
      * code : 1
      * msg : 操作成功
-     * body : [{"usercou_id":1,"user_id":0,"cou_type":"折扣","cou_usedin":"无","cou_discount":1,"start_time":"2017-08-01 00:00:00","end_time":"2017-08-31 00:00:00","cou_number":9,"cou_code":"lec","used":0,"create_time":"2017-08-04 14:33:27"}]
+     * body : [{"usercou_id":9,"user_id":60,"cou_type":"满减","cou_usedin":"时租","cou_full":20,"cou_cut":2,"start_time":"2017-08-01","end_time":"2017-08-31","cou_number":1,"cou_code":"123","used":0,"create_time":"2017-08-05 09:15:48"},{"usercou_id":10,"user_id":60,"cou_type":"折扣","cou_usedin":"无","cou_discount":0.5,"start_time":"2017-08-01","end_time":"2017-08-31","cou_number":1,"cou_code":"lec","used":0,"create_time":"2017-08-05 09:15:58"},{"usercou_id":11,"user_id":60,"cou_type":"满减","cou_usedin":"日租","cou_full":20,"cou_cut":3,"start_time":"2017-08-01","end_time":"2017-08-31","cou_number":1,"cou_code":"abc","used":0,"create_time":"2017-08-05 09:16:34"}]
      */
 
     private int code;
@@ -43,32 +44,36 @@ public class Mycoupon {
         this.body = body;
     }
 
-    public static class BodyBean {
+    public static class BodyBean implements Serializable{
         /**
-         * usercou_id : 1
-         * user_id : 0
-         * cou_type : 折扣
-         * cou_usedin : 无
-         * cou_discount : 1
-         * start_time : 2017-08-01 00:00:00
-         * end_time : 2017-08-31 00:00:00
-         * cou_number : 9
-         * cou_code : lec
+         * usercou_id : 9
+         * user_id : 60
+         * cou_type : 满减
+         * cou_usedin : 时租
+         * cou_full : 20.0
+         * cou_cut : 2.0
+         * start_time : 2017-08-01
+         * end_time : 2017-08-31
+         * cou_number : 1
+         * cou_code : 123
          * used : 0
-         * create_time : 2017-08-04 14:33:27
+         * create_time : 2017-08-05 09:15:48
+         * cou_discount : 0.5
          */
 
         private int usercou_id;
         private int user_id;
         private String cou_type;
         private String cou_usedin;
-        private int cou_discount;
+        private double cou_full;
+        private double cou_cut;
         private String start_time;
         private String end_time;
         private int cou_number;
         private String cou_code;
         private int used;
         private String create_time;
+        private double cou_discount;
 
         public int getUsercou_id() {
             return usercou_id;
@@ -102,12 +107,20 @@ public class Mycoupon {
             this.cou_usedin = cou_usedin;
         }
 
-        public int getCou_discount() {
-            return cou_discount;
+        public double getCou_full() {
+            return cou_full;
         }
 
-        public void setCou_discount(int cou_discount) {
-            this.cou_discount = cou_discount;
+        public void setCou_full(double cou_full) {
+            this.cou_full = cou_full;
+        }
+
+        public double getCou_cut() {
+            return cou_cut;
+        }
+
+        public void setCou_cut(double cou_cut) {
+            this.cou_cut = cou_cut;
         }
 
         public String getStart_time() {
@@ -156,6 +169,14 @@ public class Mycoupon {
 
         public void setCreate_time(String create_time) {
             this.create_time = create_time;
+        }
+
+        public double getCou_discount() {
+            return cou_discount;
+        }
+
+        public void setCou_discount(double cou_discount) {
+            this.cou_discount = cou_discount;
         }
     }
 }

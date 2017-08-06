@@ -21,6 +21,7 @@
             android:layout_width="325dp"
             android:layout_height="25dp"
             android:background="@null"
+            android:digits="1234567890"
             android:hint="请输入车牌号"
             android:textColorHint="@color/edittext" />
     </LinearLayout>

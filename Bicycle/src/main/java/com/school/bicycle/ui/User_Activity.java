@@ -38,7 +38,6 @@ public class User_Activity extends BaseToolBarActivity {
     TextView verifyStatusUser;
     @BindView(R.id.deposit_status_user)
     TextView depositStatusUser;
-
     User user;
     @BindView(R.id.realname_go)
     TextView realnameGo;
@@ -103,6 +102,7 @@ public class User_Activity extends BaseToolBarActivity {
                 String url = Apis.Base + Apis.userLogout;
                 OkHttpUtils.get()
                         .url(url)
+                        .addHeader("cookie",new UserService(User_Activity.this).getCookie())
                         .build()
                         .execute(new StringCallback() {
                             @Override

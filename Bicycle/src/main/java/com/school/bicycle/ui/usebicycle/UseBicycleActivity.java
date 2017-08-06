@@ -125,30 +125,26 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                                         lvShowUsebicycle.setVisibility(View.GONE);
                                         usebiycleBynumBiyclenum.setText("车牌号：" + queryBikeListByBikeNumber.getBike_info().getNumber());
                                         usebiycleBynumBiycleaddress.setText(queryBikeListByBikeNumber.getBike_info().getAddress());
-
-                                        String num = queryBikeListByBikeNumber.getBike_info().getNumber().substring(1, 2);
-
-
-
+                                        String num = queryBikeListByBikeNumber.getBike_info().getType();
                                         if (queryBikeListByBikeNumber.getBike_info().getColor().equals("yellow")) {
                                             ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_yellow);
                                             usebiycleBynumBiycletime.setText("共享时间：" + queryBikeListByBikeNumber.getBike_info().getValid_time());
                                         } else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("green")) {
-                                            if (num.equals("12")){
+                                            if (num.equals("2")){
                                                 ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_doublebicycle_green);
                                             }else {
                                                 ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_green);
                                             }
                                             usebiycleBynumBiycletime.setText("随时可用");
                                         }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("red")) {
-                                            if (num.equals("12")){
+                                            if (num.equals("2")){
                                                 ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_doublebicycle_red);
                                             }else {
                                                 ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_red);
                                             }
                                             usebiycleBynumBiycletime.setText("该车辆已经预约，请查询其他车辆");
                                         }else if (queryBikeListByBikeNumber.getBike_info().getColor().equals("blue")) {
-                                            if (num.equals("12")){
+                                            if (num.equals("2")){
                                                 ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_doublebicycle_blue);
                                             }else {
                                                 ivUsebiycleBynumBiycleaddress.setImageResource(R.drawable.ico_bicycle_blue);
@@ -301,6 +297,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                     OkHttpUtils
                             .post()
                             .url(url)
+                            .addHeader("cookie",new UserService(UseBicycleActivity.this).getCookie())
                             .addParams("dates", s)
                             .addParams("pageNumber", 1 + "")
                             .build()

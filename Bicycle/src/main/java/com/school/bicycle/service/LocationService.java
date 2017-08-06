@@ -20,11 +20,20 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.school.bicycle.R;
+import com.school.bicycle.entity.UploadLocation;
+import com.school.bicycle.global.Apis;
+import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.main.MainActivity;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2017/8/2.
@@ -52,8 +61,8 @@ public class LocationService extends Service implements AMapLocationListener {
     public void onCreate() {
         super.onCreate();
         intent = new Intent("com.example.broadcast");
-        Intent startIntent = new Intent(this, jihuoservice.class);
-        startService(startIntent);
+//        Intent startIntent = new Intent(this, jihuoservice.class);
+//        startService(startIntent);
     }
 
 
@@ -144,6 +153,23 @@ public class LocationService extends Service implements AMapLocationListener {
     }
 
 
+    //通过经纬度计算距离
+    public double getDistance(LatLng start, LatLng end) {
+        double lon1 = (Math.PI / 180) * start.longitude;
+        double lon2 = (Math.PI / 180) * end.longitude;
+        double lat1 = (Math.PI / 180) * start.latitude;
+        double lat2 = (Math.PI / 180) * end.latitude;
+        // 地球半径
+        double R = 6371;
+        // 两点间距离 km，如果想要米的话，结果*1000就可以了
+        double d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
+        return d * 1000;
+    }
+
+
+
+    //以前的定位点
+    private LatLng oldLatLng = new LatLng(0.0,0.0);
     /**
      * 处理接fasong的数据
      */
@@ -152,6 +178,35 @@ public class LocationService extends Service implements AMapLocationListener {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
+                    LatLng newLatLng = new LatLng(latitude, longitude);
+                    if (oldLatLng.latitude==0.0){
+                        oldLatLng = newLatLng;
+                    }
+                    //位置有变化
+                    if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
+                        if (getDistance(oldLatLng, newLatLng) > 5 && getDistance(oldLatLng, newLatLng) < 1000) {
+                            oldLatLng = newLatLng;
+                            String url = Apis.Base + Apis.uploadLocation + longitude + "," + latitude + "&bike_number=" + MainActivity.bike_number;
+                            String cookie = new UserService(LocationService.this).getCookie();
+                            OkHttpUtils
+                                    .get()//请求方式
+                                    .addHeader("cookie", cookie)
+                                    .url(url)//地址
+                                    .build()//创建请求
+                                    .execute(new StringCallback() {//回调
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
+
+                                        }
+
+                                        @Override
+                                        public void onResponse(String response, int id) {
+                                            Log.d("实时上传", response);
+
+                                        }
+                                    });
+                        }
+                    }
                     st = String.valueOf((float) (latitude)) + "," + String.valueOf((float) (longitude));
                     intent.putExtra("Str", st);
                     sendBroadcast(intent);

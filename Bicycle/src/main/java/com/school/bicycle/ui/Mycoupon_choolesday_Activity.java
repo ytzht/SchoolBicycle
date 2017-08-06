@@ -5,15 +5,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.school.bicycle.R;
 import com.school.bicycle.adapter.Mycoupon_chooles_adapter;
+import com.school.bicycle.adapter.Mycoupon_choolesday_adapter;
+import com.school.bicycle.entity.DayLeaseOrder;
 import com.school.bicycle.entity.FindNotPayRoute;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.ui.pay.PayActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class Mycoupon_chooles_Activity extends BaseToolBarActivity {
+public class Mycoupon_choolesday_Activity extends BaseToolBarActivity {
 
 
 
@@ -31,15 +36,14 @@ public class Mycoupon_chooles_Activity extends BaseToolBarActivity {
     }
 
     private void initview() {
-        final FindNotPayRoute findNotPayRoute = (FindNotPayRoute) getIntent().getSerializableExtra("findNotPayRoute");
-        Mycoupon_chooles_adapter mycoupon_chooles_adapter = new Mycoupon_chooles_adapter(getBaseContext(),findNotPayRoute.getCoupon() );
-        mycouponList.setAdapter(mycoupon_chooles_adapter);
+        final DayLeaseOrder dayLeaseOrder = (DayLeaseOrder) getIntent().getSerializableExtra("dayLeaseOrder");
+        Mycoupon_choolesday_adapter mycoupon_choolesday_adapter = new Mycoupon_choolesday_adapter(getBaseContext(),dayLeaseOrder.getCoupon() );
+        mycouponList.setAdapter(mycoupon_choolesday_adapter);
         mycouponList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("cid的",findNotPayRoute.getCoupon().get(position).getCou_number()+"");
-                OverPayActivity.cid = findNotPayRoute.getCoupon().get(position).getUsercou_id();
-                OverPayActivity.cidprice = findNotPayRoute.getCoupon().get(position).getCou_discount();
+                Log.d("cid的",dayLeaseOrder.getCoupon().get(position).getCou_number()+"");
+                PayActivity.cid = dayLeaseOrder.getCoupon().get(position).getUsercou_id();
                 finish();
             }
         });

@@ -9,7 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
-import com.school.bicycle.entity.Mycoupon;
+import com.school.bicycle.entity.DayLeaseOrder;
+import com.school.bicycle.entity.FindNotPayRoute;
 
 import java.util.List;
 
@@ -20,13 +21,13 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/4/13.
  */
 
-public class Mycoupon_adapter extends BaseAdapter {
+public class Mycoupon_choolesday_adapter extends BaseAdapter {
 
     private Context context;
-    private List<Mycoupon.BodyBean> data;
+    private List<DayLeaseOrder.CouponBean> data;
 
 
-    public Mycoupon_adapter(Context context, List<Mycoupon.BodyBean> data) {
+    public Mycoupon_choolesday_adapter(Context context, List<DayLeaseOrder.CouponBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -61,11 +62,12 @@ public class Mycoupon_adapter extends BaseAdapter {
 
         viewHolde.timeCoupon.setText(data.get(i).getStart_time() + "-" + data.get(i).getEnd_time());
         if (data.get(i).getCou_type().equals("折扣")) {
-            viewHolde.rmb.setText("");
+            viewHolde.rmb.setVisibility(View.GONE);
             viewHolde.manyong.setText("所有可用");
             viewHolde.dikou.setText(data.get(i).getCou_discount()*10 + "折");
             viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_orange);
         } else if (data.get(i).getCou_type().equals("满减")) {
+            viewHolde.rmb.setVisibility(View.VISIBLE);
             viewHolde.dikou.setText(data.get(i).getCou_cut() + "");
             viewHolde.manyong.setText("满" + data.get(i).getCou_full() + "元可用");
             if (data.get(i).getCou_usedin().equals("时租")){
@@ -73,13 +75,10 @@ public class Mycoupon_adapter extends BaseAdapter {
             }else {
                 viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_green);
             }
-
         }
 
         return view;
     }
-
-
 
 
     static class ViewHolder {

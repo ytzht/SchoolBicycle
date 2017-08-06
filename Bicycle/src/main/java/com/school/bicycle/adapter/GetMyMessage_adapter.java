@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
@@ -58,13 +59,16 @@ public class GetMyMessage_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
 
-        viewHolde.mymessageTitle.setText( data.get(i).getTitle());
+        viewHolde.mymessageTitle.setText(data.get(i).getTitle());
+//        viewHolde.infomationIma.setText(data.get(i).getTitle());
 
         return view;
     }
 
 
     static class ViewHolder {
+        @BindView(R.id.infomation_ima)
+        ImageView infomationIma;
         @BindView(R.id.mymessage_title)
         TextView mymessageTitle;
 

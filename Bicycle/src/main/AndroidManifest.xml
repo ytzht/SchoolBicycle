@@ -201,12 +201,15 @@
         <activity android:name=".ui.xingcheng_map_acvitity" />
         <activity android:name=".ui.MyRoute.MyRoute_Activity" />
         <activity android:name=".ui.User_Activity" />
+        <activity android:name=".ui.setup_chongzhiActivity" />
+        <activity android:name=".ui.setup_despositActivity" />
+        <activity android:name=".ui.setup_userActivity" />
         <activity android:name=".ui.openbynum_Activity" />
         <activity android:name=".ui.AboutUsActivity" />
-        <activity android:name=".ui.setup_despositActivity" />
         <activity android:name=".ui.RechargeActivity" />
         <activity android:name=".ui.BikeAlarmListActivity" />
         <activity android:name=".ui.ShareincomeActivity" />
+        <activity android:name=".ui.Mycoupon_choolesday_Activity" />
         <activity android:name=".ui.Mycoupon_Activity"></activity>
     </application>
 

@@ -48,8 +48,8 @@ public class ResultActivity extends BaseToolBarActivity {
         Intent it = getIntent();
         String type = it.getStringExtra("type");
         if (type.endsWith("time")) {
-            teResResult.setText("点击确定后预定该车，进入用车界\n面十分钟后或扫码" +
-                    "开锁后开始计时\n,\n还车请归还到原车位，否则系统将\n无法结束计时");
+            teResResult.setText("点击确定后预定该车，进入用车界面十分钟后或扫码" +
+                    "开锁后开始计时,还车请归还到原车位，否则系统将无法结束计时。");
             btResNext.setText("确定");
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,7 +89,7 @@ public class ResultActivity extends BaseToolBarActivity {
                 }
             });
         } else if (type.equals("yajin")) {
-            teResResult.setText("押金将在2个工作日内转入到\n您的押金支付账户内");
+            teResResult.setText("押金充值成功");
             btResNext.setText("返回主界面");
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,7 +98,7 @@ public class ResultActivity extends BaseToolBarActivity {
                 }
             });
         } else if (type.equals("tixian")) {
-            teResResult.setText("提现金额将在2个工作日内转入到\n您的押金支付账户内");
+            teResResult.setText("押金将在0-3个工作日内转入到您的押金支付账户内");
             btResNext.setText("返回主界面");
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -109,7 +109,7 @@ public class ResultActivity extends BaseToolBarActivity {
             });
 
         } else if (type.equals("date")) {
-            teResResult.setText("用车结束需归还至原停车位才可技术用车。\n点击主界面扫码开锁按钮解锁车辆，结束\n用车前您可多次上锁开锁");
+            teResResult.setText("用车结束需归还至原停车位才可继续用车。点击主界面扫码开锁按钮解锁车辆，结束用车前您可多次上锁开锁。");
             btResNext.setText("确定");
             new UserService(ResultActivity.this).setShowOneMark("0");
             btResNext.setOnClickListener(new View.OnClickListener() {
@@ -142,15 +142,37 @@ public class ResultActivity extends BaseToolBarActivity {
             });
         }else if (type.equals("timestop")){
             teResResult.setText("还 车 成 功");
-            btResNext.setText("去结算");
-           startActivity(OverPayActivity.class);
-        }else {
+            btResNext.setText("返回主界面");
+
+        }else if (type.equals("tixianxiaoe")){
+            teResResult.setText("提现金额将在0-3个工作日内转入您的押金充值账户！");
+            btResNext.setText("返回主界面");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new UserService(ResultActivity.this).settixian("1");
+                    finish();
+                }
+            });
             // TODO: 2017/7/24 用于设置各个界面跳转到当前界面 该界面的显示
+        }else if (type.equals("timereturnbiycle")){
+            teResResult.setText("支付成功");
+            btResNext.setText("返回主界面");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
     }
 
     @OnClick(R.id.bt_res_next)
     public void onViewClicked() {
+        String type = getIntent().getStringExtra("type");
+        if (type.equals("timestop")){
+            finish();
+        }
 
     }
 }

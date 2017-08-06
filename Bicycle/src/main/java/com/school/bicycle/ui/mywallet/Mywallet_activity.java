@@ -122,6 +122,7 @@ public class Mywallet_activity extends BaseToolBarActivity {
                         OkHttpUtils
                                 .get()
                                 .url(url)
+                                .addHeader("cookie",new UserService(Mywallet_activity.this).getCookie())
                                 .build()
                                 .execute(new StringCallback() {
                                     @Override
@@ -133,7 +134,7 @@ public class Mywallet_activity extends BaseToolBarActivity {
                                     public void onResponse(String response, int id) {
                                         BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                         if (baseResult.getCode() == 1) {
-                                            startActivity(ResultActivity.class, "type", "yajin");
+                                            startActivity(ResultActivity.class, "type", "tixian");
                                             finish();
                                         } else {
                                             showShort(baseResult.getMsg());

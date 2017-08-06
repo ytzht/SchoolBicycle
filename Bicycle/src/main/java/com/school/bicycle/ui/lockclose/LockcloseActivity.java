@@ -111,6 +111,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
                                 BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                                 if (baseResult.getCode() == 1) {
                                     int status = Integer.parseInt(getIntent().getStringExtra("status"));
+                                    Log.d("status",status+"");
                                     if (status == 1) {
                                         new UserService(LockcloseActivity.this).setShowOneMark("0");
                                         startActivity(ResultActivity.class, "type", "date");

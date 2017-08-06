@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.entity.FindNotPayRoute;
-import com.school.bicycle.entity.Mycoupon;
 
 import java.util.List;
 
@@ -59,15 +58,22 @@ public class Mycoupon_chooles_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
 
-        viewHolde.dikou.setText(data.get(i).getCou_discount()+"");
-        viewHolde.manyong.setText("满"+data.get(i).getCou_number()+"元可用");
-        viewHolde.timeCoupon.setText(data.get(i).getStart_time()+"-"+data.get(i).getEnd_time());
-        if (data.get(i).getCou_type().equals("折扣")){
+
+        viewHolde.timeCoupon.setText(data.get(i).getStart_time() + "-" + data.get(i).getEnd_time());
+        if (data.get(i).getCou_type().equals("折扣")) {
+            viewHolde.rmb.setVisibility(View.GONE);
+            viewHolde.manyong.setText("所有可用");
+            viewHolde.dikou.setText(data.get(i).getCou_discount()*10 + "折");
             viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_orange);
-        }else  if (data.get(i).getCou_type().equals("日租满减")){
-            viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_green);
-        }else  if (data.get(i).getCou_type().equals("时租满减")){
-            viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_blue);
+        } else if (data.get(i).getCou_type().equals("满减")) {
+            viewHolde.rmb.setVisibility(View.VISIBLE);
+            viewHolde.dikou.setText(data.get(i).getCou_cut() + "");
+            viewHolde.manyong.setText("满" + data.get(i).getCou_full() + "元可用");
+            if (data.get(i).getCou_usedin().equals("时租")){
+                viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_blue);
+            }else {
+                viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_green);
+            }
         }
 
         return view;
@@ -83,9 +89,11 @@ public class Mycoupon_chooles_adapter extends BaseAdapter {
         TextView manyong;
         @BindView(R.id.time_coupon)
         TextView timeCoupon;
-
+        @BindView(R.id.rmb)
+        TextView rmb;
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
 }

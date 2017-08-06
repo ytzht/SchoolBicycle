@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:paddingLeft="10dp"
-                android:focusable="false"
+                android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:id="@+id/mycoupon_ed"
                 android:background="@null" />

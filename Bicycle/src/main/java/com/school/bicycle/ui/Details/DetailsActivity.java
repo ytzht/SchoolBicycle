@@ -59,7 +59,5 @@ public class DetailsActivity extends BaseToolBarActivity {
         });
 
         tabLayout.setupWithViewPager(viewPager);
-
-
     }
 }

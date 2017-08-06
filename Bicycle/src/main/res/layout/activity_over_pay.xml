@@ -142,7 +142,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="已选一张"
                     android:textColor="@color/grey" />
 
 
@@ -151,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="-￥6" />
+                    />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -197,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingRight="15dp"
-                    android:text="30元" />
+                     />
 
             </LinearLayout>
 
@@ -228,7 +227,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="4"
                     android:textColor="@color/grey"
                     android:textSize="20sp" />
 

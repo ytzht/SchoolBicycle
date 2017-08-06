@@ -18,6 +18,8 @@ import com.school.bicycle.R;
 import com.school.bicycle.app.MyApplication;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.Login;
+import com.school.bicycle.entity.Register;
+import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
@@ -30,6 +32,9 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -142,7 +147,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                                 public void onResponse(String response, int id) {
                                     Log.d("response=", response);
                                     BaseResult baseResult = gson.fromJson(response, BaseResult.class);
-                                    showLong(baseResult.getMsg());
+                                    showShort(baseResult.getMsg());
                                 }
 
                             });
@@ -155,9 +160,11 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
             public void onClick(View v) {
 
                 iRegisterPresenter.verificationCode(etCode.getText().toString());
-                String url = getResources().getString(R.string.baseurl) + "user/register";
+                String url = Apis.Base + "user/register";
                 final String[] sid = new String[1];
+
                 if (cbRuler.isChecked()) {
+
                     OkHttpUtils
                             .post()
                             .url(url)
@@ -165,10 +172,10 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                             .addParams("code", etCode.getText().toString())
                             .addParams("reg_from", "android")
                             .build()
-                            .execute(new Callback() {
+                            .execute(new StringCallback() {
                                 String s;
                                 @Override
-                                public Object parseNetworkResponse(Response response, int id) throws Exception {
+                                public String parseNetworkResponse(Response response, int id) throws IOException {
                                     Headers headers = response.headers();
                                     Log.d("info_headers", "header " + headers);
                                     List<String> cookies = headers.values("Set-Cookie");
@@ -176,22 +183,71 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                                     Log.d("info_cookies", "onResponse-size: " + cookies);
                                     s = session.substring(0, session.indexOf(";"));
                                     Log.d("info_s", "session is  :" + s);
-                                    return null;
+                                    new UserService(RegisterActivity.this).setCookie(s);
+                                    return super.parseNetworkResponse(response, id);
                                 }
 
                                 @Override
                                 public void onError(Call call, Exception e, int id) {
-                                    Log.d("response", e.toString());
+
                                 }
 
                                 @Override
-                                public void onResponse(Object response, int id) {
+                                public void onResponse(String response, int id) {
+                                    Log.d("登录",response+" s");
                                     new UserService(RegisterActivity.this).setCookie(s);
-                                    startActivity(MainActivity.class,"bike_number","");
-                                    finish();
+                                    Register register = gson.fromJson(response,Register.class);
+                                    if (register.getCode()==1){
+                                        if (register.getVerify_status()!=1){
+                                            startActivity(RealnameActivity.class);
+                                            finish();
+                                        }else {
+                                            showShort("登录成功");
+                                            finish();
+                                        }
+                                    }
                                 }
-
                             });
+//                    OkHttpUtils
+//                            .post()
+//                            .url(url)
+//                            .addParams("device_id", DEVICE_ID)
+//                            .addParams("code", etCode.getText().toString())
+//                            .addParams("reg_from", "android")
+//                            .build()
+//                            .execute(new Callback() {
+//
+//                                @Override
+//                                public Object parseNetworkResponse(Response response, int id) throws Exception {
+//                                    Headers headers = response.headers();
+//                                    Log.d("info_headers", "header " + headers);
+//                                    List<String> cookies = headers.values("Set-Cookie");
+//                                    String session = cookies.get(0);
+//                                    Log.d("info_cookies", "onResponse-size: " + cookies);
+//                                    s = session.substring(0, session.indexOf(";"));
+//                                    Log.d("info_s", "session is  :" + s);
+//                                    new UserService(RegisterActivity.this).setCookie(s);
+//                                    return null;
+//                                }
+//
+//                                @Override
+//                                public void onError(Call call, Exception e, int id) {
+//                                    Log.d("response", e.toString());
+//                                }
+//
+//                                @Override
+//                                public void onResponse(Object response, int id) {
+//                                    new UserService(RegisterActivity.this).setCookie(s);
+//                                    BaseResult baseResult = (BaseResult)response;
+//                                    if (baseResult.getCode()==1){
+//
+//                                    }
+//                                    response.toString();
+//                                    startActivity(MainActivity.class,"bike_number","");
+//                                    finish();
+//                                }
+//
+//                            });
                 } else {
 
                 }

@@ -78,7 +78,7 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
                             L.d(response);
                             BaseResult b = gson.fromJson(response,BaseResult.class);
                             if (b.getCode()==1){
-                                startActivity(ResultActivity.class,"type","tixian");
+                                startActivity(ResultActivity.class,"type","tixianxiaoe");
                                 finish();
                             }else {
                                 showShort(b.getMsg());

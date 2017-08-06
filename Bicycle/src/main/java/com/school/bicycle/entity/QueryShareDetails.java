@@ -65,7 +65,7 @@ public class QueryShareDetails {
         private String bike_type;
         private String lease_type;
         private String order_status;
-        private int share_income;
+        private String share_income;
         private int two_user_id;
         private String use_time;
         private String create_time;
@@ -126,11 +126,11 @@ public class QueryShareDetails {
             this.order_status = order_status;
         }
 
-        public int getShare_income() {
+        public String getShare_income() {
             return share_income;
         }
 
-        public void setShare_income(int share_income) {
+        public void setShare_income(String share_income) {
             this.share_income = share_income;
         }
 

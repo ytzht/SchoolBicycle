@@ -27,7 +27,7 @@ public class FindNotPayRoute implements Serializable {
     private String time_span;
     private String distance;
     private String calories;
-    private String total_fee;
+    private double total_fee;
     private String bike_number;
     private String balance;
     private List<CouponBean> coupon;
@@ -72,11 +72,11 @@ public class FindNotPayRoute implements Serializable {
         this.calories = calories;
     }
 
-    public String getTotal_fee() {
+    public double getTotal_fee() {
         return total_fee;
     }
 
-    public void setTotal_fee(String total_fee) {
+    public void setTotal_fee(double total_fee) {
         this.total_fee = total_fee;
     }
 
@@ -129,6 +129,25 @@ public class FindNotPayRoute implements Serializable {
         private int cou_number;
         private String cou_code;
         private int used;
+        private double cou_full;
+        private double cou_cut;
+
+        public double getCou_full() {
+            return cou_full;
+        }
+
+        public void setCou_full(double cou_full) {
+            this.cou_full = cou_full;
+        }
+
+        public double getCou_cut() {
+            return cou_cut;
+        }
+
+        public void setCou_cut(double cou_cut) {
+            this.cou_cut = cou_cut;
+        }
+
         private String create_time;
 
         public int getUsercou_id() {

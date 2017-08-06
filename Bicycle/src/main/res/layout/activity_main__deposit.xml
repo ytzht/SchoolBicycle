@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="缴纳押金后才可用车（随时可退)"
+        android:text="缴纳押金后才可用车。"
         android:textColor="@color/dps_textc"
         android:textSize="17dp"
         android:layout_below="@+id/deposit_num"

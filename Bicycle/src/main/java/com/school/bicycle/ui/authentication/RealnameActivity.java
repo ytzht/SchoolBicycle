@@ -1,5 +1,6 @@
 package com.school.bicycle.ui.authentication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,34 +15,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import com.google.gson.Gson;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CampusCardImage;
-import com.school.bicycle.entity.GetLongLeaseInfo;
-import com.school.bicycle.entity.User;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UTFXMLString;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.User_Activity;
 import com.school.bicycle.utils.CheckCardID;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.ResultSet;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
-import okhttp3.MediaType;
+
 
 import static me.iwf.photopicker.PhotoPicker.REQUEST_CODE;
 
@@ -73,25 +64,33 @@ public class RealnameActivity extends BaseToolBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Uri uri = data.getData();
-        if (uri != null) {
-            photo = BitmapFactory.decodeFile(uri.getPath());
-            rnPhoto.setImageBitmap(photo);
-            saveImage(photo);
-        }
-        if (photo == null) {
-            Bundle bundle = data.getExtras();
-            if (bundle != null) {
-                photo = (Bitmap) bundle.get("data");
+        if(resultCode== Activity.RESULT_CANCELED){
+
+        }else {
+            Uri uri = data.getData();
+            if (uri != null) {
+                photo = BitmapFactory.decodeFile(uri.getPath());
                 rnPhoto.setImageBitmap(photo);
                 saveImage(photo);
-            } else {
-                return;
+            }
+            if (photo == null) {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    photo = (Bitmap) bundle.get("data");
+                    rnPhoto.setImageBitmap(photo);
+                    saveImage(photo);
+                } else {
+                    return;
+                }
             }
         }
-
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destoryBimap();
+    }
 
     //保存并上传图片
     public void saveImage(Bitmap bmp) {
@@ -123,8 +122,6 @@ public class RealnameActivity extends BaseToolBarActivity {
                     .addHeader("cookie", cookie)
                     .addFile("image", "temp.jpg", file)
                     .url(url)
-//                    .params(params)//
-//                    .headers(headers)//
                     .build()
                     .execute(new StringCallback() {
                         @Override
@@ -137,10 +134,8 @@ public class RealnameActivity extends BaseToolBarActivity {
                             CampusCardImage campusCardImage = gson.fromJson(response, CampusCardImage.class);
                             if (campusCardImage.getCode() == 0) {
                                 showShort(campusCardImage.getMsg());
-                                destoryBimap();
                             } else {
                                 showShort(campusCardImage.getMsg());
-                                destoryBimap();
                             }
                         }
                     });
@@ -175,6 +170,7 @@ public class RealnameActivity extends BaseToolBarActivity {
      * 销毁图片文件
      */
     private void destoryBimap() {
+
         if (photo != null && !photo.isRecycled()) {
             photo.recycle();
             photo = null;

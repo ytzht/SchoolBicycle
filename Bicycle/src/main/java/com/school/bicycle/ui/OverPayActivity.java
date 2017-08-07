@@ -278,6 +278,8 @@ public class OverPayActivity extends BaseToolBarActivity {
                                 tvAs.setText("-￥"+findNotPayRoute.getCoupon().get(i).getCou_cut());
                                 tvNeed.setText(findNotPayRoute.getTotal_fee()-findNotPayRoute.getCoupon().get(i).getCou_cut()+"");
                             }
+                        }else {
+                            tvNeed.setText(findNotPayRoute.getTotal_fee()+"");
                         }
                     }
                 }

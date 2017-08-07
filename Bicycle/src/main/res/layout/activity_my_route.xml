@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context="com.school.bicycle.ui.MyRoute.MyRoute_Activity">
 
 
@@ -13,6 +14,7 @@
         android:layout_height="match_parent"
         android:divider="#00000000"
         android:dividerHeight="0dip"
+        android:scrollbars="none"
         android:id="@+id/getMyRoute_list"/>
     <TextView
         android:layout_width="match_parent"

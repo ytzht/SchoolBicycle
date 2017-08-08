@@ -113,44 +113,49 @@ public class Mywallet_activity extends BaseToolBarActivity {
                 break;
             case R.id.mywallet_refund:
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("提示");
-                builder.setMessage("是否退还押金");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String url = Apis.Base + Apis.depositRefund;
-                        OkHttpUtils
-                                .get()
-                                .url(url)
-                                .addHeader("cookie",new UserService(Mywallet_activity.this).getCookie())
-                                .build()
-                                .execute(new StringCallback() {
-                                    @Override
-                                    public void onError(Call call, Exception e, int id) {
+                if (new UserService(Mywallet_activity.this).getisgetbiycle().equals("1")){
+                    showShort("您有在租的车辆，暂时不能退还您的押金！");
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("提示");
+                    builder.setMessage("是否退还押金");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String url = Apis.Base + Apis.depositRefund;
+                            OkHttpUtils
+                                    .get()
+                                    .url(url)
+                                    .addHeader("cookie",new UserService(Mywallet_activity.this).getCookie())
+                                    .build()
+                                    .execute(new StringCallback() {
+                                        @Override
+                                        public void onError(Call call, Exception e, int id) {
 
-                                    }
-
-                                    @Override
-                                    public void onResponse(String response, int id) {
-                                        BaseResult baseResult = gson.fromJson(response, BaseResult.class);
-                                        if (baseResult.getCode() == 1) {
-                                            startActivity(ResultActivity.class, "type", "tixian");
-                                            finish();
-                                        } else {
-                                            showShort(baseResult.getMsg());
                                         }
-                                    }
-                                });
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                });
-                builder.show();
+                                        @Override
+                                        public void onResponse(String response, int id) {
+                                            BaseResult baseResult = gson.fromJson(response, BaseResult.class);
+                                            if (baseResult.getCode() == 1) {
+                                                startActivity(ResultActivity.class, "type", "tixian");
+                                                finish();
+                                            } else {
+                                                showShort(baseResult.getMsg());
+                                            }
+                                        }
+                                    });
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+                }
+
                 break;
             case R.id.income_Withdrawals:
                 startActivity(WithdrawalsActivity.class, "getShare_income", wallet.getShare_income());

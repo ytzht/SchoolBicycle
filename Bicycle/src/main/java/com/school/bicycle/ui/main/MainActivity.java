@@ -1453,7 +1453,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         if (checkJumpStatus.getBike_status() == 0) {
                             isbiycle = false;
                             new UserService(MainActivity.this).setState("0");
-//                            new UserService(MainActivity.this).setShowOneMark("0");
+                            new UserService(MainActivity.this).setisgetbiycle("0");
                             //未租车状态
                             if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
                                 initmap();
@@ -1470,10 +1470,12 @@ public class MainActivity extends BaseActivity implements IMainView,
                             if (isbiycle) {
                                 new UserService(MainActivity.this).setShowOneMark("1");
                                 new UserService(MainActivity.this).setState("1");
+                                new UserService(MainActivity.this).setisgetbiycle("1");
                             } else {
                                 showOneCar(checkJumpStatus.getBody().get(0).getNumber());
                                 new UserService(MainActivity.this).setShowOneMark("1");
                                 new UserService(MainActivity.this).setState("1");
+                                new UserService(MainActivity.this).setisgetbiycle("1");
                                 bike_number = checkJumpStatus.getBike_number();
                                 //setTimerTask();
                                 //日租中
@@ -1490,11 +1492,13 @@ public class MainActivity extends BaseActivity implements IMainView,
                             if (isbiycle) {
                                 new UserService(MainActivity.this).setShowOneMark("1");
                                 new UserService(MainActivity.this).setState("1");
+                                new UserService(MainActivity.this).setisgetbiycle("1");
                             } else {
                                 isbiycle = true;
                                 showOneCar(checkJumpStatus.getBody().get(0).getNumber());
                                 new UserService(MainActivity.this).setShowOneMark("1");
                                 new UserService(MainActivity.this).setState("1");
+                                new UserService(MainActivity.this).setisgetbiycle("1");
                                 bike_number = checkJumpStatus.getBike_number();
                                 lianxumap();
                                 tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
@@ -1511,10 +1515,12 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                             initTimeDown();
                         } else if (checkJumpStatus.getBike_status() == 3) {
+                            new UserService(MainActivity.this).setisgetbiycle("0");
                             //时租付款
                             initmap();
                             startActivity(OverPayActivity.class);
                         } else if (checkJumpStatus.getBike_status() == 4) {
+                            new UserService(MainActivity.this).setisgetbiycle("1");
                             bike_number = checkJumpStatus.getBike_number();
                             countdown.setVisibility(View.GONE);
                             if (checkJumpStatus.getLock_status() == 1) {

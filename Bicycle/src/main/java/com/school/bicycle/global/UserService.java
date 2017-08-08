@@ -24,11 +24,28 @@ public class UserService {
     private static final String usebiycle   = "usebiycle";
     private static final String iscall   = "iscall";
     private static final String over   = "over";
+    private static final String isgetbiycle   = "isgetbiycle";
 
 
 
     public UserService(Context context) {
         this.context = context;
+    }
+
+
+    // 1为租车状态 0为未租车状态
+    public void setisgetbiycle(String latlon) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                isgetbiycle, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(isgetbiycle, latlon).apply();
+    }
+
+
+    public String getisgetbiycle() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                isgetbiycle, Context.MODE_PRIVATE);
+        return memberPrefs.getString(isgetbiycle, "0");
+
     }
     //1为确定 0为否
     public void setover(String latlon) {

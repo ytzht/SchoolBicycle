@@ -154,7 +154,6 @@ public class ResultActivity extends BaseToolBarActivity {
                     finish();
                 }
             });
-            // TODO: 2017/7/24 用于设置各个界面跳转到当前界面 该界面的显示
         }else if (type.equals("timereturnbiycle")){
             teResResult.setText("支付成功");
             btResNext.setText("返回主界面");

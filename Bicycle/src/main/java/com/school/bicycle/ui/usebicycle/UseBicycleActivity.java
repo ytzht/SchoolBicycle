@@ -43,6 +43,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -178,6 +179,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
     }
     GetBikeMapList g;
+    Getlistbiycle_adapter g_adapter;
     private void initview() {
         String lat = getIntent().getStringExtra("lat");
         String lon = getIntent().getStringExtra("lon");
@@ -188,11 +190,12 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         OkHttpUtils.get()
                 .url(url)
                 .addHeader("cookie", cookie)
+                .addParams("page","1")
                 .build()
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        showShort("no");
+
                     }
 
                     @Override
@@ -200,9 +203,20 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                         Log.d("获取周围单车位置列表response", response);
                         g = gson.fromJson(response, GetBikeMapList.class);
                         if (g.getCode() != 0) {
-                            Getlistbiycle_adapter g_adapter = new Getlistbiycle_adapter(getBaseContext(),g.getBody());
-                            lvShowUsebicycle.setAdapter(g_adapter);
-                            new UserService(UseBicycleActivity.this).setusebiycle("1");
+//                            if (g.getBody().size()>10){
+//                                List<GetBikeMapList.BodyBean> list = new ArrayList<GetBikeMapList.BodyBean>();
+//                                for (int i = 0;i<10;i++){
+//                                    list.add(g.getBody().get(i));
+//                                }
+//                                g_adapter = new Getlistbiycle_adapter(getBaseContext(),list);
+//                                lvShowUsebicycle.setAdapter(g_adapter);
+//                            }else {
+                                g_adapter = new Getlistbiycle_adapter(getBaseContext(),g.getBody());
+                                lvShowUsebicycle.setAdapter(g_adapter);
+                                new UserService(UseBicycleActivity.this).setusebiycle("1");
+//                            }
+
+
                         }
                     }
 

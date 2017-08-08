@@ -85,7 +85,7 @@ public class LocationService extends Service implements AMapLocationListener {
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        // TODO Auto-generated method stub
+
         latitude = aMapLocation.getLatitude();
         longitude = aMapLocation.getLongitude();
         Log.d("我在不停地定位LocationService=", "latitude:" + latitude + "longitude" + longitude);
@@ -120,7 +120,7 @@ public class LocationService extends Service implements AMapLocationListener {
     }
 
     private void startTimer() {
-        // TODO Auto-generated method stub
+
         isStop = true;//定时器启动后，修改标识，关闭定时器的开关
         if (mTimer == null) {
             mTimer = new Timer();
@@ -140,7 +140,7 @@ public class LocationService extends Service implements AMapLocationListener {
                             }
                             Thread.sleep(5000);//5秒后再次执行
                         } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
+
                             return;
                         }
                     } while (isStop);

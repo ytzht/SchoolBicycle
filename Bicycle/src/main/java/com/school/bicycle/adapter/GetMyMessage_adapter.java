@@ -60,7 +60,7 @@ public class GetMyMessage_adapter extends BaseAdapter {
         }
 
         viewHolde.mymessageTitle.setText(data.get(i).getTitle());
-//        viewHolde.infomationIma.setText(data.get(i).getTitle());
+        viewHolde.infomationIma.setImageResource(R.drawable.xinxi);
 
         return view;
     }

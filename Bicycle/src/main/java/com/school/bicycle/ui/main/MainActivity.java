@@ -207,24 +207,44 @@ public class MainActivity extends BaseActivity implements IMainView,
                     aMap.moveCamera(cameraUpdate);
                 }
 
-//                    String latlng_free =  new UserService(MainActivity.this).getLatLon();
-//                    if (!latlng_free.equals("0")){
-//                        lat = Double.parseDouble(latlng_free.substring(0,latlng_free.indexOf(",")));
-//                        lon = Double.parseDouble(latlng_free.substring(latlng_free.indexOf(",")));
-//                    }else {
-//
-//                    }
+
+                if (new UserService(MainActivity.this).getState().equals("1")) {
+                    LatLng newLatLng = new LatLng(lat, lon);
+                    if (isFirstLatLng) {
+                        //记录第一次的定位信息
+                        oldLatLng = newLatLng;
+                        isFirstLatLng = false;
+                    }
+
+                    //位置有变化
+                    if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
+                        Log.d("定位获得的经纬度main=", " latitude: " + lat + " longitude :" + lon);
+                        if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 1000) {
+                            if (checkJumpStatus.getLock_status() == 0) {
+                                if(lon!=0.0){
+                                    setUpMap(oldLatLng, newLatLng);
+                                    new UserService(MainActivity.this).setLatLon(lat + "," + lon);
+                                    oldLatLng = newLatLng;
+                                    Message message = new Message();
+                                    message.what = 1;
+                                    doActionHandler.sendMessage(message);
+                                }
+
+                            }
+                        }
+                    }
+                }
                 Log.d("我在不停地定位Mainacvitity=", "latitude:" + lat + "longitude" + lon);
 
             }
 
-            if (checkJumpStatus.getBike_status() == 0) {
-                mLocationClient.stopLocation();
-            }
-
-            if (checkJumpStatus.getBike_status() == 4 && new UserService(MainActivity.this).getState().equals("0")) {
-                mLocationClient.stopLocation();
-            }
+//            if (checkJumpStatus.getBike_status() == 0) {
+//                mLocationClient.stopLocation();
+//            }
+//
+//            if (checkJumpStatus.getBike_status() == 4 && new UserService(MainActivity.this).getState().equals("0")) {
+//                mLocationClient.stopLocation();
+//            }
 
         }
 
@@ -676,7 +696,14 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 if (v.getDeposit_status() == 0) {
                                     startActivity(DepositActivity.class);
                                 } else {
-                                    startActivity(UseBicycleActivity.class, "lat", lat + "", "lon", lon + "");
+                                    if(checkJumpStatus.getCode()==1){
+                                        if (checkJumpStatus.getBike_status()==4){
+                                            showOneCar(checkJumpStatus.getBike_number());
+                                        }else {
+                                            startActivity(UseBicycleActivity.class, "lat", lat + "", "lon", lon + "");
+                                        }
+                                    }
+
                                 }
                             }
                         }
@@ -1198,7 +1225,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 mHandler.sendMessage(mHandler.obtainMessage());
                 lon = Double.parseDouble(str.substring(str.indexOf(",") + 1));
                 lat = Double.parseDouble(str.substring(0, str.indexOf(",")));
-
+                Log.d("定位获得的经纬度service=", " latitude: " + lat + " longitude :" + lon);
                 if (new UserService(MainActivity.this).getState().equals("1")) {
                     LatLng newLatLng = new LatLng(lat, lon);
                     if (isFirstLatLng) {
@@ -1209,22 +1236,17 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                     //位置有变化
                     if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
-//                        cameraUpdate = CameraUpdateFactory
-//                                .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-//                        aMap.moveCamera(cameraUpdate);
-                        setUpMap(oldLatLng, newLatLng);
-                        Log.d("定位获得的经纬度=", " latitude: " + lat + " longitude :" + lon);
+                        Log.d("定位获得的经纬度qingqiu=", " latitude: " + lat + " longitude :" + lon);
                         if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 1000) {
                             if (checkJumpStatus.getLock_status() == 0) {
-
-                                new UserService(MainActivity.this).setLatLon(lat + "," + lon);
-                                oldLatLng = newLatLng;
-                                Message message = new Message();
-                                message.what = 1;
-                                doActionHandler.sendMessage(message);
-//                                cameraUpdate = CameraUpdateFactory
-//                                        .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-//                                aMap.moveCamera(cameraUpdate);
+                                if (lon!=0.0){
+                                    setUpMap(oldLatLng, newLatLng);
+                                    new UserService(MainActivity.this).setLatLon(lat + "," + lon);
+                                    oldLatLng = newLatLng;
+                                    Message message = new Message();
+                                    message.what = 1;
+                                    doActionHandler.sendMessage(message);
+                                }
                             }
                         }
                     }
@@ -1269,6 +1291,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         initview();
 //        UpdateInfo();
         BindPushUtils.bind(getBaseContext());//保存绑定推送
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastAction);
         registerReceiver(receiver, filter);
@@ -1952,7 +1975,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                                     }
                                 }
                             });
-                    // TODO: 2017/8/6 判断车锁状态
 
                 }
             });

@@ -7,6 +7,13 @@
     android:background="@color/white"
     android:orientation="vertical"
     tools:context="com.school.bicycle.ui.OverPayActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_overpay"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"

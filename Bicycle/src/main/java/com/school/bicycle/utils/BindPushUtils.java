@@ -55,7 +55,7 @@ public class BindPushUtils {
         final String deviceToken = new UserService(context).getDeviceToken();
         OkHttpUtils
                 .post()
-                .url(Apis.Base + Apis.DiviceToken)
+                .url(Apis.Base + Apis.setDiviceToken)
                 .addHeader("divice_token", deviceToken)
                 .addParams("phone", phone)
                 .build()

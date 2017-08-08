@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +24,7 @@ import com.school.bicycle.entity.Pay_wallet;
 import com.school.bicycle.entity.WxPayParams;
 import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
-import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
@@ -34,7 +35,6 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -44,7 +44,7 @@ import okhttp3.Call;
 
 import static com.school.bicycle.R.id.tv_has;
 
-public class OverPayActivity extends BaseToolBarActivity {
+public class OverPayActivity extends BaseActivity {
 
 
     @BindView(R.id.by_time)
@@ -80,13 +80,15 @@ public class OverPayActivity extends BaseToolBarActivity {
     FindNotPayRoute findNotPayRoute;
     public static int cid = 0;
     public static double cidprice = 0;
+    @BindView(R.id.tb_overpay)
+    Toolbar tbOverpay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_over_pay);
         ButterKnife.bind(this);
-        setToolbarText("付款");
+        tbOverpay.setTitle("日租付款");
         String url = Apis.Base + Apis.findNotPayRoute;
         String cookie = new UserService(OverPayActivity.this).getCookie();
         OkHttpUtils
@@ -108,9 +110,9 @@ public class OverPayActivity extends BaseToolBarActivity {
                             byTime.setText(findNotPayRoute.getTime_span());
                             byDistance.setText(findNotPayRoute.getDistance());
                             byExpend.setText(findNotPayRoute.getCalories());
-                            byPay.setText(findNotPayRoute.getTotal_fee()+"");
+                            byPay.setText(findNotPayRoute.getTotal_fee() + "");
                             tvYe.setText(findNotPayRoute.getBalance());
-                            price = findNotPayRoute.getTotal_fee()+"";
+                            price = findNotPayRoute.getTotal_fee() + "";
                             bike_number = findNotPayRoute.getBike_number();
                         } else {
                             showShort(findNotPayRoute.getMsg());
@@ -123,20 +125,20 @@ public class OverPayActivity extends BaseToolBarActivity {
 
     String info;
 
-    @OnClick({R.id.cb_we, R.id.cb_zfb, R.id.cb_wallet, R.id.confirm,R.id.youhuiquan})
+    @OnClick({R.id.cb_we, R.id.cb_zfb, R.id.cb_wallet, R.id.confirm, R.id.youhuiquan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
             case R.id.youhuiquan:
-                if (findNotPayRoute.getCoupon()!=null){
-                    if (findNotPayRoute.getCoupon().size()==0){
+                if (findNotPayRoute.getCoupon() != null) {
+                    if (findNotPayRoute.getCoupon().size() == 0) {
                         showShort("暂无可用的优惠券");
-                    }else {
+                    } else {
                         Intent intent = new Intent(this, Mycoupon_chooles_Activity.class);
                         intent.putExtra("findNotPayRoute", findNotPayRoute);
                         startActivity(intent);
                     }
-                }else {
+                } else {
                     showShort("暂无可用的优惠券");
                 }
 
@@ -162,7 +164,7 @@ public class OverPayActivity extends BaseToolBarActivity {
                 } else {
                     String url = Apis.Base + Apis.submitLeaseOrder;
                     String cookie = new UserService(OverPayActivity.this).getCookie();
-                    Log.d("cid的值",cid+"");
+                    Log.d("cid的值", cid + "");
                     OkHttpUtils
                             .post()
                             .url(url)
@@ -170,7 +172,7 @@ public class OverPayActivity extends BaseToolBarActivity {
                             .addParams("price", price)
                             .addParams("bike_number", bike_number)
                             .addParams("pay_type", pay_type)
-                            .addParams("cid", cid+"")
+                            .addParams("cid", cid + "")
                             .build()
                             .execute(new StringCallback() {
                                 @Override
@@ -259,27 +261,27 @@ public class OverPayActivity extends BaseToolBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (cid!=0){
+        if (cid != 0) {
             tvHas.setText("已选一张");
         }
 
-        if (findNotPayRoute!=null){
+        if (findNotPayRoute != null) {
             if (findNotPayRoute.getCode() == 1) {
-                if (findNotPayRoute.getCoupon().size()==0){
+                if (findNotPayRoute.getCoupon().size() == 0) {
                     showShort("暂无可用的优惠券");
-                }else {
-                    for (int i = 0;i<findNotPayRoute.getCoupon().size();i++){
-                        if (findNotPayRoute.getCoupon().get(i).getUsercou_id() ==cid){
-                            if (findNotPayRoute.getCoupon().get(i).getCou_type().equals("折扣")){
-                                tvAs.setText("-￥"+(findNotPayRoute.getTotal_fee()*findNotPayRoute.getCoupon().get(i).getCou_discount()));
-                                tvNeed.setText(findNotPayRoute.getTotal_fee()-
-                                        (findNotPayRoute.getTotal_fee()*findNotPayRoute.getCoupon().get(i).getCou_discount())+"");
-                            }else {
-                                tvAs.setText("-￥"+findNotPayRoute.getCoupon().get(i).getCou_cut());
-                                tvNeed.setText(findNotPayRoute.getTotal_fee()-findNotPayRoute.getCoupon().get(i).getCou_cut()+"");
+                } else {
+                    for (int i = 0; i < findNotPayRoute.getCoupon().size(); i++) {
+                        if (findNotPayRoute.getCoupon().get(i).getUsercou_id() == cid) {
+                            if (findNotPayRoute.getCoupon().get(i).getCou_type().equals("折扣")) {
+                                tvAs.setText("-￥" + (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()));
+                                tvNeed.setText(findNotPayRoute.getTotal_fee() -
+                                        (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()) + "");
+                            } else {
+                                tvAs.setText("-￥" + findNotPayRoute.getCoupon().get(i).getCou_cut());
+                                tvNeed.setText(findNotPayRoute.getTotal_fee() - findNotPayRoute.getCoupon().get(i).getCou_cut() + "");
                             }
-                        }else {
-                            tvNeed.setText(findNotPayRoute.getTotal_fee()+"");
+                        } else {
+                            tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
                         }
                     }
                 }

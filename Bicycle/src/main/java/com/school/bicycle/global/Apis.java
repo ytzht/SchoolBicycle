@@ -16,7 +16,7 @@ public interface Apis {
 
     String getMyAppoint = "order/getMyAppoint";
 
-    String DiviceToken = "order/setDiviceToken";
+    String setDiviceToken = "order/setDiviceToken";
 
     String aboutUs = "order/aboutUs";
 

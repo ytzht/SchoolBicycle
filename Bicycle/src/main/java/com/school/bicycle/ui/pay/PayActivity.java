@@ -100,7 +100,7 @@ public class PayActivity extends BaseToolBarActivity {
                             PaymentAmount.setText(dayLeaseOrder.getPrice()+"");
                         } else {
                             showShort(dayLeaseOrder.getMsg());
-                            finish();
+//                            finish();
                         }
 
                     }

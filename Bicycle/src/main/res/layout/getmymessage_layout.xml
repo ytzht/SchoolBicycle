@@ -4,8 +4,8 @@
     android:layout_height="120dp"
     android:orientation="vertical"
     android:paddingBottom="5dp"
-    android:paddingLeft="25dp"
-    android:paddingRight="25dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
     android:paddingTop="5dp">
 
     <RelativeLayout
@@ -17,8 +17,8 @@
         <ImageView
             android:id="@+id/infomation_ima"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/actionbar"/>
+            android:layout_height="wrap_content"
+            />
 
         <RelativeLayout
             android:layout_width="match_parent"

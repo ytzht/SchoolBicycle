@@ -59,6 +59,7 @@ public class LockOpenActivity extends BaseToolBarActivity  {
                         Log.d("response", response);
                         BaseResult baseResult = gson.fromJson(response, BaseResult.class);
                         if (baseResult.getCode()==1){
+                            startActivity(MainActivity.class,"bike_number","");
                             finish();
                         }else {
                             showShort(baseResult.getMsg());

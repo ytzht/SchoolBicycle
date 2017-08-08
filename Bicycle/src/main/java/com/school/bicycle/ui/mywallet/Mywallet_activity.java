@@ -112,6 +112,7 @@ public class Mywallet_activity extends BaseToolBarActivity {
                 startActivity(DetailsActivity.class);
                 break;
             case R.id.mywallet_refund:
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("提示");
                 builder.setMessage("是否退还押金");

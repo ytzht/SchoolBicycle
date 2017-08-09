@@ -182,6 +182,12 @@ public class UseBicycleActivity extends BaseToolBarActivity {
     GetBikeMapList g;
     Getlistbiycle_adapter g_adapter;
     private void initview() {
+        final ProgressDialog dialogproa = new ProgressDialog(UseBicycleActivity.this);
+
+        dialogproa.setMessage("请稍候...");
+        dialogproa.setCancelable(false);
+        dialogproa.show();
+
         String lat = getIntent().getStringExtra("lat");
         String lon = getIntent().getStringExtra("lon");
         String url = Apis.Base +
@@ -201,23 +207,17 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        if (dialogproa.isShowing()){
+                            dialogproa.dismiss();
+                        }
                         Log.d("获取周围单车位置列表response", response);
                         g = gson.fromJson(response, GetBikeMapList.class);
                         if (g.getCode() != 0) {
-//                            if (g.getBody().size()>10){
-//                                List<GetBikeMapList.BodyBean> list = new ArrayList<GetBikeMapList.BodyBean>();
-//                                for (int i = 0;i<10;i++){
-//                                    list.add(g.getBody().get(i));
-//                                }
-//                                g_adapter = new Getlistbiycle_adapter(getBaseContext(),list);
-//                                lvShowUsebicycle.setAdapter(g_adapter);
-//                            }else {
                                 g_adapter = new Getlistbiycle_adapter(getBaseContext(),g.getBody());
                                 lvShowUsebicycle.setAdapter(g_adapter);
                                 new UserService(UseBicycleActivity.this).setusebiycle("1");
-//                            }
-
-
+                        }else {
+                            showShort("周围暂无可用车辆！");
                         }
                     }
 
@@ -309,7 +309,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                     }
                     final ProgressDialog dialogpro = new ProgressDialog(UseBicycleActivity.this);
 
-                    dialogpro.setMessage("请稍后...");
+                    dialogpro.setMessage("请稍候...");
                     dialogpro.setCancelable(false);
                     dialogpro.show();
 

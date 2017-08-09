@@ -32,6 +32,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -677,6 +679,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         }
     }
 
+    private RotateAnimation myAnimation_Rotate;
 
     //点击事件
     private void initClickListener() {
@@ -745,7 +748,13 @@ public class MainActivity extends BaseActivity implements IMainView,
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                myAnimation_Rotate = new RotateAnimation(0, 720,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF, 0.5f);
+                myAnimation_Rotate.setDuration(500);
+                myAnimation_Rotate.setFillEnabled(true);
+                myAnimation_Rotate.setFillAfter(true);
+                floatingActionButton.startAnimation(myAnimation_Rotate);
                 L.d("未用车状态下刷新" + zhonglat + "纬度", zhonglon + "经度");
                 LatLng latLng = new LatLng(zhonglat, zhonglon);
                 initgetBikeMapList(latLng);
@@ -1209,9 +1218,9 @@ public class MainActivity extends BaseActivity implements IMainView,
         super.onDestroy();
         new UserService(MainActivity.this).setShowOneMark("0");
         mMapView.onDestroy();
-        Intent stopIntent = new Intent(this, LocationService.class);
-        stopService(stopIntent);
-        unregisterReceiver(receiver);
+//        Intent stopIntent = new Intent(this, LocationService.class);
+//        stopService(stopIntent);
+//        unregisterReceiver(receiver);
         deactivate();
 //        mTimer.cancel();
     }
@@ -1220,52 +1229,52 @@ public class MainActivity extends BaseActivity implements IMainView,
     /**
      * 创建 BroadcastReceiver
      */
-    String str;
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (BroadcastAction.equals(intent.getAction())) {
-                Log.i("FSD", "get the broadcast from Service...");
-                str = intent.getStringExtra("Str");
-                Log.i("FSD", str);
-                mHandler.sendMessage(mHandler.obtainMessage());
-                lon = Double.parseDouble(str.substring(str.indexOf(",") + 1));
-                lat = Double.parseDouble(str.substring(0, str.indexOf(",")));
-                Log.d("定位获得的经纬度service=", " latitude: " + lat + " longitude :" + lon);
-                if (new UserService(MainActivity.this).getState().equals("1")) {
-                    LatLng newLatLng = new LatLng(lat, lon);
-                    if (isFirstLatLng) {
-                        //记录第一次的定位信息
-                        oldLatLng = newLatLng;
-                        isFirstLatLng = false;
-                    }
-
-                    //位置有变化
-                    if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
-                        Log.d("定位获得的经纬度qingqiu=", " latitude: " + lat + " longitude :" + lon);
-                        cameraUpdate = CameraUpdateFactory
-                                .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
-                        aMap.moveCamera(cameraUpdate);
-                        if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 1000) {
-//                            if (checkJumpStatus.getLock_status() == 0) {
-                                if (lon != 0.0) {
-                                    setUpMap(oldLatLng, newLatLng);
-                                    new UserService(MainActivity.this).setLatLon(lat + "," + lon);
-                                    oldLatLng = newLatLng;
-                                    Message message = new Message();
-                                    message.what = 1;
-                                    doActionHandler.sendMessage(message);
-//                                }
-                            }
-                        }
-                    }
-                }
-
-            } else {
-                Log.i("FSD", "the action is not intent.getAction");
-            }
-        }
-    };
+//    String str;
+//    BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (BroadcastAction.equals(intent.getAction())) {
+//                Log.i("FSD", "get the broadcast from Service...");
+//                str = intent.getStringExtra("Str");
+//                Log.i("FSD", str);
+//                mHandler.sendMessage(mHandler.obtainMessage());
+//                lon = Double.parseDouble(str.substring(str.indexOf(",") + 1));
+//                lat = Double.parseDouble(str.substring(0, str.indexOf(",")));
+//                Log.d("定位获得的经纬度service=", " latitude: " + lat + " longitude :" + lon);
+//                if (new UserService(MainActivity.this).getState().equals("1")) {
+//                    LatLng newLatLng = new LatLng(lat, lon);
+//                    if (isFirstLatLng) {
+//                        //记录第一次的定位信息
+//                        oldLatLng = newLatLng;
+//                        isFirstLatLng = false;
+//                    }
+//
+//                    //位置有变化
+//                    if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
+//                        Log.d("定位获得的经纬度qingqiu=", " latitude: " + lat + " longitude :" + lon);
+//                        cameraUpdate = CameraUpdateFactory
+//                                .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
+//                        aMap.moveCamera(cameraUpdate);
+//                        if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 1000) {
+////                            if (checkJumpStatus.getLock_status() == 0) {
+//                                if (lon != 0.0) {
+//                                    setUpMap(oldLatLng, newLatLng);
+//                                    new UserService(MainActivity.this).setLatLon(lat + "," + lon);
+//                                    oldLatLng = newLatLng;
+//                                    Message message = new Message();
+//                                    message.what = 1;
+//                                    doActionHandler.sendMessage(message);
+////                                }
+//                            }
+//                        }
+//                    }
+//                }
+//
+//            } else {
+//                Log.i("FSD", "the action is not intent.getAction");
+//            }
+//        }
+//    };
 
     /**
      * 处理 广播接收到的数据
@@ -1300,12 +1309,12 @@ public class MainActivity extends BaseActivity implements IMainView,
         initview();
 //        UpdateInfo();
         BindPushUtils.bind(getBaseContext());//保存绑定推送
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(BroadcastAction);
-        registerReceiver(receiver, filter);
-        Intent startIntent = new Intent(this, LocationService.class);
-        startService(startIntent);
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(BroadcastAction);
+//        registerReceiver(receiver, filter);
+//
+//        Intent startIntent = new Intent(this, LocationService.class);
+//        startService(startIntent);
 
     }
 
@@ -1922,6 +1931,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                         if (new UserService(MainActivity.this).getState().equals("1")) {
                             AMap aMap = mMapView.getMap();
                             aMap.clear();
+                        }else {
+                            AMap aMap = mMapView.getMap();
+                            aMap.clear();
+                            LatLng latLng = new LatLng(zhonglat, zhonglon);
+                            initgetBikeMapList(latLng);
                         }
 
                         if (getBikeMapList.getCode() == 0) {
@@ -2036,6 +2050,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                     Log.d("response提示锁状态", response);
                                     Lockstatus lockstatus = gson.fromJson(response, Lockstatus.class);
                                     if (lockstatus.getCode() == 1) {
+                                        if (lockstatus.getLock_status()==1){
                                         String cookie;
                                         cookie = new UserService(MainActivity.this).getCookie();
                                         String url = Apis.Base + Apis.dayLeaseLists;
@@ -2064,6 +2079,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                                                     }
                                                 });
+                                        }
                                     } else {
                                         showShort(lockstatus.getMsg());
                                     }

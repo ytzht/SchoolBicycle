@@ -23,6 +23,7 @@ import com.school.bicycle.entity.Wxpayinfo;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
+import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.result.ResultActivity;
@@ -93,6 +94,15 @@ public class DepositActivity extends BaseToolBarActivity implements IDepositView
                 });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
+            PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
+            startActivity(ResultActivity.class, "type", "yajin");
+            finish();
+        }
+    }
 
     @OnClick({R.id.rdb_wchatpay, R.id.rdb_alipay, R.id.dps_paynow})
     public void onViewClicked(View view) {
@@ -108,13 +118,19 @@ public class DepositActivity extends BaseToolBarActivity implements IDepositView
                 pay_type = "zfb";
                 break;
             case R.id.dps_paynow:
-                initpay();
+                if (pay_type.equals("")){
+                    showShort("请选择一种支付方式");
+                }else {
+                    initpay();
+                }
+
 
                 break;
         }
     }
 
     String info;
+
     private void initpay() {
 
         String url = Apis.Base + Apis.submit;
@@ -122,9 +138,9 @@ public class DepositActivity extends BaseToolBarActivity implements IDepositView
         OkHttpUtils
                 .post()
                 .url(url)
-                .addHeader("cookie",cookie)
-                .addParams("deposit_money",deposit_money)
-                .addParams("pay_type",pay_type)
+                .addHeader("cookie", cookie)
+                .addParams("deposit_money", deposit_money)
+                .addParams("pay_type", pay_type)
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -193,12 +209,10 @@ public class DepositActivity extends BaseToolBarActivity implements IDepositView
             if (TextUtils.equals(resultStatus, "9000")) {
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                 Toast.makeText(DepositActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-
-                Toast.makeText(DepositActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(ResultActivity.class,"type","yajin");
+                        startActivity(ResultActivity.class, "type", "yajin");
                         finish();
                     }
                 });

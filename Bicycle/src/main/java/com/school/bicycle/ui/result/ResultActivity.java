@@ -143,6 +143,14 @@ public class ResultActivity extends BaseToolBarActivity {
         }else if (type.equals("timestop")){
             teResResult.setText("还 车 成 功");
             btResNext.setText("返回主界面");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new UserService(ResultActivity.this).settixian("1");
+                    startActivity(OverPayActivity.class);
+                    finish();
+                }
+            });
 
         }else if (type.equals("tixianxiaoe")){
             teResResult.setText("提现金额将在0-3个工作日内转入您的押金充值账户！");

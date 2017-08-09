@@ -269,21 +269,25 @@ public class OverPayActivity extends BaseActivity {
             if (findNotPayRoute.getCode() == 1) {
                 if (findNotPayRoute.getCoupon().size() == 0) {
                     showShort("暂无可用的优惠券");
+                    tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
                 } else {
                     for (int i = 0; i < findNotPayRoute.getCoupon().size(); i++) {
-                        if (findNotPayRoute.getCoupon().get(i).getUsercou_id() == cid) {
-                            if (findNotPayRoute.getCoupon().get(i).getCou_type().equals("折扣")) {
-                                tvAs.setText("-￥" + (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()));
-                                tvNeed.setText(findNotPayRoute.getTotal_fee() -
-                                        (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()) + "");
+                        if (cid != 0) {
+                            if (findNotPayRoute.getCoupon().get(i).getUsercou_id() == cid) {
+                                if (findNotPayRoute.getCoupon().get(i).getCou_type().equals("折扣")) {
+                                    tvAs.setText("-￥" + (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()));
+                                    tvNeed.setText(findNotPayRoute.getTotal_fee() -
+                                            (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()) + "");
+                                } else {
+                                    tvAs.setText("-￥" + findNotPayRoute.getCoupon().get(i).getCou_cut());
+                                    tvNeed.setText(findNotPayRoute.getTotal_fee() - findNotPayRoute.getCoupon().get(i).getCou_cut() + "");
+                                }
                             } else {
-                                tvAs.setText("-￥" + findNotPayRoute.getCoupon().get(i).getCou_cut());
-                                tvNeed.setText(findNotPayRoute.getTotal_fee() - findNotPayRoute.getCoupon().get(i).getCou_cut() + "");
+                                tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
                             }
-                        } else {
-                            tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
                         }
                     }
+
                 }
 
             }

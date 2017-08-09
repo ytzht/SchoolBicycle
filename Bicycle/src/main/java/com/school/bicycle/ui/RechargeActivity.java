@@ -167,7 +167,8 @@ public class RechargeActivity extends BaseToolBarActivity {
 
     private void initpay() {
         if (price.equals("")) {
-            showShort("请选择长租时间");
+            showShort("请选择充值金额" +
+                    "");
         } else {
             if (cbWx.isChecked() || cbZfb.isChecked()) {
                 if (cbZfb.isChecked()) {

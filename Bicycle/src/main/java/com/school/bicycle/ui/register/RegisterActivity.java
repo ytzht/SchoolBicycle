@@ -1,13 +1,10 @@
 package com.school.bicycle.ui.register;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,28 +12,19 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.school.bicycle.R;
-import com.school.bicycle.app.MyApplication;
 import com.school.bicycle.entity.BaseResult;
-import com.school.bicycle.entity.Login;
 import com.school.bicycle.entity.Register;
 import com.school.bicycle.global.Apis;
-import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.authentication.RealnameActivity;
-import com.school.bicycle.ui.eposit.DepositActivity;
-import com.school.bicycle.ui.main.MainActivity;
-import com.school.bicycle.ui.pay.PayActivity;
+import com.school.bicycle.ui.setup_userActivity;
 import com.school.bicycle.utils.Forms;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +44,8 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
     TextView regNext;
     @BindView(R.id.cb_ruler)
     CheckBox cbRuler;
+    @BindView(R.id.tv_user)
+    TextView tvUser;
     private IRegisterPresenter iRegisterPresenter;
     Gson gson = new Gson();
     TelephonyManager tm;
@@ -73,7 +63,6 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         DEVICE_ID = tm.getDeviceId();
     }
-
 
 
     private void initHandler() {
@@ -121,6 +110,12 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
 
 
     private void initClick() {
+        tvUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(setup_userActivity.class);
+            }
+        });
 
         tvCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +169,7 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
                             .build()
                             .execute(new StringCallback() {
                                 String s;
+
                                 @Override
                                 public String parseNetworkResponse(Response response, int id) throws IOException {
                                     Headers headers = response.headers();
@@ -194,14 +190,14 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
 
                                 @Override
                                 public void onResponse(String response, int id) {
-                                    Log.d("登录",response+" s");
+                                    Log.d("登录", response + " s");
                                     new UserService(RegisterActivity.this).setCookie(s);
-                                    Register register = gson.fromJson(response,Register.class);
-                                    if (register.getCode()==1){
-                                        if (register.getVerify_status()!=1){
+                                    Register register = gson.fromJson(response, Register.class);
+                                    if (register.getCode() == 1) {
+                                        if (register.getVerify_status() != 1) {
                                             startActivity(RealnameActivity.class);
                                             finish();
-                                        }else {
+                                        } else {
                                             showShort("登录成功");
                                             finish();
                                         }

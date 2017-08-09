@@ -71,7 +71,7 @@ public class OverPayActivity extends BaseActivity {
     CheckBox cbWallet;
     @BindView(R.id.confirm)
     Button confirm;
-    String pay_type;
+    String pay_type = "";
     String price;
     String bike_number;
 
@@ -111,6 +111,7 @@ public class OverPayActivity extends BaseActivity {
                             byDistance.setText(findNotPayRoute.getDistance());
                             byExpend.setText(findNotPayRoute.getCalories());
                             byPay.setText(findNotPayRoute.getTotal_fee() + "");
+                            tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
                             tvYe.setText(findNotPayRoute.getBalance());
                             price = findNotPayRoute.getTotal_fee() + "";
                             bike_number = findNotPayRoute.getBike_number();
@@ -159,7 +160,7 @@ public class OverPayActivity extends BaseActivity {
                 pay_type = "wallet";
                 break;
             case R.id.confirm:
-                if (pay_type.isEmpty()) {
+                if (pay_type=="") {
                     showShort("请选择一种支付方式");
                 } else {
                     String url = Apis.Base + Apis.submitLeaseOrder;

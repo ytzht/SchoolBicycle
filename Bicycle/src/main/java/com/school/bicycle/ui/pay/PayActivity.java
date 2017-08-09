@@ -143,7 +143,7 @@ public class PayActivity extends BaseToolBarActivity {
                 pay_type = "wallet";
                 break;
             case R.id.pay_sure:
-                if (pay_type.isEmpty()) {
+                if (pay_type=="") {
                     showShort("请选择一种支付方式");
                 } else {
                     initpay();

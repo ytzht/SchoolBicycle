@@ -153,57 +153,63 @@ public class RegisterActivity extends BaseToolBarActivity implements IRegisterVi
         regNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 iRegisterPresenter.verificationCode(etCode.getText().toString());
                 String url = Apis.Base + "user/register";
                 final String[] sid = new String[1];
 
                 if (cbRuler.isChecked()) {
 
-                    OkHttpUtils
-                            .post()
-                            .url(url)
-                            .addParams("device_id", DEVICE_ID)
-                            .addParams("code", etCode.getText().toString())
-                            .addParams("reg_from", "android")
-                            .build()
-                            .execute(new StringCallback() {
-                                String s;
+                    String accout = etPhone.getEditableText().toString();
+                    if (Forms.disValid(accout, Forms.PHONENUM)) {
+                        etPhone.requestFocus();
+                        showShort("请输入正确的手机号");
+                    } else{
+                        OkHttpUtils
+                                .post()
+                                .url(url)
+                                .addParams("device_id", DEVICE_ID)
+                                .addParams("code", etCode.getText().toString())
+                                .addParams("mobile", accout)
+                                .addParams("reg_from", "android")
+                                .build()
+                                .execute(new StringCallback() {
+                                    String s;
+                                    @Override
+                                    public String parseNetworkResponse(Response response, int id) throws IOException {
+                                        Headers headers = response.headers();
+                                        Log.d("info_headers", "header " + headers);
+                                        List<String> cookies = headers.values("Set-Cookie");
+                                        String session = cookies.get(0);
+                                        Log.d("info_cookies", "onResponse-size: " + cookies);
+                                        s = session.substring(0, session.indexOf(";"));
+                                        Log.d("info_s", "session is  :" + s);
+                                        new UserService(RegisterActivity.this).setCookie(s);
+                                        return super.parseNetworkResponse(response, id);
+                                    }
 
-                                @Override
-                                public String parseNetworkResponse(Response response, int id) throws IOException {
-                                    Headers headers = response.headers();
-                                    Log.d("info_headers", "header " + headers);
-                                    List<String> cookies = headers.values("Set-Cookie");
-                                    String session = cookies.get(0);
-                                    Log.d("info_cookies", "onResponse-size: " + cookies);
-                                    s = session.substring(0, session.indexOf(";"));
-                                    Log.d("info_s", "session is  :" + s);
-                                    new UserService(RegisterActivity.this).setCookie(s);
-                                    return super.parseNetworkResponse(response, id);
-                                }
+                                    @Override
+                                    public void onError(Call call, Exception e, int id) {
 
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
+                                    }
 
-                                }
-
-                                @Override
-                                public void onResponse(String response, int id) {
-                                    Log.d("登录", response + " s");
-                                    new UserService(RegisterActivity.this).setCookie(s);
-                                    Register register = gson.fromJson(response, Register.class);
-                                    if (register.getCode() == 1) {
-                                        if (register.getVerify_status() != 1) {
-                                            startActivity(RealnameActivity.class);
-                                            finish();
-                                        } else {
-                                            showShort("登录成功");
-                                            finish();
+                                    @Override
+                                    public void onResponse(String response, int id) {
+                                        Log.d("登录", response + " s");
+                                        new UserService(RegisterActivity.this).setCookie(s);
+                                        Register register = gson.fromJson(response, Register.class);
+                                        if (register.getCode() == 1) {
+                                            if (register.getVerify_status() != 1) {
+                                                startActivity(RealnameActivity.class);
+                                                finish();
+                                            } else {
+                                                showShort("登录成功");
+                                                finish();
+                                            }
                                         }
                                     }
-                                }
-                            });
+                                });
+                    }
+
 //                    OkHttpUtils
 //                            .post()
 //                            .url(url)

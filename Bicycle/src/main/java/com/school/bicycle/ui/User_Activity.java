@@ -50,6 +50,12 @@ public class User_Activity extends BaseToolBarActivity {
         setContentView(R.layout.activity_user_);
         ButterKnife.bind(this);
         setToolbarText("账户设置");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initview();
     }
 

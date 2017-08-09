@@ -11,6 +11,7 @@ import com.school.bicycle.ui.setup_banbenhaoActivity;
 import com.school.bicycle.ui.setup_chongzhiActivity;
 import com.school.bicycle.ui.setup_despositActivity;
 import com.school.bicycle.ui.setup_userActivity;
+import com.school.bicycle.ui.setup_yonghuActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +51,7 @@ public class Setup_Activity extends BaseToolBarActivity {
                 startActivity(setup_banbenhaoActivity.class);
                 break;
             case R.id.setup_address:
+                startActivity(setup_yonghuActivity.class);
                 break;
             case R.id.setup_UserProtocol:
                 startActivity(setup_userActivity.class);

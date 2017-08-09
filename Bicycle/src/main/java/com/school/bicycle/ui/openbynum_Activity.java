@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.lockopen.LockOpenActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -106,6 +107,7 @@ public class openbynum_Activity extends BaseToolBarActivity {
                 if (!num.isEmpty()){
                     if (status.equals("0")){
                         Intent it = new Intent(openbynum_Activity.this, MainActivity.class);
+                        new UserService(openbynum_Activity.this).setShowOneMark("1");
                         it.putExtra("bike_number",num);
                         startActivity(it);
                         finish();

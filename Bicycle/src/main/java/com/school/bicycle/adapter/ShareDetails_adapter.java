@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.school.bicycle.R;
-import com.school.bicycle.entity.Consumption;
 import com.school.bicycle.entity.QueryShareDetails;
 
 import java.util.List;
@@ -51,7 +50,7 @@ public class ShareDetails_adapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolde = null;
         LayoutInflater myInflater = LayoutInflater.from(context);
-        Log.d("data",data.get(i).getOrder_no());
+        Log.d("data", data.get(i).getOrder_no());
         if (view == null) {
             view = myInflater.inflate(R.layout.consumption_layout, null);
             viewHolde = new ViewHolder(view);
@@ -60,11 +59,14 @@ public class ShareDetails_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
 
-        viewHolde.detailNum.setText("订单号：" + data.get(i).getOrder_no());
-        viewHolde.detailType.setText(data.get(i).getOrder_status());
+        viewHolde.detailNum.setText(data.get(i).getLease_type());
+        viewHolde.detailType.setText(data.get(i).getLease_type() + ":" + data.get(i).getShare_income() + "元");
         viewHolde.detailMoney.setText("下单时间：" + data.get(i).getCreate_time());
+        viewHolde.detailPaytype.setVisibility(View.GONE);
         return view;
     }
+
+
 
 
     static class ViewHolder {
@@ -74,9 +76,11 @@ public class ShareDetails_adapter extends BaseAdapter {
         TextView detailType;
         @BindView(R.id.detail_money)
         TextView detailMoney;
-
+        @BindView(R.id.detail_paytype)
+        TextView detailPaytype;
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
 }

@@ -114,7 +114,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
                                     Log.d("status",status+"");
                                     if (status == 1) {
                                         new UserService(LockcloseActivity.this).setShowOneMark("0");
-                                        startActivity(ResultActivity.class, "type", "date");
+                                        startActivity(ResultActivity.class, "type", "datestop");
                                         finish();
                                         //日租停车
                                     } else if (status == 2) {

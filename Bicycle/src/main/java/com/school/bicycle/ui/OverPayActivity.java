@@ -1,5 +1,6 @@
 package com.school.bicycle.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,7 @@ import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.result.ResultActivity;
+import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -89,6 +91,11 @@ public class OverPayActivity extends BaseActivity {
         setContentView(R.layout.activity_over_pay);
         ButterKnife.bind(this);
         tbOverpay.setTitle("日租付款");
+        final ProgressDialog dialogpro = new ProgressDialog(OverPayActivity.this);
+
+        dialogpro.setMessage("请稍候...");
+        dialogpro.setCancelable(false);
+        dialogpro.show();
         String url = Apis.Base + Apis.findNotPayRoute;
         String cookie = new UserService(OverPayActivity.this).getCookie();
         OkHttpUtils
@@ -104,6 +111,9 @@ public class OverPayActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        if (dialogpro.isShowing()){
+                            dialogpro.dismiss();
+                        }
                         Log.d("response_overpay", response);
                         findNotPayRoute = gson.fromJson(response, FindNotPayRoute.class);
                         if (findNotPayRoute.getCode() == 1) {

@@ -65,12 +65,13 @@
             android:textSize="15dp"
             android:textColor="@color/blackHint"
             android:paddingLeft="8dp"
-            android:paddingTop="25dp"
-            android:layout_marginTop="10dp"
+            android:paddingTop="15dp"
             android:text="日租"
-
-            android:layout_toEndOf="@+id/relativeLayout6"
-            android:layout_toRightOf="@+id/relativeLayout6" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/relativeLayout6"
+            android:layout_toEndOf="@+id/relativeLayout6" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,7 +81,7 @@
             android:textSize="13dp"
             android:textColor="@color/blackHint"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             android:layout_toRightOf="@+id/relativeLayout6"
             android:layout_toEndOf="@+id/relativeLayout6" />
     </RelativeLayout>

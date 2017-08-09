@@ -58,9 +58,17 @@ public class Consumption_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
 
-        viewHolde.detailNum.setText("订单号：" + data.get(i).getOrder_no());
-        viewHolde.detailType.setText(data.get(i).getOrder_status());
-        viewHolde.detailMoney.setText("充值款：" + data.get(i).getTotal_fee());
+        viewHolde.detailNum.setText(data.get(i).getOrder_status());
+        viewHolde.detailType.setText(data.get(i).getOrder_status()+":"+data.get(i).getTotal_fee()+"元");
+        viewHolde.detailMoney.setText(data.get(i).getCreate_time());
+        if (null==data.get(i).getPay_type()){
+            viewHolde.detailPaytype.setText("");
+        }else if(data.get(i).getPay_type().equals("zfb")){
+            viewHolde.detailPaytype.setText("支付宝");
+        }else if (data.get(i).getPay_type().equals("wx")){
+            viewHolde.detailPaytype.setText("微信");
+        }
+
         return view;
     }
 
@@ -72,7 +80,8 @@ public class Consumption_adapter extends BaseAdapter {
         TextView detailType;
         @BindView(R.id.detail_money)
         TextView detailMoney;
-
+        @BindView(R.id.detail_paytype)
+        TextView detailPaytype;
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

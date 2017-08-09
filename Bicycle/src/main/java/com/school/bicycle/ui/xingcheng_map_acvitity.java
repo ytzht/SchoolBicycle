@@ -129,8 +129,7 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
         }
 
         Polyline polyline = aMap.addPolyline(new PolylineOptions().
-                addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
-
+                addAll(latLngs).width(10).color(getResources().getColor(R.color.org)));
         }
     }
 

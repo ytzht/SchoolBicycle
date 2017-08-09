@@ -12,7 +12,7 @@ public class Consumption {
     /**
      * code : 1
      * msg : 操作成功
-     * consumer_details : [{"cid":1,"order_no":"20170713194749933000","user_id":0,"order_status":"充值余额","total_fee":10},{"cid":2,"order_no":"20170713200054317001","user_id":0,"order_status":"充值余额","total_fee":10},{"cid":3,"order_no":"20170713200800012002","user_id":0,"order_status":"充值余额","total_fee":10},{"cid":4,"order_no":"20170713200900837003","user_id":0,"order_status":"充值余额","total_fee":10},{"cid":5,"order_no":"20170713203753549004","user_id":0,"order_status":"充值余额","total_fee":50},{"cid":6,"order_no":"20170713203800005005","user_id":0,"order_status":"充值余额","total_fee":10},{"cid":7,"order_no":"20170713203817065006","user_id":0,"order_status":"押金充值","total_fee":100}]
+     * consumer_details : [{"cid":462,"order_no":"F20170809144940859006","user_id":114,"order_status":"押金充值","total_fee":0.01,"create_time":"2017-08-09 14:49:46"}]
      */
 
     private int code;
@@ -45,11 +45,12 @@ public class Consumption {
 
     public static class ConsumerDetailsBean {
         /**
-         * cid : 1
-         * order_no : 20170713194749933000
-         * user_id : 0
-         * order_status : 充值余额
-         * total_fee : 10
+         * cid : 462
+         * order_no : F20170809144940859006
+         * user_id : 114
+         * order_status : 押金充值
+         * total_fee : 0.01
+         * create_time : 2017-08-09 14:49:46
          */
 
         private int cid;
@@ -57,6 +58,27 @@ public class Consumption {
         private int user_id;
         private String order_status;
         private double total_fee;
+        private String create_time;
+
+        public String getPay_type() {
+            return pay_type;
+        }
+
+        public void setPay_type(String pay_type) {
+            this.pay_type = pay_type;
+        }
+
+        private String pay_type;
+
+        public String getBike_type() {
+            return bike_type;
+        }
+
+        public void setBike_type(String bike_type) {
+            this.bike_type = bike_type;
+        }
+
+        private String bike_type;
 
         public int getCid() {
             return cid;
@@ -96,6 +118,14 @@ public class Consumption {
 
         public void setTotal_fee(double total_fee) {
             this.total_fee = total_fee;
+        }
+
+        public String getCreate_time() {
+            return create_time;
+        }
+
+        public void setCreate_time(String create_time) {
+            this.create_time = create_time;
         }
     }
 }

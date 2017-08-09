@@ -3,13 +3,13 @@
     android:oneshot="true">
     <item
         android:drawable="@drawable/ico_bicycle_0"
-        android:duration="400"/>
+        android:duration="1000"/>
     <item
         android:drawable="@drawable/ico_bicycle_50"
-        android:duration="400"/>
+        android:duration="1000"/>
     <item
         android:drawable="@drawable/ico_bicycle_100"
-        android:duration="400"/>
+        android:duration="1000"/>
     <!--<item-->
         <!--android:drawable="@drawable/sign_4"-->
         <!--android:duration="400"/>-->

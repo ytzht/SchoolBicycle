@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
+import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.lockopen.LockOpenActivity;
 import com.school.bicycle.ui.main.MainActivity;
 import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
@@ -71,6 +72,7 @@ public class ZxingActivity extends BaseToolBarActivity {
                 //跳回主界面
                 Intent it = new Intent(ZxingActivity.this, MainActivity.class);
                 it.putExtra("bike_number",num);
+                new UserService(ZxingActivity.this).setShowOneMark("1");
                 startActivity(it);
                 finish();
             }else {

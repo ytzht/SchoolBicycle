@@ -98,6 +98,7 @@ public class PayActivity extends BaseToolBarActivity {
                         dayLeaseOrder = gson.fromJson(response, DayLeaseOrder.class);
                         if (dayLeaseOrder.getCode() == 1) {
                             PaymentAmount.setText(dayLeaseOrder.getPrice()+"");
+                            tvNeedDay.setText(dayLeaseOrder.getPrice()+"");
                         } else {
                             showShort(dayLeaseOrder.getMsg());
 //                            finish();
@@ -167,6 +168,7 @@ public class PayActivity extends BaseToolBarActivity {
                 if (dayLeaseOrder.getCoupon().size()==0){
                     showShort("暂无可用的优惠券");
                 }else {
+
                     for (int i = 0;i<dayLeaseOrder.getCoupon().size();i++){
                         if (dayLeaseOrder.getCoupon().get(i).getUsercou_id() ==cid){
                             if (dayLeaseOrder.getCoupon().get(i).getCou_type().equals("折扣")){

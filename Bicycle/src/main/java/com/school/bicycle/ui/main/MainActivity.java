@@ -221,20 +221,21 @@ public class MainActivity extends BaseActivity implements IMainView,
                     if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
                         Log.d("定位获得的经纬度main=", " latitude: " + lat + " longitude :" + lon);
                         Log.d("两点的距离", getDistance(oldLatLng, newLatLng) + "");
-                        L.d("=====aMap====="+aMap.getMyLocationStyle().getMyLocationType() + "");
+                        L.d("=====aMap=====" + aMap.getMyLocationStyle().getMyLocationType() + "");
 //                        showShort("两点的距离" + getDistance(oldLatLng, newLatLng));
-                        if (getDistance(oldLatLng, newLatLng) > 5 && getDistance(oldLatLng, newLatLng) < 100) {
-                            if (checkJumpStatus.getLock_status() == 0) {
-                                if (lon != 0.0) {
-                                    setUpMap(oldLatLng, newLatLng);
-                                    new UserService(MainActivity.this).setLatLon(lat + "," + lon);
-                                    oldLatLng = newLatLng;
-                                    Message message = new Message();
-                                    message.what = 1;
-                                    doActionHandler.sendMessage(message);
-                                }
+                        if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 100) {
+//                            if (checkJumpStatus.getLock_status() == 0) {
+                            if (lon != 0.0) {
+                                Log.d("上传=", "latitude:" + lat + "longitude" + lon);
+                                setUpMap(oldLatLng, newLatLng);
+                                new UserService(MainActivity.this).setLatLon(lat + "," + lon);
+                                oldLatLng = newLatLng;
+                                Message message = new Message();
+                                message.what = 1;
+                                doActionHandler.sendMessage(message);
                             }
-                        }else {
+//                            }
+                        } else {
                             oldLatLng = newLatLng;
                         }
                     }
@@ -411,6 +412,8 @@ public class MainActivity extends BaseActivity implements IMainView,
         RelativeLayout state_0 = (RelativeLayout) findViewById(R.id.state_0);
         finish_usecar = (TextView) findViewById(R.id.finish_usecar);
         RelativeLayout useing_biycle_lay = (RelativeLayout) findViewById(R.id.useing_biycle_lay);
+        lengthBiycile.setText("0"  + "米");
+        kaluli.setText("0" + "卡");
 
         if (new UserService(MainActivity.this).getState().equals("1")) {
             state_0.setVisibility(View.GONE);
@@ -486,11 +489,12 @@ public class MainActivity extends BaseActivity implements IMainView,
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
                                         showShort("上传成功");
-                                        kaluli.setText("" + uploadLocation.getCalories() + "卡");
+
                                         String distance = uploadLocation.getDistance();
                                         recLen = Long.parseLong(uploadLocation.getTime()) * 1000;
                                         distance = distance.substring(0, distance.indexOf("."));
                                         lengthBiycile.setText("" + distance + "米");
+                                        kaluli.setText("" + uploadLocation.getCalories() + "卡");
                                         tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                                     } else {
                                         tvUse.setText("车已锁");
@@ -979,38 +983,62 @@ public class MainActivity extends BaseActivity implements IMainView,
                 msg_btn_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String cookie;
-                        cookie = new UserService(MainActivity.this).getCookie();
-                        String url = Apis.Base + Apis.sharedBikeList;
-                        format = new SimpleDateFormat("yyyy-MM-dd");
+                        String url = Apis.Base + Apis.overLongLeaseBike;
                         OkHttpUtils
                                 .post()
                                 .url(url)
-                                .addHeader("cookie", cookie)
-//                .addParams("bike_number", bike_number)
+                                .addHeader("cookie", new UserService(MainActivity.this).getCookie())
+                                .addParams("bike_number", checkJumpStatus.getBike_number())
                                 .build()
                                 .execute(new StringCallback() {
                                     @Override
                                     public void onError(Call call, Exception e, int id) {
+
                                     }
 
                                     @Override
                                     public void onResponse(String response, int id) {
-                                        L.d(response);
-                                        SharedBikeList d = gson.fromJson(response, SharedBikeList.class);
-                                        if (d.getCode() == 1) {
-                                            unList.clear();
-                                            canList.clear();
-                                            showAlertshare(d.getBody());
-                                            if (dialog.isShowing()) dialog.dismiss();
+                                        Log.d("response提示锁状态", response);
+                                        Lockstatus lockstatus = gson.fromJson(response, Lockstatus.class);
+                                        if (lockstatus.getCode() == 1) {
+                                            if (lockstatus.getLock_status() == 1) {
+                                                String cookie;
+                                                cookie = new UserService(MainActivity.this).getCookie();
+                                                String url = Apis.Base + Apis.sharedBikeList;
+                                                format = new SimpleDateFormat("yyyy-MM-dd");
+                                                OkHttpUtils
+                                                        .post()
+                                                        .url(url)
+                                                        .addHeader("cookie", cookie)
+                                                        .build()
+                                                        .execute(new StringCallback() {
+                                                            @Override
+                                                            public void onError(Call call, Exception e, int id) {
+                                                            }
 
-                                        } else {
-                                            showShort(d.getMsg());
+                                                            @Override
+                                                            public void onResponse(String response, int id) {
+                                                                L.d(response);
+                                                                SharedBikeList d = gson.fromJson(response, SharedBikeList.class);
+                                                                if (d.getCode() == 1) {
+                                                                    unList.clear();
+                                                                    canList.clear();
+                                                                    showAlertshare(d.getBody());
+                                                                    if (dialog.isShowing())
+                                                                        dialog.dismiss();
+
+                                                                } else {
+                                                                    showShort(d.getMsg());
+                                                                }
+
+                                                            }
+                                                        });
+                                            }
+                                        }else {
+                                            showShort("请上锁！");
                                         }
-
                                     }
                                 });
-
                     }
                 });
             } else {
@@ -1188,6 +1216,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                         if (result.getCode() == 1) {
                                             showShort(result.getMsg());
                                             if (dialog.isShowing()) dialog.dismiss();
+                                            checkJumpStatus();
                                         } else {
                                             showShort(result.getMsg());
                                         }
@@ -1480,6 +1509,8 @@ public class MainActivity extends BaseActivity implements IMainView,
                         Log.d("response跳转状态", response);
                         checkJumpStatus = gson.fromJson(response, CheckJumpStatus.class);
                         if (checkJumpStatus.getBike_status() == 0) {
+                            AMap aMap = mMapView.getMap();
+                            aMap.clear();
                             isbiycle = false;
                             new UserService(MainActivity.this).setState("0");
                             new UserService(MainActivity.this).setisgetbiycle("0");
@@ -1497,32 +1528,22 @@ public class MainActivity extends BaseActivity implements IMainView,
 //                            mLocationClient.startLocation();
                         } else if (checkJumpStatus.getBike_status() == 1) {
 
-
-                                showOneCar(checkJumpStatus.getBody().get(0).getNumber());
-                                new UserService(MainActivity.this).setShowOneMark("1");
-                                new UserService(MainActivity.this).setState("1");
-                                new UserService(MainActivity.this).setisgetbiycle("1");
-                                bike_number = checkJumpStatus.getBike_number();
-
-                                //setTimerTask();
-                                //日租中
-                                isbiycle = true;
-                                tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
-                                initview();
-                                lianxumap();
-//                                mLocationClient.startLocation();
-                                countdown.setVisibility(View.GONE);
-                                countdown1.setVisibility(View.GONE);
-
+                            showOneCar(checkJumpStatus.getBody().get(0).getNumber());
+                            new UserService(MainActivity.this).setShowOneMark("1");
+                            new UserService(MainActivity.this).setState("1");
+                            new UserService(MainActivity.this).setisgetbiycle("1");
+                            bike_number = checkJumpStatus.getBike_number();
+                            //日租中
+                            isbiycle = true;
+                            tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
+                            initview();
+                            lianxumap();
+                            countdown.setVisibility(View.GONE);
+                            countdown1.setVisibility(View.GONE);
 
 
                         } else if (checkJumpStatus.getBike_status() == 2) {
 
-//                            if (isbiycle) {
-//                                new UserService(MainActivity.this).setShowOneMark("1");
-//                                new UserService(MainActivity.this).setState("1");
-//                                new UserService(MainActivity.this).setisgetbiycle("1");
-//                            } else {
                             isbiycle = true;
                             showOneCar(checkJumpStatus.getBody().get(0).getNumber());
                             new UserService(MainActivity.this).setShowOneMark("1");
@@ -1530,7 +1551,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                             new UserService(MainActivity.this).setisgetbiycle("1");
                             bike_number = checkJumpStatus.getBike_number();
                             lianxumap();
-//                            mLocationClient.startLocation();
                             tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                             countdown.setVisibility(View.VISIBLE);
                             //时租中
@@ -1541,10 +1561,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 new UserService(MainActivity.this).setBikeNumber(bike_number);
                                 L.d("锁  新车是 " + bike_number);
                             }
-//                            }
 
                             initTimeDown();
                         } else if (checkJumpStatus.getBike_status() == 3) {
+                            AMap aMap = mMapView.getMap();
+                            aMap.clear();
                             new UserService(MainActivity.this).setisgetbiycle("0");
                             //时租付款
                             initmap();
@@ -1554,21 +1575,15 @@ public class MainActivity extends BaseActivity implements IMainView,
                             bike_number = checkJumpStatus.getBike_number();
                             countdown.setVisibility(View.GONE);
                             if (checkJumpStatus.getLock_status() == 1) {
+                                AMap aMap = mMapView.getMap();
+                                aMap.clear();
                                 initmap();
-//                                mLocationClient.startLocation();
                                 new UserService(MainActivity.this).setState("0");
                             } else {
-
-                                if (isbiycle) {
-                                    new UserService(MainActivity.this).setState("1");
-                                } else {
-                                    tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
-                                    lianxumap();
-//                                    mLocationClient.startLocation();
-                                    new UserService(MainActivity.this).setState("1");
-                                    showOneCar(checkJumpStatus.getBike_number());
-                                }
-
+                                tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
+                                lianxumap();
+                                new UserService(MainActivity.this).setState("1");
+                                showOneCar(checkJumpStatus.getBike_number());
                             }
                             initview();
                         }
@@ -1714,7 +1729,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                             if (v.getDeposit_status() == 0) {
                                 startActivity(DepositActivity.class);
                             } else {
-                                startActivity(IvfriendsActivity.class);
+                                startActivity(IvfriendsActivity.class,"num",v.getBody().getPhone());
                             }
                         }
 //                        if (v.getVerify_status() == 0) {
@@ -1942,7 +1957,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void onResponse(String response, int id) {
                         L.d(response);
                         GetBikeMapList getBikeMapList = gson.fromJson(response, GetBikeMapList.class);
-                        if (new UserService(MainActivity.this).getState().equals("1")&&checkJumpStatus.getBike_status()!=4) {
+                        if (new UserService(MainActivity.this).getState().equals("1") && checkJumpStatus.getBike_status() != 4) {
                             AMap aMap = mMapView.getMap();
                             aMap.clear();
                         } else {
@@ -1951,8 +1966,13 @@ public class MainActivity extends BaseActivity implements IMainView,
 //                            LatLng latLng = new LatLng(zhonglat, zhonglon);
 //                            initgetBikeMapList(latLng);
                         }
+                        if (checkJumpStatus.getBike_status()==4&&checkJumpStatus.getLock_status()==0){
+                            AMap aMap = mMapView.getMap();
+                            aMap.clear();
+                        }
 
                         if (getBikeMapList.getCode() == 0) {
+
 
                         } else {
                             LatLng latLng = new LatLng(getBikeMapList.getBody().get(0).getLat(),
@@ -2015,27 +2035,34 @@ public class MainActivity extends BaseActivity implements IMainView,
         TextView tv_darentbt_info;
         TextView tv_longrent_info;
         TextView tv_lorentbt_info;
+        TextView tv_distance_info;
 
         if (data.getMybike() == 1 && data.getColor().equals("blue") && checkJumpStatus.getBike_status() == 4) {
-            tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
+
             tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
             tv_dayrent_info = (TextView) view.findViewById(R.id.tv_dayrent_info);
             tv_longrent_info = (TextView) view.findViewById(R.id.tv_longrent_info);
             tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
             tv_lorentbt_info = (TextView) view.findViewById(R.id.tv_lorentbt_info);
+            tv_distance_info = (TextView) view.findViewById(R.id.tv_distance_info);
             TextView tv_bicyclenum_info = (TextView) view.findViewById(R.id.tv_bicyclenum_info);
             tv_tirentbt_info.setText("共享收入");
             tv_darentbt_info.setText("设置共享");
             tv_bicyclenum_info.setText("山地车:" + data.getNumber() + "");
             tv_lorentbt_info.setVisibility(View.GONE);
-            tv_time_info.setText("山地车:" + data.getNumber() + "");
-            tv_timerent_info.setText("地点:" + data.getAddress() + "");
-            String valid_time = " ";
-            for (int a = 0; a < data.getValid_time().size(); a++) {
-                valid_time = valid_time + data.getValid_time().get(a).toString();
-                tv_dayrent_info.setText("共享时段:" + valid_time + "");
-            }
+            tv_bicyclenum_info.setText("车牌号：" + data.getNumber() + "");
+//            tv_time_info.setText("在租时段" + data.getValid_time() + "");
+            tv_timerent_info.setText("时租：" + data.getLease_info().get时租() + "元");
+            tv_dayrent_info.setText("日租：" + data.getLease_info().get日租() + "元");
+            tv_distance_info.setText("地点："+data.getAddress());
+//            tv_time_info.setText("山地车:" + data.getNumber() + "");
+
+//            String valid_time = " ";
+//            for (int a = 0; a < data.getValid_time().size(); a++) {
+//                valid_time = valid_time + data.getValid_time().get(a).toString();
+//                tv_dayrent_info.setText("共享时段:" + valid_time + "");
+//            }
             tv_tirentbt_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -2110,10 +2137,10 @@ public class MainActivity extends BaseActivity implements IMainView,
       自定义infowinfow窗口
      */
             TextView tv_bicyclenum_info = (TextView) view.findViewById(R.id.tv_bicyclenum_info);
-            tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
             tv_timerent_info = (TextView) view.findViewById(R.id.tv_timerent_info);
             tv_dayrent_info = (TextView) view.findViewById(R.id.tv_dayrent_info);
             tv_longrent_info = (TextView) view.findViewById(R.id.tv_longrent_info);
+            tv_distance_info = (TextView) view.findViewById(R.id.tv_distance_info);
 
             tv_tirentbt_info = (TextView) view.findViewById(R.id.tv_tirentbt_info);
             tv_darentbt_info = (TextView) view.findViewById(R.id.tv_darentbt_info);
@@ -2121,9 +2148,10 @@ public class MainActivity extends BaseActivity implements IMainView,
             tv_tirentbt_info.setText("时租");
             tv_darentbt_info.setText("日租");
             tv_lorentbt_info.setText("长租");
-
+            tv_distance_info.setText("地点："+data.getAddress());
+            tv_lorentbt_info.setVisibility(View.VISIBLE);
             tv_bicyclenum_info.setText("车牌号：" + data.getNumber() + "");
-            tv_time_info.setText("在租时段" + data.getValid_time() + "");
+//            tv_time_info.setText("在租时段" + data.getValid_time() + "");
             tv_timerent_info.setText("时租：" + data.getLease_info().get时租() + "元");
             tv_dayrent_info.setText("日租：" + data.getLease_info().get日租() + "元");
             if (!data.getColor().equals("yellow")) {

@@ -61,12 +61,13 @@ public class Mycoupon_adapter extends BaseAdapter {
 
         viewHolde.timeCoupon.setText(data.get(i).getStart_time() + "-" + data.get(i).getEnd_time());
         if (data.get(i).getCou_type().equals("折扣")) {
-            viewHolde.rmb.setText("");
+            viewHolde.rmb.setVisibility(View.GONE);
             viewHolde.manyong.setText("所有可用");
             viewHolde.dikou.setText(data.get(i).getCou_discount() * 10 + "折");
             viewHolde.zhekouleixing.setText("折扣券");
             viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_orange);
         } else if (data.get(i).getCou_type().equals("满减")) {
+            viewHolde.rmb.setVisibility(View.VISIBLE);
             viewHolde.dikou.setText(data.get(i).getCou_cut() + "");
             viewHolde.manyong.setText("满" + data.get(i).getCou_full() + "元可用");
             if (data.get(i).getCou_usedin().equals("时租")) {

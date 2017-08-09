@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
+import com.school.bicycle.entity.FindNotPayRoute;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
@@ -143,12 +144,37 @@ public class ResultActivity extends BaseToolBarActivity {
         }else if (type.equals("timestop")){
             teResResult.setText("还 车 成 功");
             btResNext.setText("返回主界面");
+
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new UserService(ResultActivity.this).settixian("1");
-                    startActivity(OverPayActivity.class);
-                    finish();
+                    String url = Apis.Base + Apis.findNotPayRoute;
+                    String cookie = new UserService(ResultActivity.this).getCookie();
+                    OkHttpUtils
+                            .get()
+                            .url(url)
+                            .addHeader("cookie", cookie)
+                            .build()
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                   BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+                                    if (baseResult.getCode()==0){
+                                        finish();
+                                    }else {
+                                        new UserService(ResultActivity.this).settixian("1");
+                                        startActivity(OverPayActivity.class);
+                                        finish();
+                                    }
+
+                                }
+                            });
+
                 }
             });
 
@@ -164,6 +190,15 @@ public class ResultActivity extends BaseToolBarActivity {
             });
         }else if (type.equals("timereturnbiycle")){
             teResResult.setText("支付成功");
+            btResNext.setText("返回主界面");
+            btResNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }else if (type.equals("datestop")){
+            teResResult.setText("还车成功");
             btResNext.setText("返回主界面");
             btResNext.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -129,7 +129,7 @@
                 <TextView
                     android:id="@+id/usebiycle_bynum_biycletime"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:textColor="@color/all_textc" />
             </LinearLayout>

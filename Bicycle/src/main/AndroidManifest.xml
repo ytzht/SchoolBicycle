@@ -213,6 +213,7 @@
         <activity android:name=".ui.Mycoupon_Activity" />
         <activity android:name=".ui.setup_banbenhaoActivity" />
         <activity android:name=".ui.ChangePhoneActivity" />
+        <activity android:name=".ui.setup_yonghuActivity" />
         <activity android:name=".ui.ChangePhoneNextActivity"></activity>
     </application>
 

@@ -3,9 +3,11 @@ package com.school.bicycle.ui.main;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -62,6 +64,8 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
+import com.school.bicycle.ui.Mycoupon_Activity;
+import com.school.bicycle.ui.RechargeActivity;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.DayleaseList;
@@ -76,11 +80,11 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.service.LocationService;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
-import com.school.bicycle.ui.Mycoupon_Activity;
 import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.TimeCountDownTextView;
 import com.school.bicycle.ui.User_Activity;
@@ -201,26 +205,25 @@ public class MainActivity extends BaseActivity implements IMainView,
                     isFirstLatLng = false;
                     newLatLng = new LatLng(lat, lon);
                     oldLatLng = newLatLng;
-//                    cameraUpdate = CameraUpdateFactory
-//                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
-//                    aMap.moveCamera(cameraUpdate);
+                    cameraUpdate = CameraUpdateFactory
+                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
+                    aMap.moveCamera(cameraUpdate);
                 }
 
 
                 if (new UserService(MainActivity.this).getState().equals("1")) {
                     newLatLng = new LatLng(lat, lon);
-
-//                    cameraUpdate = CameraUpdateFactory
-//                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-//                    aMap.moveCamera(cameraUpdate);
+                    cameraUpdate = CameraUpdateFactory
+                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+                    aMap.moveCamera(cameraUpdate);
                     L.d("=====new old", oldLatLng.latitude + " and " + newLatLng.latitude + "");
                     //位置有变化
                     if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
                         Log.d("定位获得的经纬度main=", " latitude: " + lat + " longitude :" + lon);
                         Log.d("两点的距离", getDistance(oldLatLng, newLatLng) + "");
                         L.d("=====aMap====="+aMap.getMyLocationStyle().getMyLocationType() + "");
-                        showShort("两点的距离" + getDistance(oldLatLng, newLatLng));
-                        if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 10000) {
+//                        showShort("两点的距离" + getDistance(oldLatLng, newLatLng));
+                        if (getDistance(oldLatLng, newLatLng) > 5 && getDistance(oldLatLng, newLatLng) < 100) {
                             if (checkJumpStatus.getLock_status() == 0) {
                                 if (lon != 0.0) {
                                     setUpMap(oldLatLng, newLatLng);
@@ -230,17 +233,14 @@ public class MainActivity extends BaseActivity implements IMainView,
                                     message.what = 1;
                                     doActionHandler.sendMessage(message);
                                 }
-
                             }
+                        }else {
+                            oldLatLng = newLatLng;
                         }
-                    } else {
-                        L.d("=====!=");
                     }
                 }
                 Log.d("我在不停地定位Mainacvitity=", "latitude:" + lat + "longitude" + lon);
 
-            } else {
-                L.d("!0");
             }
 
             if (checkJumpStatus.getBike_status() == 0) {
@@ -1492,12 +1492,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 //                            mLocationClient.startLocation();
                         } else if (checkJumpStatus.getBike_status() == 1) {
 
-                            if (isbiycle) {
-                                new UserService(MainActivity.this).setShowOneMark("1");
-                                new UserService(MainActivity.this).setState("1");
-                                new UserService(MainActivity.this).setisgetbiycle("1");
-                                L.d("isbicycle");
-                            } else {
+
                                 showOneCar(checkJumpStatus.getBody().get(0).getNumber());
                                 new UserService(MainActivity.this).setShowOneMark("1");
                                 new UserService(MainActivity.this).setState("1");
@@ -1513,7 +1508,7 @@ public class MainActivity extends BaseActivity implements IMainView,
 //                                mLocationClient.startLocation();
                                 countdown.setVisibility(View.GONE);
                                 countdown1.setVisibility(View.GONE);
-                            }
+
 
 
                         } else if (checkJumpStatus.getBike_status() == 2) {
@@ -1673,7 +1668,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         if (v.getVerify_status() == 0 || v.getVerify_status() == 3) {
                             startActivity(RealnameActivity.class);
                         } else if (v.getVerify_status() == 2) {
-                            showShort("正在审核中，清稍后..");
+                            showShort("正在审核中，请稍后..");
                         } else {
                             if (v.getDeposit_status() == 0) {
                                 startActivity(DepositActivity.class);
@@ -1942,7 +1937,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                     public void onResponse(String response, int id) {
                         L.d(response);
                         GetBikeMapList getBikeMapList = gson.fromJson(response, GetBikeMapList.class);
-                        if (new UserService(MainActivity.this).getState().equals("1")) {
+                        if (new UserService(MainActivity.this).getState().equals("1")&&checkJumpStatus.getBike_status()!=4) {
                             AMap aMap = mMapView.getMap();
                             aMap.clear();
                         } else {

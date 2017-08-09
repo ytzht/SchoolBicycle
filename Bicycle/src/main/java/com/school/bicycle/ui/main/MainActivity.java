@@ -218,10 +218,10 @@ public class MainActivity extends BaseActivity implements IMainView,
                     if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
                         Log.d("定位获得的经纬度main=", " latitude: " + lat + " longitude :" + lon);
                         Log.d("两点的距离", getDistance(oldLatLng, newLatLng) + "");
-                        L.d("=====aMap====="+aMap.getMyLocationStyle().getMyLocationType() + "");
+                        L.d("=====aMap=====" + aMap.getMyLocationStyle().getMyLocationType() + "");
                         showShort("两点的距离" + getDistance(oldLatLng, newLatLng));
                         if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 10000) {
-                            if (checkJumpStatus.getLock_status() == 0) {
+//                            if (checkJumpStatus.getLock_status() == 0) {
                                 if (lon != 0.0) {
                                     setUpMap(oldLatLng, newLatLng);
                                     new UserService(MainActivity.this).setLatLon(lat + "," + lon);
@@ -231,7 +231,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                     doActionHandler.sendMessage(message);
                                 }
 
-                            }
+//                            }
                         }
                     } else {
                         L.d("=====!=");
@@ -314,6 +314,9 @@ public class MainActivity extends BaseActivity implements IMainView,
 
         long betweenTime = time - service.getBikeNumberTime(bike_number);
         L.d("锁 betweenTime" + betweenTime);
+        if (betweenTime < 0) {
+            betweenTime = 0 - betweenTime;
+        }
         if (betweenTime > maxTime) {
             L.d("1上次记录的时间比现在多十分钟以上，不管锁的状态反正是正计时");
             if (service.getBikeNumberTime(bike_number) == 0) {
@@ -485,6 +488,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                         showShort("上传成功");
                                         kaluli.setText("" + uploadLocation.getCalories() + "卡");
                                         String distance = uploadLocation.getDistance();
+                                        recLen = Long.parseLong(uploadLocation.getTime()) * 1000;
                                         distance = distance.substring(0, distance.indexOf("."));
                                         lengthBiycile.setText("" + distance + "米");
                                         tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
@@ -617,7 +621,8 @@ public class MainActivity extends BaseActivity implements IMainView,
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
 //        aMap.moveCamera(CameraUpdateFactory.zoomTo(17));//显示地图等级15级
 
-        mlocationClient.startLocation();
+        if (mLocationClient != null)
+            mlocationClient.startLocation();
 
     }
 

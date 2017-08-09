@@ -133,9 +133,9 @@ public class LocationService extends Service implements AMapLocationListener {
                         try {
                             if (strIsLogin == "1") {
                                 init();
-                                Message message = new Message();
-                                message.what = 1;
-                                handler.sendMessage(message);
+//                                Message message = new Message();
+//                                message.what = 1;
+//                                handler.sendMessage(message);
                                 mLocationClient.startLocation();
                             }
                             Thread.sleep(5000);//5秒后再次执行

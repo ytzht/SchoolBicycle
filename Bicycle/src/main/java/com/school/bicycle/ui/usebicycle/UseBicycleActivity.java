@@ -1,5 +1,6 @@
 package com.school.bicycle.ui.usebicycle;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -253,6 +254,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
         });
     }
 
+
     private AlertDialog dialog;
 
     @OnClick({R.id.tv_bicyclenum_use, R.id.tv_date_use, R.id.ll_search_bicyclenum_sure})
@@ -305,6 +307,12 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                             s = s + format + ",";
                         }
                     }
+                    final ProgressDialog dialogpro = new ProgressDialog(UseBicycleActivity.this);
+
+                    dialogpro.setMessage("请稍后...");
+                    dialogpro.setCancelable(false);
+                    dialogpro.show();
+
 
                     Log.d(TAG, s);
                     String url = Apis.Base + Apis.queryBikeListByDate;
@@ -313,7 +321,7 @@ public class UseBicycleActivity extends BaseToolBarActivity {
                             .url(url)
                             .addHeader("cookie",new UserService(UseBicycleActivity.this).getCookie())
                             .addParams("dates", s)
-                            .addParams("pageNumber", 1 + "")
+                            .addParams("pageNumber", "1")
                             .build()
                             .execute(new StringCallback() {
                                 @Override
@@ -323,6 +331,9 @@ public class UseBicycleActivity extends BaseToolBarActivity {
 
                                 @Override
                                 public void onResponse(String response, int id) {
+                                    if (dialogpro.isShowing()){
+                                        dialogpro.dismiss();
+                                    }
                                     usebiycleBynum.setVisibility(View.GONE);
                                     lvShowUsebicycle.setVisibility(View.VISIBLE);
                                     new UserService(UseBicycleActivity.this).setusebiycle("0");

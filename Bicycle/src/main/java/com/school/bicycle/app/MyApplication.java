@@ -120,8 +120,8 @@ public class MyApplication extends MultiDexApplication {
         if (!key.equals("a")) new UserService(context).setCookie(value);
         CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(context));
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
-                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(20000L, TimeUnit.MILLISECONDS)
+                .readTimeout(20000L, TimeUnit.MILLISECONDS)
                 .addInterceptor(new LoggerInterceptor("TAG====="))
                 .cookieJar(cookieJar)
                 //其他配置

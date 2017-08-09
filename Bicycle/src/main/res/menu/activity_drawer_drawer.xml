@@ -4,7 +4,7 @@
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/my_bicycle"
-            android:icon="@drawable/icon_bicycle"
+            android:icon="@drawable/ico_bicycle_yellow"
             android:title="我的车辆" />
         <item
             android:id="@+id/my_wallet"

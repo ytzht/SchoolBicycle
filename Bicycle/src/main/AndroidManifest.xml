@@ -210,7 +210,8 @@
         <activity android:name=".ui.BikeAlarmListActivity" />
         <activity android:name=".ui.ShareincomeActivity" />
         <activity android:name=".ui.Mycoupon_choolesday_Activity" />
-        <activity android:name=".ui.Mycoupon_Activity"></activity>
+        <activity android:name=".ui.Mycoupon_Activity" />
+        <activity android:name=".ui.setup_banbenhaoActivity"></activity>
     </application>
 
 </manifest>

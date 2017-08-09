@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 import com.school.bicycle.R;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.ui.AboutUsActivity;
+import com.school.bicycle.ui.setup_banbenhaoActivity;
 import com.school.bicycle.ui.setup_chongzhiActivity;
 import com.school.bicycle.ui.setup_despositActivity;
 import com.school.bicycle.ui.setup_userActivity;
@@ -46,6 +47,7 @@ public class Setup_Activity extends BaseToolBarActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.setup_banbenhao:
+                startActivity(setup_banbenhaoActivity.class);
                 break;
             case R.id.setup_address:
                 break;

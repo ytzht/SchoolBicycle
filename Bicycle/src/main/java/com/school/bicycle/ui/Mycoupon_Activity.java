@@ -28,8 +28,7 @@ public class Mycoupon_Activity extends BaseActivity {
 
     @BindView(R.id.my_coupon_back)
     ImageView myCouponBack;
-    @BindView(R.id.my_coupon_make)
-    TextView myCouponMake;
+
     @BindView(R.id.mycoupon_ed)
     EditText mycouponEd;
     @BindView(R.id.mycoupon_ok)
@@ -74,13 +73,11 @@ public class Mycoupon_Activity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.my_coupon_back, R.id.my_coupon_make, R.id.mycoupon_ok})
+    @OnClick({R.id.my_coupon_back,  R.id.mycoupon_ok})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.my_coupon_back:
                 finish();
-                break;
-            case R.id.my_coupon_make:
                 break;
             case R.id.mycoupon_ok:
                 if (mycouponEd.getText().equals("")){

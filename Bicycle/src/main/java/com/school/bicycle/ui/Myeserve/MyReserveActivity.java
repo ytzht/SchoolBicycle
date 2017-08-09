@@ -86,7 +86,7 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
         Log.d("AlertDialog","AlertDialog");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("据用车时间少于24h，\n取消将扣除10%手续费，是否取消");
+        builder.setMessage("如果据用车时间少于24h，取消将扣除10%手续费，是否取消？");
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

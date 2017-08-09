@@ -93,4 +93,8 @@ public interface Apis {
     String dayLeaseLists = "order/sharedBikeList";
 
     String CancelShareMyBike = "order/cancelShareMyBike";
+
+    String CheckOldPhone = "user/checkOldPhone";
+
+    String UpdateNewPhone = "user/updateNewPhone";
 }

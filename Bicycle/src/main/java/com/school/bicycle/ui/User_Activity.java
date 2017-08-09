@@ -103,6 +103,7 @@ public class User_Activity extends BaseToolBarActivity {
                 break;
             case R.id.user_changephone:
                 //更换手机号
+                startActivity(ChangePhoneActivity.class, "phone", user.getPhone());
                 break;
             case R.id.Signout:
                 String url = Apis.Base + Apis.userLogout;

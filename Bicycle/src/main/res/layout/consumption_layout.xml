@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,11 +15,13 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textColor="@color/all_textc"
+            tools:text="11111111111111"
             android:textSize="15dp" />
         <TextView
             android:id="@+id/detail_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:text="22222222222222"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
@@ -28,6 +31,7 @@
     <TextView
         android:id="@+id/detail_money"
         android:layout_width="wrap_content"
+        tools:text="33333333333333333"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:layout_alignParentLeft="true"

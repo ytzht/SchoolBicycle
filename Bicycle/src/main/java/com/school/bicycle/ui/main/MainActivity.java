@@ -3,11 +3,9 @@ package com.school.bicycle.ui.main;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -64,8 +62,6 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.school.bicycle.R;
-import com.school.bicycle.ui.Mycoupon_Activity;
-import com.school.bicycle.ui.RechargeActivity;
 import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.CheckJumpStatus;
 import com.school.bicycle.entity.DayleaseList;
@@ -80,11 +76,11 @@ import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.service.LocationService;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.FaultActivity;
 import com.school.bicycle.ui.InformationActivity;
 import com.school.bicycle.ui.Ivfriends.IvfriendsActivity;
+import com.school.bicycle.ui.Mycoupon_Activity;
 import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.TimeCountDownTextView;
 import com.school.bicycle.ui.User_Activity;
@@ -116,9 +112,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -202,26 +196,29 @@ public class MainActivity extends BaseActivity implements IMainView,
 //                        double locationType = amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
                 lat = amapLocation.getLatitude();//获取纬度
                 lon = amapLocation.getLongitude();//获取经度
+                LatLng newLatLng;
                 if (isFirstLatLng) {
                     isFirstLatLng = false;
-                    cameraUpdate = CameraUpdateFactory
-                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
-                    aMap.moveCamera(cameraUpdate);
+                    newLatLng = new LatLng(lat, lon);
+                    oldLatLng = newLatLng;
+//                    cameraUpdate = CameraUpdateFactory
+//                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
+//                    aMap.moveCamera(cameraUpdate);
                 }
 
 
                 if (new UserService(MainActivity.this).getState().equals("1")) {
-                    LatLng newLatLng = new LatLng(lat, lon);
-                    if (isFirstLatLng) {
-                        //记录第一次的定位信息
-                        oldLatLng = newLatLng;
-                        isFirstLatLng = false;
-                    }
+                    newLatLng = new LatLng(lat, lon);
 
+//                    cameraUpdate = CameraUpdateFactory
+//                            .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 17, 0, 0));
+//                    aMap.moveCamera(cameraUpdate);
+                    L.d("=====new old", oldLatLng.latitude + " and " + newLatLng.latitude + "");
                     //位置有变化
                     if (newLatLng != null && oldLatLng != null && oldLatLng != newLatLng) {
                         Log.d("定位获得的经纬度main=", " latitude: " + lat + " longitude :" + lon);
                         Log.d("两点的距离", getDistance(oldLatLng, newLatLng) + "");
+                        L.d("=====aMap====="+aMap.getMyLocationStyle().getMyLocationType() + "");
                         showShort("两点的距离" + getDistance(oldLatLng, newLatLng));
                         if (getDistance(oldLatLng, newLatLng) > 0 && getDistance(oldLatLng, newLatLng) < 10000) {
                             if (checkJumpStatus.getLock_status() == 0) {
@@ -236,19 +233,23 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                             }
                         }
+                    } else {
+                        L.d("=====!=");
                     }
                 }
                 Log.d("我在不停地定位Mainacvitity=", "latitude:" + lat + "longitude" + lon);
 
+            } else {
+                L.d("!0");
             }
 
-//            if (checkJumpStatus.getBike_status() == 0) {
-//                mLocationClient.stopLocation();
-//            }
-//
-//            if (checkJumpStatus.getBike_status() == 4 && new UserService(MainActivity.this).getState().equals("0")) {
-//                mLocationClient.stopLocation();
-//            }
+            if (checkJumpStatus.getBike_status() == 0) {
+                mLocationClient.stopLocation();
+            }
+
+            if (checkJumpStatus.getBike_status() == 4 && new UserService(MainActivity.this).getState().equals("0")) {
+                mLocationClient.stopLocation();
+            }
 
         }
 
@@ -608,14 +609,15 @@ public class MainActivity extends BaseActivity implements IMainView,
         iMainPresenter.initUISettings(aMap);
         MyLocationStyle myLocationStyle;
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.interval(60000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        myLocationStyle.interval(1000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);
         // 设置定位的类型为定位模式 ，可以由定位 LOCATION_TYPE_LOCATE、跟随 LOCATION_TYPE_MAP_FOLLOW 或地图根据面向方向旋转 LOCATION_TYPE_MAP_ROTATE
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         aMap.getUiSettings().setMyLocationButtonEnabled(false);//设置默认定位按钮是否显示，非必需设置。
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(17));//显示地图等级15级
+//        aMap.moveCamera(CameraUpdateFactory.zoomTo(17));//显示地图等级15级
 
+        mlocationClient.startLocation();
 
     }
 
@@ -1315,7 +1317,11 @@ public class MainActivity extends BaseActivity implements IMainView,
 //
 //        Intent startIntent = new Intent(this, LocationService.class);
 //        startService(startIntent);
-
+        if (aMap != null) {
+            cameraUpdate = CameraUpdateFactory
+                    .newCameraPosition(new CameraPosition(new LatLng(lat, lon), 15, 0, 0));
+            aMap.moveCamera(cameraUpdate);
+        }
     }
 
 
@@ -1490,6 +1496,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 new UserService(MainActivity.this).setShowOneMark("1");
                                 new UserService(MainActivity.this).setState("1");
                                 new UserService(MainActivity.this).setisgetbiycle("1");
+                                L.d("isbicycle");
                             } else {
                                 showOneCar(checkJumpStatus.getBody().get(0).getNumber());
                                 new UserService(MainActivity.this).setShowOneMark("1");
@@ -1640,7 +1647,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                         if (v.getVerify_status() == 0 || v.getVerify_status() == 3) {
                             startActivity(RealnameActivity.class);
                         } else if (v.getVerify_status() == 2) {
-                            showShort("正在审核中，清稍后..");
+                            showShort("正在审核中，请稍后...");
                         } else {
                             if (v.getDeposit_status() == 0) {
                                 startActivity(DepositActivity.class);
@@ -2301,7 +2308,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         zhonglon = target.longitude;
         Log.d("onCameraChange", target.latitude + "jinjin------" + target.longitude);
         if (new UserService(MainActivity.this).getState().equals("1")) {
-            lianxumap();
+//            lianxumap();
         } else {
             String showOneMark = new UserService(MainActivity.this).getShowOneMark();
             if (showOneMark.equals("1")) {

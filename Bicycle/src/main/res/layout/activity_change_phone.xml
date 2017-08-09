@@ -22,7 +22,8 @@
             android:src="@drawable/iv_phone"
             android:layout_height="22dp" />
 
-        <EditText
+        <TextView
+            android:gravity="center_vertical"
             android:id="@+id/et_phone"
             android:layout_toRightOf="@id/iv_reg_phone"
             android:layout_width="match_parent"

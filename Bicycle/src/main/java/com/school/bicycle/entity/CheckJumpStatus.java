@@ -16,6 +16,7 @@ public class CheckJumpStatus {
      * bike_status : 1
      * bike_number : 011169
      * lock_status : 1
+     *
      */
 
     private int code;
@@ -23,6 +24,17 @@ public class CheckJumpStatus {
     private int bike_status;
     private String bike_number;
     private int lock_status;
+
+    public int getIsshare() {
+        return isshare;
+    }
+
+    public void setIsshare(int isshare) {
+        this.isshare = isshare;
+    }
+
+    private int isshare;
+
     private List<BodyBean> body;
 
     public int getCode() {

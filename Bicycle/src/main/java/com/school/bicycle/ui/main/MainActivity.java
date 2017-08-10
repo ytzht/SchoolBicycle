@@ -421,6 +421,11 @@ public class MainActivity extends BaseActivity implements IMainView,
             toolbar.setTitle("用车中");
             // init timer
             mTimer = new Timer();
+            if (checkJumpStatus!=null){
+                if (checkJumpStatus.getBike_status()==1){
+                    showOneCar(checkJumpStatus.getBike_number());
+                }
+            }
             // start timer task
         } else if (new UserService(MainActivity.this).getState().equals("0")) {
             state_0.setVisibility(View.VISIBLE);
@@ -488,7 +493,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                     Log.d("实时上传", response);
                                     UploadLocation uploadLocation = gson.fromJson(response, UploadLocation.class);
                                     if (uploadLocation.getCode() == 1) {
-                                        showShort("上传成功");
+//                                        showShort("上传成功");
 
                                         String distance = uploadLocation.getDistance();
                                         recLen = Long.parseLong(uploadLocation.getTime()) * 1000;
@@ -498,7 +503,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                                         tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                                     } else {
                                         tvUse.setText("车已锁");
-                                        showShort("上传失败");
+//                                        showShort("上传失败");
                                     }
                                 }
                             });
@@ -936,6 +941,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         ImageView close_showtips = (ImageView) view.findViewById(R.id.close_showtips);
         if (checkJumpStatus != null) {
             if (checkJumpStatus.getBike_status() == 4) {
+                close_showtips.setVisibility(View.VISIBLE);
                 msg_btn_over.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1046,6 +1052,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                 msg_txt.setText("车辆归回原处才可结束用车，由用户不当操作造成的财产损失将追究法律责任。");
                 msg_btn_share.setText("确定");
                 msg_btn_over.setText("返回");
+                close_showtips.setVisibility(View.GONE);
                 //确定点击
                 msg_btn_share.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1365,13 +1372,13 @@ public class MainActivity extends BaseActivity implements IMainView,
     }
 
     QueryBikeListByDate queryBikeListByDate;
-
+    String bikenum;
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         L.d("onnewIntent");
         queryBikeListByDate = new QueryBikeListByDate();
-        String bikenum = intent.getStringExtra("bike_number");
+        bikenum = intent.getStringExtra("bike_number");
         if (bikenum == null) {
 
         } else {
@@ -1518,6 +1525,13 @@ public class MainActivity extends BaseActivity implements IMainView,
                             if (new UserService(MainActivity.this).getShowOneMark().equals("1")) {
                                 initmap();
                                 initview();
+                                if (bikenum == null) {
+
+                                } else {
+                                    if (!bikenum.isEmpty()) {
+                                        showOneCar(bikenum);
+                                    }
+                                }
                             } else {
                                 initmap();
                                 aMap.clear();
@@ -1527,8 +1541,6 @@ public class MainActivity extends BaseActivity implements IMainView,
                             }
 //                            mLocationClient.startLocation();
                         } else if (checkJumpStatus.getBike_status() == 1) {
-
-                            showOneCar(checkJumpStatus.getBody().get(0).getNumber());
                             new UserService(MainActivity.this).setShowOneMark("1");
                             new UserService(MainActivity.this).setState("1");
                             new UserService(MainActivity.this).setisgetbiycle("1");
@@ -1538,6 +1550,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                             tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
                             initview();
                             lianxumap();
+                            showOneCar(checkJumpStatus.getBody().get(0).getNumber());
                             countdown.setVisibility(View.GONE);
                             countdown1.setVisibility(View.GONE);
 
@@ -1580,10 +1593,15 @@ public class MainActivity extends BaseActivity implements IMainView,
                                 initmap();
                                 new UserService(MainActivity.this).setState("0");
                             } else {
-                                tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
-                                lianxumap();
-                                new UserService(MainActivity.this).setState("1");
-                                showOneCar(checkJumpStatus.getBike_number());
+                                if (checkJumpStatus.getIsshare()==1){
+                                   //已经租出去了
+                                }else {
+                                    tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
+                                    lianxumap();
+                                    new UserService(MainActivity.this).setState("1");
+                                    showOneCar(checkJumpStatus.getBike_number());
+                                }
+
                             }
                             initview();
                         }
@@ -2004,9 +2022,11 @@ public class MainActivity extends BaseActivity implements IMainView,
                                         .newCameraPosition(new CameraPosition(new LatLng(getBikeMapList.getBody().get(0).getLat(),
                                                 getBikeMapList.getBody().get(0).getLog()), 18, 0, 0));
                                 aMap.moveCamera(cameraUpdate);
-                                if (checkJumpStatus.getBike_status() == 0) {
+                                if (checkJumpStatus.getBike_status() == 0||new UserService(MainActivity.this).getShowOneMark().equals("1")) {
                                     marker.showInfoWindow();
+                                    currentMarker = marker;
                                 }
+
                             } else {
                                 showShort("该车辆已经预约，请点击立即用车查看其它车辆！");
                             }
@@ -2422,7 +2442,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         CalendarDay today = CalendarDay.today();
         myCalendar.state().edit()
                 .setMinimumDate(CalendarDay.today())
-                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 1, today.getDay()))
+                .setMaximumDate(CalendarDay.from(today.getYear(), today.getMonth() + 1, today.getDay()-2))
                 .commit();
         myCalendar.setShowOtherDates(MaterialCalendarView.SHOW_OTHER_MONTHS);
 //        init(myCalendar.getCurrentDate().getYear(), myCalendar.getCurrentDate().get月租() + 1, list);

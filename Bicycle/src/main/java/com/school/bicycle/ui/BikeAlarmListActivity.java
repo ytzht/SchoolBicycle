@@ -48,9 +48,9 @@ public class BikeAlarmListActivity extends AppCompatActivity {
     private void initview() {
         String iscall = new UserService(BikeAlarmListActivity.this).getiscall();
         if (iscall.equals("0")){
-            callpolice.setImageDrawable(getResources().getDrawable(R.drawable.callclose));
+            callpolice.setImageDrawable(getResources().getDrawable(R.drawable.btn_off));
         }else {
-            callpolice.setImageDrawable(getResources().getDrawable(R.drawable.calloppen));
+            callpolice.setImageDrawable(getResources().getDrawable(R.drawable.btn_on));
         }
 
         String url = Apis.Base + Apis.bikeAlarmList;
@@ -88,11 +88,11 @@ public class BikeAlarmListActivity extends AppCompatActivity {
                 String iscall = new UserService(BikeAlarmListActivity.this).getiscall();
                 if (iscall.equals("0")){
                     new UserService(BikeAlarmListActivity.this).setiscall("1");
-                    callpolice.setImageResource(R.drawable.calloppen);
+                    callpolice.setImageResource(R.drawable.btn_on);
 //                    callpolice.setImageDrawable(getResources().getDrawable(R.drawable.calloppen));
                 }else {
                     new UserService(BikeAlarmListActivity.this).setiscall("0");
-                    callpolice.setImageResource(R.drawable.callclose);
+                    callpolice.setImageResource(R.drawable.btn_off);
 //                    callpolice.setImageDrawable(getResources().getDrawable(R.drawable.callclose));
                 }
                 break;

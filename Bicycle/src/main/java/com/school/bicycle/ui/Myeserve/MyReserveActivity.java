@@ -76,6 +76,7 @@ public class MyReserveActivity extends BaseToolBarActivity implements Myreserve_
     @Override
     public void ondetialClick(View v) {
         Intent it = new Intent(MyReserveActivity.this, MainActivity.class);
+        new UserService(MyReserveActivity.this).setShowOneMark("1");
         it.putExtra("bike_number",String.valueOf(myAppoint.getMy_appoint().get((Integer) v.getTag()).getNumber()));
         startActivity(it);
 

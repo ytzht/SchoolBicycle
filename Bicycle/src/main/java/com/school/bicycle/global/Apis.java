@@ -88,7 +88,7 @@ public interface Apis {
 
     String StartShareMyBike = "order/startShareMyBike";
 
-    String UpDate = "";
+    String UpDate = "version";
 
     String dayLeaseLists = "order/sharedBikeList";
 

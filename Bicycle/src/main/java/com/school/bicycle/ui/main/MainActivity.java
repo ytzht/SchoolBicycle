@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -289,7 +288,7 @@ public class MainActivity extends BaseActivity implements IMainView,
         isFirstLatLng = true;
         initview();
         initClickListener();
-
+        UpdateInfo();
 //        initmap();
 //        LatLng target = new LatLng(lon, lat);
 //        initgetBikeMapList(target);
@@ -1397,7 +1396,6 @@ public class MainActivity extends BaseActivity implements IMainView,
         initvalidateUser();
         checkJumpStatus();
         initview();
-//        UpdateInfo();
         BindPushUtils.bind(getBaseContext());//保存绑定推送
 //        IntentFilter filter = new IntentFilter();
 //        filter.addAction(BroadcastAction);
@@ -1437,19 +1435,16 @@ public class MainActivity extends BaseActivity implements IMainView,
 
     boolean isWifi = false;
     private DownloadManager downloadManager;
-
+    private UpDate upDate;
     //更新apk 相关
     private void UpdateInfo() {
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         isWifi = NetworkInfo.State.CONNECTED == ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
         try {
             // getPackageName()是你当前类的包名，0代表是获取版本信息
-            PackageInfo packInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            String url = "https://api.cishan123.org/v2.2/api/AutoUpdate/UpdateInfoNew?type=yst&version=1.2";
+            final PackageInfo packInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             //获取到versionNum 用vName接收, downloadUrl = http://file.cishan123.org/yst_1.7.apk
-            final String vName = "1.7";
-            final String downloadUrl = "http://file.cishan123.org/yst_1.7.apk";
-            download(downloadUrl, vName);
+
             OkHttpUtils.get().url(Apis.Base + Apis.UpDate).build().execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
@@ -1459,8 +1454,12 @@ public class MainActivity extends BaseActivity implements IMainView,
 
                 @Override
                 public void onResponse(String response, int id) {
-                    UpDate upDate = (new Gson()).fromJson(response, UpDate.class);
+                    upDate = (new Gson()).fromJson(response, UpDate.class);
                     if (upDate.getCode() == 1) {
+                        String downloadUrl = Apis.Base + upDate.getBody().getFile_url();
+                        if (!packInfo.versionName.equals(upDate.getBody().getVersion())){
+                            download(downloadUrl, upDate.getBody().getVersion());
+                        }
 
                     } else {
                         showShort(upDate.getMsg());
@@ -1522,7 +1521,7 @@ public class MainActivity extends BaseActivity implements IMainView,
     //更新apk 相关
     public void myDialog(final DownloadManager downloadManager, final String url, final String vName) {
         new AlertDialog.Builder(this).setTitle("新版本提醒")//对话框标题
-                .setMessage("本期做了一些新功能和优化体验，快来试试吧？")//对话框提示正文
+                .setMessage(upDate.getBody().getContent())//对话框提示正文
                 .setIcon(R.mipmap.ic_launcher)//对话框标题上的图片
                 .setNegativeButton("暂不升级", new DialogInterface.OnClickListener() {
                     @Override//取消按钮

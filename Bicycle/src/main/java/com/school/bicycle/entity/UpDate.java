@@ -8,15 +8,13 @@ public class UpDate {
 
     /**
      * code : 1
-     * msg : 操作成功
-     * name : 闰土
-     * phone : 15553426817
+     * msg : 最新版本
+     * body : {"version":"2.0.1","build":11,"content":"1.收货时间优化\t\t","file_url":"/upload/app/xiaov_11.apk","create_time":"2017-05-12 20:21:25"}
      */
 
     private int code;
     private String msg;
-    private String name;
-    private String phone;
+    private BodyBean body;
 
     public int getCode() {
         return code;
@@ -34,19 +32,67 @@ public class UpDate {
         this.msg = msg;
     }
 
-    public String getName() {
-        return name;
+    public BodyBean getBody() {
+        return body;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBody(BodyBean body) {
+        this.body = body;
     }
 
-    public String getPhone() {
-        return phone;
-    }
+    public static class BodyBean {
+        /**
+         * version : 2.0.1
+         * build : 11
+         * content : 1.收货时间优化
+         * file_url : /upload/app/xiaov_11.apk
+         * create_time : 2017-05-12 20:21:25
+         */
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+        private String version;
+        private int build;
+        private String content;
+        private String file_url;
+        private String create_time;
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public int getBuild() {
+            return build;
+        }
+
+        public void setBuild(int build) {
+            this.build = build;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getFile_url() {
+            return file_url;
+        }
+
+        public void setFile_url(String file_url) {
+            this.file_url = file_url;
+        }
+
+        public String getCreate_time() {
+            return create_time;
+        }
+
+        public void setCreate_time(String create_time) {
+            this.create_time = create_time;
+        }
     }
 }

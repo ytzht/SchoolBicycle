@@ -2,6 +2,8 @@ package com.school.bicycle.ui;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.school.bicycle.R;
@@ -10,7 +12,6 @@ import com.school.bicycle.entity.GetMyMessage;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -31,7 +32,7 @@ public class InformationActivity extends BaseToolBarActivity {
         setToolbarText("我的信息");
         initview();
     }
-
+    GetMyMessage g;
     private void initview() {
 
         String url = Apis.Base + Apis.getMyMessage + "?pageNumber=1";
@@ -49,11 +50,18 @@ public class InformationActivity extends BaseToolBarActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response",response);
-                        GetMyMessage g = gson.fromJson(response, GetMyMessage.class);
+                        g = gson.fromJson(response, GetMyMessage.class);
                         GetMyMessage_adapter getMyMessage_adapter = new GetMyMessage_adapter(InformationActivity.this,
                                 g.getMessage());
                         myinformationListview.setAdapter(getMyMessage_adapter);
                     }
                 });
+
+        myinformationListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(MyMsgDetailActivity.class, "msg", g.getMessage().get(position).getContent());
+            }
+        });
     }
 }

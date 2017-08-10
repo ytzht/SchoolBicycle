@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="12dp"
-    android:paddingRight="12dp"
-    android:paddingTop="5dp">
+    android:layout_height="wrap_content">
+    <!--android:foreground="?attr/selectableItemBackground"-->
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/information"
-        android:orientation="vertical">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        card_view:cardBackgroundColor="@color/white"
+        card_view:cardCornerRadius="4dp"
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/infomation_ima"
-            android:layout_width="match_parent"
-            android:adjustViewBounds="true"
-            android:layout_height="wrap_content"
-            android:src="@drawable/xinxi" />
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/infomation_ima">
-
-            <TextView
-                android:id="@+id/mymessage_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingLeft="5dp"
-                android:textColor="@color/all_textc"
-                android:textSize="15dp" />
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="22dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:paddingRight="10dp"
-                android:src="@drawable/mybic_next" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:id="@+id/infomation_ima"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/xinxi" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/infomation_ima">
+
+                <TextView
+                    android:id="@+id/mymessage_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/all_textc"
+                    android:textSize="15dp"
+                    tools:text="校易行开张了！！！" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/mybic_next" />
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

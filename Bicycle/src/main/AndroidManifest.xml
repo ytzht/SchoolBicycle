@@ -214,7 +214,8 @@
         <activity android:name=".ui.setup_banbenhaoActivity" />
         <activity android:name=".ui.ChangePhoneActivity" />
         <activity android:name=".ui.setup_yonghuActivity" />
-        <activity android:name=".ui.ChangePhoneNextActivity"></activity>
+        <activity android:name=".ui.ChangePhoneNextActivity" />
+        <activity android:name=".ui.MyMsgDetailActivity"></activity>
     </application>
 
 </manifest>

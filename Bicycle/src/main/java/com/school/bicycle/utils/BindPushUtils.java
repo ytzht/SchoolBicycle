@@ -53,10 +53,12 @@ public class BindPushUtils {
     private static void bindId(Context context, String phone) {
 
         final String deviceToken = new UserService(context).getDeviceToken();
+        final String cookie = new UserService(context).getCookie();
         OkHttpUtils
                 .post()
                 .url(Apis.Base + Apis.setDiviceToken)
-                .addHeader("divice_token", deviceToken)
+                .addHeader("cookie", cookie)
+                .addParams("divice_token", deviceToken)
                 .addParams("phone", phone)
                 .build()
                 .execute(new StringCallback() {

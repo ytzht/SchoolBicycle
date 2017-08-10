@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context="com.school.bicycle.ui.InformationActivity">
+    tools:context="com.school.bicycle.ui.MyMsgDetailActivity">
 
-
-    <ListView
+    <WebView
+        android:id="@+id/msg_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/myinformation_listview"
-        android:divider="@null"
-        android:scrollbars="none"/>
+        android:padding="16dp"
+        tools:text="欢迎欢迎欢迎欢迎欢迎欢迎" />
 </LinearLayout>

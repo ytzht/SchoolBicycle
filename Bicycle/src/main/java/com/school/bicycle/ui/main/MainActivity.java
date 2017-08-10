@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -735,9 +736,59 @@ public class MainActivity extends BaseActivity implements IMainView,
         saoma.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String location = lon + "," + lat;
-                Log.d("location===", location);
-                startActivity(ZxingActivity.class, "location", location, "status", "1");
+                if (checkJumpStatus!=null){
+                    if (checkJumpStatus.getBike_status()==1||checkJumpStatus.getBike_status()==2){
+                        if ( !new UserService(MainActivity.this).getshowAlert().equals("0")){
+                            String location = lon + "," + lat;
+                            Log.d("location===", location);
+                            startActivity(ZxingActivity.class, "location", location, "status", "1");
+                        }else {
+                            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.msg_alert, null, false);
+                            final Dialog dialog = new AlertDialog.Builder(MainActivity.this).setView(view).setCancelable(false).show();
+                            TextView msg_txt = (TextView) view.findViewById(R.id.msg_txt);
+                            TextView msg_btn_l = (TextView) view.findViewById(R.id.msg_btn_l);
+                            TextView msg_btn_r = (TextView) view.findViewById(R.id.msg_btn_r);
+                            final CheckBox cb_msg = (CheckBox) view.findViewById(R.id.cb_msg);
+                            msg_txt.setText("结束用车前可多次开关锁，车辆回归原处才能结束用车，由用户不当操作造成的财产损失将追究法律责任。");
+                            msg_btn_l.setText("返回");
+                            msg_btn_r.setText("确定");
+                            msg_btn_l.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (dialog.isShowing()){
+                                        dialog.dismiss();
+                                    }
+                                }
+                            });
+                            msg_btn_r.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (dialog.isShowing()){
+                                        dialog.dismiss();
+                                    }
+                                    String location = lon + "," + lat;
+                                    Log.d("location===", location);
+                                    startActivity(ZxingActivity.class, "location", location, "status", "1");
+                                }
+                            });
+                            cb_msg.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (cb_msg.isChecked()){
+                                        new UserService(MainActivity.this).setshowAlert("1");
+                                    }else {
+                                        new UserService(MainActivity.this).setshowAlert("0");
+                                    }
+                                }
+                            });
+                        }
+                    }else {
+                        String location = lon + "," + lat;
+                        Log.d("location===", location);
+                        startActivity(ZxingActivity.class, "location", location, "status", "1");
+                    }
+                }
+
 
 
             }
@@ -1561,7 +1612,8 @@ public class MainActivity extends BaseActivity implements IMainView,
                             bike_number = checkJumpStatus.getBike_number();
                             lianxumap();
                             tvUse.setText("用车中" + checkJumpStatus.getBike_number() + "");
-                            countdown.setVisibility(View.VISIBLE);
+                            countdown.setVisibility(View.GONE);
+                            countdown1.setVisibility(View.GONE);
                             //时租中
                             initview();
                             if ((new UserService(MainActivity.this).getBikeNumber()).equals(bike_number)) {
@@ -1583,6 +1635,7 @@ public class MainActivity extends BaseActivity implements IMainView,
                             new UserService(MainActivity.this).setisgetbiycle("1");
                             bike_number = checkJumpStatus.getBike_number();
                             countdown.setVisibility(View.GONE);
+                            countdown1.setVisibility(View.GONE);
                             if (checkJumpStatus.getLock_status() == 1) {
                                 AMap aMap = mMapView.getMap();
                                 aMap.clear();

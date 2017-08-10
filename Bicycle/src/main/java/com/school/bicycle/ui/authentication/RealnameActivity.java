@@ -62,31 +62,6 @@ public class RealnameActivity extends BaseToolBarActivity {
 
     }
 
-//    //获取照相返回的图片
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(resultCode== Activity.RESULT_CANCELED){
-//
-//        }else {
-//            Uri uri = data.getData();
-//            if (uri != null) {
-//                photo = BitmapFactory.decodeFile(uri.getPath());
-//                rnPhoto.setImageBitmap(photo);
-//                saveImage(photo);
-//            }
-//            if (photo == null) {
-//                Bundle bundle = data.getExtras();
-//                if (bundle != null) {
-//                    photo = (Bitmap) bundle.get("data");
-//                    rnPhoto.setImageBitmap(photo);
-//                    saveImage(photo);
-//                } else {
-//                    return;
-//                }
-//            }
-//        }
-//    }
 
     @Override
     protected void onDestroy() {

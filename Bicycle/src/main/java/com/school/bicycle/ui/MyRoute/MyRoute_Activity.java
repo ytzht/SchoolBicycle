@@ -1,5 +1,6 @@
 package com.school.bicycle.ui.MyRoute;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.school.bicycle.entity.GetMyRoute;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.school.bicycle.ui.xingcheng_map_acvitity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -45,7 +47,10 @@ public class MyRoute_Activity extends BaseToolBarActivity {
     }
 
     private void initview() {
-
+        final ProgressDialog dialogproa = new ProgressDialog(MyRoute_Activity.this);
+        dialogproa.setMessage("请稍候...");
+        dialogproa.setCancelable(false);
+        dialogproa.show();
         String url = Apis.Base + Apis.getMyRoute;
         String cookie = new UserService(MyRoute_Activity.this).getCookie();
 
@@ -60,6 +65,9 @@ public class MyRoute_Activity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
+                        if (dialogproa.isShowing()){
+                            dialogproa.dismiss();
+                        }
                         Log.d(TAG, "onResponse我的行程: " + response);
                         getMyRoute = gson.fromJson(response, GetMyRoute.class);
                         if (getMyRoute.getBody().size()==0){

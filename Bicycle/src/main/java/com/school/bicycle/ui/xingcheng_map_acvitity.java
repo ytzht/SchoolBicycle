@@ -1,7 +1,6 @@
 package com.school.bicycle.ui;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.school.bicycle.R;
@@ -24,7 +22,6 @@ import com.school.bicycle.entity.GetMyRoute;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.ui.main.IMainPresenter;
 import com.school.bicycle.ui.main.IMainView;
-import com.school.bicycle.ui.main.MainPresenterCompl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +57,8 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
     LinearLayout llDetail;
     @BindView(R.id.useing_biycle_lay)
     RelativeLayout useingBiycleLay;
+    @BindView(R.id.riqitype)
+    TextView riqitype;
 
     private IMainPresenter iMainPresenter;
     Intent it;
@@ -106,30 +105,42 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
         GetMyRoute getMyRoute = (GetMyRoute) it.getSerializableExtra("getMyRoute");
         String position = it.getStringExtra("position");
         int i = Integer.parseInt(position);
-        if (getMyRoute.getBody().get(i).getLines().size()==0){
+        if (getMyRoute.getBody().get(i).getLines().size() == 0) {
 
-        }else {
-        cameraUpdate = CameraUpdateFactory
-                .newCameraPosition(new CameraPosition(new LatLng(
-                        getMyRoute.getBody().get(i).getLines().get(0).getLat(),getMyRoute.getBody().get(i).getLines().get(0).getLog()), 18, 0, 30));
-        aMap.moveCamera(cameraUpdate);
-        mapBikeNumber.setText("车 牌 号"+getMyRoute.getBody().get(i).getBike_number());
-        mapDistance.setText("骑行距离："+getMyRoute.getBody().get(i).getDistance()+"M");
-        mapTotalFee.setText("骑行消费："+getMyRoute.getBody().get(i).getTotal_fee()+"元");
-        mapCalories.setText(getMyRoute.getBody().get(i).getCalories()+"卡");
-        mapCarbonSaved.setText(getMyRoute.getBody().get(i).getCarbon_saved()+"g");
-        String str=getMyRoute.getBody().get(i).getStart_time().substring(2,10);
-        mapStartTime.setText(str);
+        } else {
+            cameraUpdate = CameraUpdateFactory
+                    .newCameraPosition(new CameraPosition(new LatLng(
+                            getMyRoute.getBody().get(i).getLines().get(0).getLat(), getMyRoute.getBody().get(i).getLines().get(0).getLog()), 18, 0, 30));
+            aMap.moveCamera(cameraUpdate);
+            mapBikeNumber.setText("车 牌 号" + getMyRoute.getBody().get(i).getBike_number());
+            mapDistance.setText("骑行距离：" + getMyRoute.getBody().get(i).getDistance() + "M");
+            mapTotalFee.setText("骑行消费：" + getMyRoute.getBody().get(i).getTotal_fee() + "元");
+            mapCalories.setText(getMyRoute.getBody().get(i).getCalories() + "卡");
+            mapCarbonSaved.setText(getMyRoute.getBody().get(i).getCarbon_saved() + "g");
 
-        Log.d("getMyRoute",getMyRoute.getBody().get(i).toString());
-        List<LatLng> latLngs = new ArrayList<LatLng>();
-        for (int a = 0; a < getMyRoute.getBody().get(i).getLines().size(); a++) {
-            latLngs.add(new LatLng(getMyRoute.getBody().get(i).getLines().get(a).getLat()
-                    , getMyRoute.getBody().get(i).getLines().get(a).getLog()));
-        }
+            if (getMyRoute.getBody().get(i).getRoute_type()==1){
+                riqitype.setText("骑行日期");
+                String str = getMyRoute.getBody().get(i).getCreate_time().substring(2, 10);
+                mapStartTime.setText(str);
+            }else if (getMyRoute.getBody().get(i).getRoute_type()==2){
+                riqitype.setText("骑行时间");
+                mapStartTime.setText(getMyRoute.getBody().get(i).getTime_span()+"分钟");
+            }else if (getMyRoute.getBody().get(i).getRoute_type()==0){
+                riqitype.setText("骑行日期");
+                String str = getMyRoute.getBody().get(i).getCreate_time().substring(2, 10);
+                mapStartTime.setText(str);
+            }
 
-        Polyline polyline = aMap.addPolyline(new PolylineOptions().
-                addAll(latLngs).width(10).color(getResources().getColor(R.color.org)));
+
+            Log.d("getMyRoute", getMyRoute.getBody().get(i).toString());
+            List<LatLng> latLngs = new ArrayList<LatLng>();
+            for (int a = 0; a < getMyRoute.getBody().get(i).getLines().size(); a++) {
+                latLngs.add(new LatLng(getMyRoute.getBody().get(i).getLines().get(a).getLat()
+                        , getMyRoute.getBody().get(i).getLines().get(a).getLog()));
+            }
+
+            Polyline polyline = aMap.addPolyline(new PolylineOptions().
+                    addAll(latLngs).width(10).color(getResources().getColor(R.color.org)));
         }
     }
 

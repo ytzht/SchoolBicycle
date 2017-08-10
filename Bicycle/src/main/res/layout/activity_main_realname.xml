@@ -97,7 +97,8 @@
         android:layout_marginTop="14dp"
         android:layout_below="@+id/linearLayout2"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout9">
 
         <TextView
             android:layout_width="13dp"
@@ -136,17 +137,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/shangchuan"
         android:text="上传"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/rn_photo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
     
     
     <ImageView
         android:layout_width="304dp"
         android:layout_height="194dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
         android:id="@+id/rn_photo"
-        android:src="@drawable/ico_frame_nor"/>
+        android:src="@drawable/ico_frame_nor"
+        android:layout_below="@+id/linearLayout9"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp" />
 
 </RelativeLayout>

@@ -58,20 +58,27 @@ public class GetMyRoute_adapter extends BaseAdapter {
             viewHolde = (ViewHolder) view.getTag();
         }
 
-        viewHolde.OrdernumberMyroute.setText("骑行时间：" + data.get(i).getTime_span() + "分钟    骑行花费：" + data.get(i).getTotal_fee() + "元");
+        String str = data.get(i).getCreate_time().substring(2, 10);
+        if (data.get(i).getRoute_type() == 0) {
+            viewHolde.OrdernumberMyroute.setText("骑行时间：" + str + "    骑行花费：" + data.get(i).getTotal_fee() + "元");
+        } else if (data.get(i).getRoute_type() == 1) {
+            viewHolde.OrdernumberMyroute.setText("骑行时间：" + str + "   骑行花费：" + data.get(i).getTotal_fee() + "元");
+        } else if (data.get(i).getRoute_type() == 2) {
+            viewHolde.OrdernumberMyroute.setText("骑行时间：" + data.get(i).getTime_span() + "分钟    骑行花费：" + data.get(i).getTotal_fee() + "元");
+        }
+
         viewHolde.carnumberMyroute.setText("车牌号：" + data.get(i).getBike_number());
         viewHolde.timeMyroute.setText(data.get(i).getCreate_time());
-        if (i+1==1){
+        if (i + 1 == 1) {
             viewHolde.shang.setVisibility(View.GONE);
-        }else if (i+1>1&&i+1<data.size()){
+        } else if (i + 1 > 1 && i + 1 < data.size()) {
             viewHolde.xia.setVisibility(View.VISIBLE);
             viewHolde.shang.setVisibility(View.VISIBLE);
-        }else if (i+1==data.size()){
+        } else if (i + 1 == data.size()) {
             viewHolde.xia.setVisibility(View.GONE);
         }
         return view;
     }
-
 
 
     static class ViewHolder {

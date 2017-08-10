@@ -16,6 +16,7 @@ public class UserService {
     private static final String State = "state";
     private static final String tixian = "tixian";
     private static final String alert = "alert";
+    private static final String showalert = "showalert";
     private static final String Cookie = "Cookie";
     private static final String BikeNumber = "BikeNumber";
     private static final String COOKIE_PREFS = "CookiePrefsFile";
@@ -189,6 +190,18 @@ public class UserService {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 USER_PREFS, Context.MODE_PRIVATE);
         return memberPrefs.getString(alert, "0");
+
+    }
+    public void setshowAlert(String s) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                showalert, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(showalert, s).apply();
+    }
+
+    public String getshowAlert() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                showalert, Context.MODE_PRIVATE);
+        return memberPrefs.getString(showalert, "0");
 
     }
 

@@ -110,7 +110,7 @@ public class ResultActivity extends BaseToolBarActivity {
             });
 
         } else if (type.equals("date")) {
-            teResResult.setText("用车结束需归还至原停车位才可继续用车。点击主界面扫码开锁按钮解锁车辆，结束用车前您可多次上锁开锁。");
+            teResResult.setText("用车结束需归还至原停车位才可继续用车。点击主界面扫码开锁按钮解锁车辆。");
             btResNext.setText("确定");
             new UserService(ResultActivity.this).setShowOneMark("0");
             btResNext.setOnClickListener(new View.OnClickListener() {

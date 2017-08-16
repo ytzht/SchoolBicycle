@@ -25,7 +25,6 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;

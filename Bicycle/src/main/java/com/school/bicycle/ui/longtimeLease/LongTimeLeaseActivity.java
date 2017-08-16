@@ -31,6 +31,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
+import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -72,6 +73,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
 
     private int month = 0;
     private String bike_number;
+    private String deposit_status;
     private String pay_type;
     private String lease_type;
     private String price;
@@ -87,6 +89,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
         initview();
         Intent it = getIntent();
         bike_number = it.getStringExtra("biyclenum");//车牌号
+        deposit_status = it.getStringExtra("deposit_status");//车牌号
         cbZfb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -210,6 +213,7 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
     }
 
     private void initpay() {
+        if (deposit_status.equals("1")){
         if (month == 0) {
             showShort("请选择长租时间");
         } else {
@@ -286,6 +290,9 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
             } else {
                 showShort("请至少选择一种支付方式");
             }
+        }
+        }else {
+            startActivity(DepositActivity.class);
         }
     }
 

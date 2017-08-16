@@ -63,12 +63,14 @@ public class Mycoupon_adapter extends BaseAdapter {
         if (data.get(i).getCou_type().equals("折扣")) {
             viewHolde.rmb.setVisibility(View.GONE);
             viewHolde.manyong.setText("所有可用");
-            viewHolde.dikou.setText(data.get(i).getCou_discount() * 10 + "折");
+            viewHolde.dikou.setText(data.get(i).getCou_discount() * 10+"");
+            viewHolde.yuanzhe.setText("折");
             viewHolde.zhekouleixing.setText("折扣券");
             viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_orange);
         } else if (data.get(i).getCou_type().equals("满减")) {
             viewHolde.rmb.setVisibility(View.VISIBLE);
             viewHolde.dikou.setText(data.get(i).getCou_cut() + "");
+            viewHolde.yuanzhe.setText("");
             viewHolde.manyong.setText("满" + data.get(i).getCou_full() + "元可用");
             if (data.get(i).getCou_usedin().equals("时租")) {
                 viewHolde.couponColor.setImageResource(R.drawable.ico_coupon_blue);
@@ -85,6 +87,7 @@ public class Mycoupon_adapter extends BaseAdapter {
 
 
 
+
     static class ViewHolder {
         @BindView(R.id.coupon_color)
         ImageView couponColor;
@@ -98,10 +101,12 @@ public class Mycoupon_adapter extends BaseAdapter {
         TextView rmb;
         @BindView(R.id.zhekouleixing)
         TextView zhekouleixing;
-
+        @BindView(R.id.yuanzhe)
+        TextView yuanzhe;
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
 
 }

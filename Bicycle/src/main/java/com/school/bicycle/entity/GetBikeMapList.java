@@ -179,18 +179,18 @@ public class GetBikeMapList {
              * 年租 : 500
              */
 
-            private String 时租;
+            private double 时租;
             private String 日租;
             private String 月租;
             private String 季租;
             private String 半年租;
             private String 年租;
 
-            public String get时租() {
+            public double get时租() {
                 return 时租;
             }
 
-            public void set时租(String 时租) {
+            public void set时租(double 时租) {
                 this.时租 = 时租;
             }
 

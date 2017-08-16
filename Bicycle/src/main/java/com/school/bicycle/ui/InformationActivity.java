@@ -29,7 +29,7 @@ public class InformationActivity extends BaseToolBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
         ButterKnife.bind(this);
-        setToolbarText("我的信息");
+        setToolbarText("我的消息");
         initview();
     }
     GetMyMessage g;

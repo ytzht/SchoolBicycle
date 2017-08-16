@@ -8,6 +8,8 @@ package com.school.bicycle.global;
 public interface Apis {
     String Base = "http://106.14.192.87/xyxapi/";
 
+    String Basedown = "http://106.14.192.87";
+
     String queryBikeListByDate = "order/queryBikeListByDate";
 
     String queryConsumDetails = "order/queryConsumDetails";

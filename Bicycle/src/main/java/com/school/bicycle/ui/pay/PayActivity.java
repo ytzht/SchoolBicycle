@@ -26,9 +26,10 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.Mycoupon_chooles_Activity;
+
 import com.school.bicycle.ui.Mycoupon_choolesday_Activity;
 import com.school.bicycle.ui.result.ResultActivity;
+
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -172,9 +173,9 @@ public class PayActivity extends BaseToolBarActivity {
                     for (int i = 0;i<dayLeaseOrder.getCoupon().size();i++){
                         if (dayLeaseOrder.getCoupon().get(i).getUsercou_id() ==cid){
                             if (dayLeaseOrder.getCoupon().get(i).getCou_type().equals("折扣")){
-                                tvCutDay.setText("-￥"+(dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount()));
-                                tvNeedDay.setText(dayLeaseOrder.getPrice()-
-                                        (dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount())+"");
+                                tvCutDay.setText("-￥"+(dayLeaseOrder.getPrice()-
+                                        (dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount())));
+                                tvNeedDay.setText(dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount()+"");
                             }else {
                                 tvCutDay.setText("-￥"+dayLeaseOrder.getCoupon().get(i).getCou_cut());
                                 tvNeedDay.setText(dayLeaseOrder.getPrice()-dayLeaseOrder.getCoupon().get(i).getCou_cut()+"");

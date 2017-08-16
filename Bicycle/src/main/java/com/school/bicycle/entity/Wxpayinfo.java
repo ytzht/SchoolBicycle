@@ -1,6 +1,6 @@
 package com.school.bicycle.entity;
 
-import com.tencent.mm.opensdk.modelpay.PayReq;
+
 
 /**
  * Created by Administrator on 2017/7/27.

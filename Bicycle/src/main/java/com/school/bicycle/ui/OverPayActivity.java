@@ -30,7 +30,6 @@ import com.school.bicycle.global.L;
 import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.result.ResultActivity;
-import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -286,9 +285,9 @@ public class OverPayActivity extends BaseActivity {
                         if (cid != 0) {
                             if (findNotPayRoute.getCoupon().get(i).getUsercou_id() == cid) {
                                 if (findNotPayRoute.getCoupon().get(i).getCou_type().equals("折扣")) {
-                                    tvAs.setText("-￥" + (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()));
-                                    tvNeed.setText(findNotPayRoute.getTotal_fee() -
-                                            (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount()) + "");
+                                    tvAs.setText("-￥" +( findNotPayRoute.getTotal_fee() -
+                                            (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount())));
+                                    tvNeed.setText(findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount() + "");
                                 } else {
                                     tvAs.setText("-￥" + findNotPayRoute.getCoupon().get(i).getCou_cut());
                                     tvNeed.setText(findNotPayRoute.getTotal_fee() - findNotPayRoute.getCoupon().get(i).getCou_cut() + "");

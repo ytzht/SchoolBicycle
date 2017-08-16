@@ -138,7 +138,7 @@ public class ZxingActivity extends BaseToolBarActivity {
                 String location = getIntent().getStringExtra("location");
                 String status = getIntent().getStringExtra("status");
                 startActivity(openbynum_Activity.class, "location", location,"status",status);
-                finish();
+//                finish();
                 break;
             case R.id.linear2:
                 if (!isOpen) {

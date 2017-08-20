@@ -295,6 +295,9 @@ public class OverPayActivity extends BaseActivity {
                             } else {
                                 tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
                             }
+                        }else {
+                            tvAs.setText("");
+                            tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
                         }
                     }
 
@@ -307,7 +310,7 @@ public class OverPayActivity extends BaseActivity {
         if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
             L.d("wchat-1", PayCore.getInstance().mWeichatState + "");
             PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
-            startActivity(ResultActivity.class, "type", "returnbiycle");
+            startActivity(ResultActivity.class, "type", "timereturnbiycle");
             finish();
         }
     }

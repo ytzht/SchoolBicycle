@@ -18,7 +18,7 @@ public class DayLeaseOrder implements Serializable {
 
     private int code;
     private String msg;
-    private int price;
+    private double price;
     private List<CouponBean> coupon;
 
     public int getCode() {
@@ -37,11 +37,11 @@ public class DayLeaseOrder implements Serializable {
         this.msg = msg;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

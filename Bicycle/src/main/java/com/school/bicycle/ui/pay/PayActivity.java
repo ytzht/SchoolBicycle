@@ -180,6 +180,9 @@ public class PayActivity extends BaseToolBarActivity {
                                 tvCutDay.setText("-￥"+dayLeaseOrder.getCoupon().get(i).getCou_cut());
                                 tvNeedDay.setText(dayLeaseOrder.getPrice()-dayLeaseOrder.getCoupon().get(i).getCou_cut()+"");
                             }
+                        }else {
+                            tvCutDay.setText("");
+                            tvNeedDay.setText(dayLeaseOrder.getPrice()+"");
                         }
                     }
                 }

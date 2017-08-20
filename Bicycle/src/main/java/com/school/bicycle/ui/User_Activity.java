@@ -136,14 +136,19 @@ public class User_Activity extends BaseToolBarActivity {
             case R.id.deposit_status_user:
                 break;
             case R.id.realname_go:
-                if (user.getVerify_status() != 1) {
-                    startActivity(RealnameActivity.class);
+                if (user!=null) {
+                    if (user.getVerify_status() != 1) {
+                        startActivity(RealnameActivity.class);
+                    }
                 }
                 break;
             case R.id.yajin_go:
-                if (user.getDeposit_status() != 1) {
-                    startActivity(DepositActivity.class);
+                if (user!=null){
+                    if (user.getDeposit_status() != 1) {
+                        startActivity(DepositActivity.class);
+                    }
                 }
+
                 break;
         }
     }

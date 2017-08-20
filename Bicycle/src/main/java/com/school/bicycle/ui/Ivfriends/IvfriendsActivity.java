@@ -78,7 +78,7 @@ public class IvfriendsActivity extends BaseToolBarActivity {
     @OnClick({R.id.submit_num, R.id.share_weixin, R.id.share_qq, R.id.share_pengyouquan, R.id.share_weibo, R.id.share_kongjian})
     public void onViewClicked(View view) {
 
-        UMWeb web = new UMWeb("http://xiaoyixinggo.com/admin/supplier/account/app/dw.html");
+        UMWeb web = new UMWeb("http://xiaoyixinggo.com/admin/guide/app");
         UMImage thumb = new UMImage(this, R.mipmap.ic_launcher);
         web.setTitle("校易行");//标题
         web.setThumb(thumb);  //缩略图

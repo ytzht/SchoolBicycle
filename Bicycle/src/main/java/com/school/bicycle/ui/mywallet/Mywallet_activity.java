@@ -85,6 +85,7 @@ public class Mywallet_activity extends BaseToolBarActivity {
                             mywalletBalance.setText(wallet.getBalance());
                             mywalletIncome.setText(wallet.getShare_income());
                             depositMoney.setText(wallet.getDeposit_money());
+
                         } else {
                             showShort("网络出现了一点小问题");
                         }

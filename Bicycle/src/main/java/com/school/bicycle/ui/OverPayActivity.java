@@ -89,7 +89,7 @@ public class OverPayActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_over_pay);
         ButterKnife.bind(this);
-        tbOverpay.setTitle("日租付款");
+        tbOverpay.setTitle("时租付款");
         final ProgressDialog dialogpro = new ProgressDialog(OverPayActivity.this);
 
         dialogpro.setMessage("请稍候...");
@@ -179,7 +179,7 @@ public class OverPayActivity extends BaseActivity {
                             .post()
                             .url(url)
                             .addHeader("cookie", cookie)
-                            .addParams("price", price)
+                            .addParams("price", findNotPayRoute.getTotal_fee()+"")
                             .addParams("bike_number", bike_number)
                             .addParams("pay_type", pay_type)
                             .addParams("cid", cid + "")
@@ -226,6 +226,7 @@ public class OverPayActivity extends BaseActivity {
                                     } else {
                                         Pay_wallet p = gson.fromJson(response, Pay_wallet.class);
                                         if (p.getCode() == 1) {
+                                            startActivity(ResultActivity.class, "type", "timestop");
                                             showShort(p.getMsg());
                                             finish();
                                         } else {
@@ -256,7 +257,7 @@ public class OverPayActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(ResultActivity.class, "type", "timereturnbiycle");
+                        startActivity(ResultActivity.class, "type", "timestop");
                         finish();
                     }
                 });
@@ -288,9 +289,11 @@ public class OverPayActivity extends BaseActivity {
                                     tvAs.setText("-￥" +( findNotPayRoute.getTotal_fee() -
                                             (findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount())));
                                     tvNeed.setText(findNotPayRoute.getTotal_fee() * findNotPayRoute.getCoupon().get(i).getCou_discount() + "");
+                                    break;
                                 } else {
                                     tvAs.setText("-￥" + findNotPayRoute.getCoupon().get(i).getCou_cut());
                                     tvNeed.setText(findNotPayRoute.getTotal_fee() - findNotPayRoute.getCoupon().get(i).getCou_cut() + "");
+                                    break;
                                 }
                             } else {
                                 tvNeed.setText(findNotPayRoute.getTotal_fee() + "");
@@ -310,7 +313,7 @@ public class OverPayActivity extends BaseActivity {
         if (PayCore.getInstance().mWeichatState == PayCore.WeiChat_Pay_Success) {
             L.d("wchat-1", PayCore.getInstance().mWeichatState + "");
             PayCore.getInstance().mWeichatState = PayCore.WeiChat_Pay_Normal;
-            startActivity(ResultActivity.class, "type", "timereturnbiycle");
+            startActivity(ResultActivity.class, "type", "timestop");
             finish();
         }
     }

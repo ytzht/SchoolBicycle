@@ -17,6 +17,16 @@ public class Recharge {
 
     private int code;
     private String msg;
+    private String img_url;
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
+    }
+
     private List<RechargeBean> recharge;
 
     public int getCode() {

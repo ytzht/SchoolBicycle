@@ -9,15 +9,19 @@ public class Wallet {
 
     /**
      * code : 1
-     * balance : 0
-     * share_income : 0
-     * deposit_money : 10
+     * msg : 操作成功
+     * balance : 175.74
+     * share_income : 0.0
+     * deposit_money : 299
+     * deposit_status : 1
      */
 
     private int code;
+    private String msg;
     private String balance;
     private String share_income;
     private String deposit_money;
+    private int deposit_status;
 
     public int getCode() {
         return code;
@@ -25,6 +29,14 @@ public class Wallet {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public String getBalance() {
@@ -49,5 +61,13 @@ public class Wallet {
 
     public void setDeposit_money(String deposit_money) {
         this.deposit_money = deposit_money;
+    }
+
+    public int getDeposit_status() {
+        return deposit_status;
+    }
+
+    public void setDeposit_status(int deposit_status) {
+        this.deposit_status = deposit_status;
     }
 }

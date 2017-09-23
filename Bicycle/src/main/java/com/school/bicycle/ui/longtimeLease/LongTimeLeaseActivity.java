@@ -159,34 +159,54 @@ public class LongTimeLeaseActivity extends BaseToolBarActivity {
 
     @OnClick({R.id.month1, R.id.month3, R.id.month6, R.id.month12, R.id.wx_icon, R.id.tv_okpay, R.id.zfb_icon})
     public void onViewClicked(View view) {
+        String xinyongfen = new UserService(LongTimeLeaseActivity.this).getxinyongfen();
+        int xinyong = Integer.valueOf(xinyongfen);
         switch (view.getId()) {
             case R.id.month1:
                 initview();
-                month1.setBackgroundResource(R.drawable.bg_org);
-                month = 1;
-                lease_type = "月租";
-                price = g.getLonglease_info().get(0).get月租();
+                if (xinyong<100){
+                    showShort("对不起，您当前的信用值暂时无法解锁此服务\n");
+                }else {
+                    month1.setBackgroundResource(R.drawable.bg_org);
+                    month = 1;
+                    lease_type = "月租";
+                    price = g.getLonglease_info().get(0).get月租();
+                }
                 break;
             case R.id.month3:
                 initview();
-                month3.setBackgroundResource(R.drawable.bg_org);
-                month = 3;
-                lease_type = "季租";
-                price = g.getLonglease_info().get(1).get季租();
+                if (xinyong<150){
+                    showShort("对不起，您当前的信用值暂时无法解锁此服务\n");
+                }else {
+                    month3.setBackgroundResource(R.drawable.bg_org);
+                    month = 3;
+                    lease_type = "季租";
+                    price = g.getLonglease_info().get(1).get季租();
+                }
+
                 break;
             case R.id.month6:
                 initview();
-                month6.setBackgroundResource(R.drawable.bg_org);
-                month = 6;
-                lease_type = "半年租";
-                price = g.getLonglease_info().get(2).get半年租();
+                if (xinyong<180){
+                    showShort("对不起，您当前的信用值暂时无法解锁此服务\n");
+                }else {
+                    month6.setBackgroundResource(R.drawable.bg_org);
+                    month = 6;
+                    lease_type = "半年租";
+                    price = g.getLonglease_info().get(2).get半年租();
+                }
+
                 break;
             case R.id.month12:
                 initview();
-                month12.setBackgroundResource(R.drawable.bg_org);
-                month = 12;
-                lease_type = "年租";
-                price = g.getLonglease_info().get(3).get年租();
+                if (xinyong<200){
+                    showShort("对不起，您当前的信用值暂时无法解锁此服务\n");
+                }else {
+                    month12.setBackgroundResource(R.drawable.bg_org);
+                    month = 12;
+                    lease_type = "年租";
+                    price = g.getLonglease_info().get(3).get年租();
+                }
                 break;
             case R.id.wx_icon:
                 break;

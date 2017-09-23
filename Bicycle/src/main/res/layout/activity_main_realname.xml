@@ -133,11 +133,13 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:id="@+id/shangchuan"
         android:text="上传"
+        android:textColor="@color/white"
         android:layout_below="@+id/rn_photo"
+        android:background="@drawable/btn_btton_pressed"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp" />
     

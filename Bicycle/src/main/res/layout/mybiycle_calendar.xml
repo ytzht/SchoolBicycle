@@ -66,12 +66,15 @@
         android:layout_width="wrap_content"
         android:gravity="center_vertical"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
         <CheckBox
             android:id="@+id/cal_cb"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+
+            android:checked="true"/>
 
         <TextView
             android:layout_width="wrap_content"

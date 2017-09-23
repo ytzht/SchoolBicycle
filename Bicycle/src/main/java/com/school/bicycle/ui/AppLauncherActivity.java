@@ -95,7 +95,7 @@ public class AppLauncherActivity extends BaseActivity {
 
                 @Override
                 public void run() {
-                    superFinish();
+                    superFinish(1);
                 }
             }, time);
         }
@@ -107,14 +107,20 @@ public class AppLauncherActivity extends BaseActivity {
 
             @Override
             public void run() {
-                superFinish();
+                superFinish(0);
             }
         }, time);
     }
 
-    public void superFinish() {
-        startActivity(MainActivity.class);
-        super.finish();
+    public void superFinish(int i) {
+        if(i==0){
+            startActivity(MainActivity.class,"first","0");
+            super.finish();
+        }else {
+            startActivity(MainActivity.class,"first","1");
+            super.finish();
+        }
+
     }
 
 
@@ -163,7 +169,7 @@ public class AppLauncherActivity extends BaseActivity {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        superFinish();
+                        superFinish(1);
                     }
                 });
             }

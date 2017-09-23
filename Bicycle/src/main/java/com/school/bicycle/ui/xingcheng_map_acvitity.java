@@ -23,6 +23,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.ui.main.IMainPresenter;
 import com.school.bicycle.ui.main.IMainView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,10 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
     RelativeLayout useingBiycleLay;
     @BindView(R.id.riqitype)
     TextView riqitype;
+    @BindView(R.id.map_cut_fee)
+    TextView mapCutFee;
+    @BindView(R.id.map_need_fee)
+    TextView mapNeedFee;
 
     private IMainPresenter iMainPresenter;
     Intent it;
@@ -67,7 +72,7 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_map_my);
         ButterKnife.bind(this);
         setToolbarText("我的行程");
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
@@ -117,19 +122,24 @@ public class xingcheng_map_acvitity extends BaseToolBarActivity implements IMain
             mapTotalFee.setText("骑行消费：" + getMyRoute.getBody().get(i).getTotal_fee() + "元");
             mapCalories.setText(getMyRoute.getBody().get(i).getCalories() + "卡");
             mapCarbonSaved.setText(getMyRoute.getBody().get(i).getCarbon_saved() + "g");
-
-            if (getMyRoute.getBody().get(i).getRoute_type()==1){
+            mapCutFee.setText("优惠券"+getMyRoute.getBody().get(i).getCoupon_used()+"元");
+            DecimalFormat df   = new DecimalFormat("######0.0");
+            mapNeedFee.setText("实际支付"+
+                    df.format(getMyRoute.getBody().get(i).getTotal_fee()
+                            -getMyRoute.getBody().get(i).getCoupon_used())+"元");
+            if (getMyRoute.getBody().get(i).getRoute_type() == 1) {
                 riqitype.setText("骑行日期");
                 String str = getMyRoute.getBody().get(i).getCreate_time().substring(2, 10);
                 mapStartTime.setText(str);
-            }else if (getMyRoute.getBody().get(i).getRoute_type()==2){
+            } else if (getMyRoute.getBody().get(i).getRoute_type() == 2) {
                 riqitype.setText("骑行时间");
-                mapStartTime.setText(getMyRoute.getBody().get(i).getTime_span()+"分钟");
-            }else if (getMyRoute.getBody().get(i).getRoute_type()==0){
+                mapStartTime.setText(getMyRoute.getBody().get(i).getTime_span() + "分钟");
+            } else if (getMyRoute.getBody().get(i).getRoute_type() == 0) {
                 riqitype.setText("骑行日期");
                 String str = getMyRoute.getBody().get(i).getCreate_time().substring(2, 10);
                 mapStartTime.setText(str);
             }
+
 
 
             Log.d("getMyRoute", getMyRoute.getBody().get(i).toString());

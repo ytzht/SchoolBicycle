@@ -9,27 +9,48 @@
 
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="请输入提现金额（单位/元）"
-        android:textSize="15dp"
-        android:textColor="@color/all_textc"
+
+
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/txshape"
         android:layout_marginTop="80dp"
-        android:id="@+id/textView4" />
+        android:id="@+id/textView4"
+        >
+        <ImageView
+            android:layout_width="21dp"
+            android:layout_height="20dp"
+            android:padding="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/zfb_tx"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/edit_Withdrawals_zfb"
+            android:inputType="number"
+            android:textSize="14sp"
+            android:hint="请输入支付宝账号"
+            android:textColorHint="@color/blackHint"
+            android:background="@null"/>
+
+    </LinearLayout>
     
     <LinearLayout
-        android:layout_width="214dp"
+        android:layout_width="240dp"
         android:layout_height="30dp"
         android:orientation="horizontal"
         android:background="@drawable/txshape"
         android:layout_marginTop="13dp"
         android:id="@+id/linearLayout4"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView4"
-        android:layout_alignRight="@+id/textView6"
-        android:layout_alignEnd="@+id/textView6">
+        >
         <ImageView
             android:layout_width="21dp"
             android:layout_height="20dp"
@@ -43,6 +64,9 @@
             android:layout_height="match_parent"
             android:id="@+id/edit_Withdrawals"
             android:inputType="number"
+            android:textSize="14sp"
+            android:hint="请输入提现金额"
+            android:textColorHint="@color/blackHint"
             android:background="@null"/>
         
     </LinearLayout>
@@ -50,7 +74,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:textColor="@color/all_textc"
         android:layout_below="@+id/linearLayout4"
         android:layout_centerHorizontal="true"

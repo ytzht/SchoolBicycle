@@ -26,6 +26,7 @@ public class UserService {
     private static final String iscall   = "iscall";
     private static final String over   = "over";
     private static final String isgetbiycle   = "isgetbiycle";
+    private static final String xinyongfen   = "xinyongfen";
 
 
 
@@ -33,8 +34,22 @@ public class UserService {
         this.context = context;
     }
 
-
     // 1为租车状态 0为未租车状态
+    public void setxinyongfen(String latlon) {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                xinyongfen, Context.MODE_PRIVATE);
+        memberPrefs.edit().putString(xinyongfen, latlon).apply();
+    }
+
+
+    public String getxinyongfen() {
+        SharedPreferences memberPrefs = context.getSharedPreferences(
+                xinyongfen, Context.MODE_PRIVATE);
+        return memberPrefs.getString(xinyongfen, "0");
+    }
+
+
+        // 1为租车状态 0为未租车状态
     public void setisgetbiycle(String latlon) {
         SharedPreferences memberPrefs = context.getSharedPreferences(
                 isgetbiycle, Context.MODE_PRIVATE);

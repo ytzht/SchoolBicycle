@@ -23,6 +23,7 @@ import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.OverPayActivity;
 import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.main.MainActivity;
+import com.school.bicycle.ui.pay.PayActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -118,7 +119,7 @@ public class LockcloseActivity extends BaseToolBarActivity {
                                         finish();
                                         //日租停车
                                     } else if (status == 2) {
-                                        startActivity(ResultActivity.class, "type", "timestop");
+//                                        startActivity(OverPayActivity.class);
                                         new UserService(LockcloseActivity.this).setState("0");
                                         finish();
                                         //时租停车

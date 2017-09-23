@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
+import com.school.bicycle.entity.BaseResult;
 import com.school.bicycle.entity.DayLeaseOrder;
 import com.school.bicycle.entity.PayInfo;
 import com.school.bicycle.entity.PayResult;
@@ -36,6 +37,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -162,6 +164,8 @@ public class PayActivity extends BaseToolBarActivity {
 
         if (cid!=0){
             tvHasDay.setText("已选一张");
+        }else {
+            tvHasDay.setText("");
         }
 
         if (dayLeaseOrder!=null){
@@ -169,16 +173,20 @@ public class PayActivity extends BaseToolBarActivity {
                 if (dayLeaseOrder.getCoupon().size()==0){
                     showShort("暂无可用的优惠券");
                 }else {
-
+                    DecimalFormat    df   = new DecimalFormat("######0.00");
                     for (int i = 0;i<dayLeaseOrder.getCoupon().size();i++){
                         if (dayLeaseOrder.getCoupon().get(i).getUsercou_id() ==cid){
                             if (dayLeaseOrder.getCoupon().get(i).getCou_type().equals("折扣")){
-                                tvCutDay.setText("-￥"+(dayLeaseOrder.getPrice()-
-                                        (dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount())));
-                                tvNeedDay.setText(dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount()+"");
+
+                                double cutday = dayLeaseOrder.getPrice()-(dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount());
+                                double needday = dayLeaseOrder.getPrice()*dayLeaseOrder.getCoupon().get(i).getCou_discount();
+                                tvCutDay.setText("-￥"+df.format(cutday));
+                                tvNeedDay.setText(df.format(needday)+"");
+                                break;
                             }else {
                                 tvCutDay.setText("-￥"+dayLeaseOrder.getCoupon().get(i).getCou_cut());
-                                tvNeedDay.setText(dayLeaseOrder.getPrice()-dayLeaseOrder.getCoupon().get(i).getCou_cut()+"");
+                                tvNeedDay.setText( df.format(dayLeaseOrder.getPrice()-dayLeaseOrder.getCoupon().get(i).getCou_cut())+"");
+                                break;
                             }
                         }else {
                             tvCutDay.setText("");
@@ -219,46 +227,48 @@ public class PayActivity extends BaseToolBarActivity {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.d("response", response);
-                        if (pay_type.equals("wx")) {
-                            Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
-                            WxPayParams wxPayParams = gson.fromJson(wxpayinfo.getPay_info(), WxPayParams.class);
-                            final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
-                            msgApi.registerApp(wxPayParams.appid);
-                            PayReq request = new PayReq();
-                            request.appId = wxPayParams.appid;
-                            request.partnerId = wxPayParams.partnerid;
-                            request.prepayId = wxPayParams.prepayid;
-                            request.packageValue = "Sign=WXPay";
-                            request.nonceStr = wxPayParams.noncestr;
-                            request.timeStamp = wxPayParams.timestamp;
-                            request.sign = wxPayParams.sign;
-                            msgApi.sendReq(request);
+                        BaseResult baseResult = gson.fromJson(response,BaseResult.class);
+                        if(baseResult.getCode()==1){
+                            if (pay_type.equals("wx")) {
+                                Wxpayinfo wxpayinfo = gson.fromJson(response, Wxpayinfo.class);
+                                WxPayParams wxPayParams = gson.fromJson(wxpayinfo.getPay_info(), WxPayParams.class);
+                                final IWXAPI msgApi = WXAPIFactory.createWXAPI(getBaseContext(), null);
+                                msgApi.registerApp(wxPayParams.appid);
+                                PayReq request = new PayReq();
+                                request.appId = wxPayParams.appid;
+                                request.partnerId = wxPayParams.partnerid;
+                                request.prepayId = wxPayParams.prepayid;
+                                request.packageValue = "Sign=WXPay";
+                                request.nonceStr = wxPayParams.noncestr;
+                                request.timeStamp = wxPayParams.timestamp;
+                                request.sign = wxPayParams.sign;
+                                msgApi.sendReq(request);
 
-                        } else if (pay_type.equals("zfb")) {
-                            final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
-                            info = response;
-                            new Thread() {
-                                @Override
-                                public void run() {
-                                    super.run();
-                                    PayTask payTask = new PayTask(PayActivity.this);
-                                    Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
-                                    Message message = mHandler.obtainMessage();
-                                    message.what = 200;
-                                    message.obj = result;
-                                    mHandler.sendMessage(message);
-                                }
-                            }.start();
+                            } else if (pay_type.equals("zfb")) {
+                                final PayInfo payInfo = (new Gson()).fromJson(response, PayInfo.class);
+                                info = response;
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        super.run();
+                                        PayTask payTask = new PayTask(PayActivity.this);
+                                        Map<String, String> result = payTask.payV2(payInfo.getPay_info(), true);
+                                        Message message = mHandler.obtainMessage();
+                                        message.what = 200;
+                                        message.obj = result;
+                                        mHandler.sendMessage(message);
+                                    }
+                                }.start();
 
-                        } else {
-                            Pay_wallet p = gson.fromJson(response, Pay_wallet.class);
-                            if (p.getCode() == 1) {
-                                startActivity(ResultActivity.class, "type", "date");
-                                finish();
                             } else {
-                                showShort(p.getMsg());
+                                Pay_wallet p = gson.fromJson(response, Pay_wallet.class);
+                                    startActivity(ResultActivity.class, "type", "date");
+                                    finish();
                             }
+                        }else {
+                            showShort(baseResult.getMsg());
                         }
+
                     }
                 });
 

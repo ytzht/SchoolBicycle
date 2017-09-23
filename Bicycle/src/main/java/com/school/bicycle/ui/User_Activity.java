@@ -82,15 +82,22 @@ public class User_Activity extends BaseToolBarActivity {
                             userPhone.setText(user.getPhone());
                             if (user.getDeposit_status() == 1) {
                                 depositStatusUser.setText("押金充值成功");
-                            } else {
+                            } else if (user.getDeposit_status()==2){
+                                depositStatusUser.setText("处于押金退款中");
+                            }else {
                                 depositStatusUser.setText("未付押金");
                             }
                             if (user.getVerify_status() == 1) {
                                 verifyStatusUser.setText("已实名认证");
-                            } else {
+                            } else if (user.getVerify_status()==2){
+                                verifyStatusUser.setText("实名认证审核中..");
+                            }else {
                                 verifyStatusUser.setText("未实名认证");
                             }
 
+                        }else {
+                            showShort("本地保存的登录信息已过期,请重新登录");
+                            new UserService(User_Activity.this).setCookie("0");
                         }
                     }
                 });
@@ -124,6 +131,7 @@ public class User_Activity extends BaseToolBarActivity {
                                     showShort(b.getMsg());
                                     new UserService(User_Activity.this).setValidateUser("0");
                                     new UserService(User_Activity.this).setCookie("0");
+                                    new UserService(User_Activity.this).setState("0");
                                     finish();
                                 } else {
                                     showShort(b.getMsg());
@@ -137,8 +145,10 @@ public class User_Activity extends BaseToolBarActivity {
                 break;
             case R.id.realname_go:
                 if (user!=null) {
-                    if (user.getVerify_status() != 1) {
+                    if (user.getVerify_status() == 0) {
                         startActivity(RealnameActivity.class);
+                    }else if (user.getVerify_status()==2){
+                        showShort("正在审核中~请稍候...");
                     }
                 }
                 break;

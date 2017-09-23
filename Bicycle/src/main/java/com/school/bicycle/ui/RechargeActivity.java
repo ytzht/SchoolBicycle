@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.school.bicycle.R;
 import com.school.bicycle.entity.PayInfo;
@@ -59,6 +60,8 @@ public class RechargeActivity extends BaseToolBarActivity {
     TextView tvOkpay;
     @BindView(R.id.tex_show)
     TextView texShow;
+    @BindView(R.id.ima)
+    ImageView ima;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +159,13 @@ public class RechargeActivity extends BaseToolBarActivity {
                             month3.setText(recharge.getRecharge().get(1).getPrice() + "元");
                             month6.setText(recharge.getRecharge().get(2).getPrice() + "元");
                             month12.setText(recharge.getRecharge().get(3).getPrice() + "元");
+                            String imaurl = recharge.getImg_url();
+                            if (recharge.getImg_url()==null){
+
+                            }else {
+                                Glide.with(RechargeActivity.this).load(imaurl).into(ima);
+                            }
+
                         } else {
 
                         }

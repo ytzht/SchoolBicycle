@@ -79,7 +79,7 @@ public class GetMyRoute implements Serializable {
         private int status;
         private int pay_status;
         private int route_type;
-        private int coupon_used;
+        private double coupon_used;
         private String create_time;
         private List<LinesBean> lines;
 
@@ -195,11 +195,11 @@ public class GetMyRoute implements Serializable {
             this.route_type = route_type;
         }
 
-        public int getCoupon_used() {
+        public double getCoupon_used() {
             return coupon_used;
         }
 
-        public void setCoupon_used(int coupon_used) {
+        public void setCoupon_used(double coupon_used) {
             this.coupon_used = coupon_used;
         }
 

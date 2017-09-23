@@ -8,20 +8,13 @@ import android.widget.TextView;
 
 import com.school.bicycle.R;
 import com.school.bicycle.entity.BaseResult;
-import com.school.bicycle.entity.WeiXinPayResultEvent;
 import com.school.bicycle.global.Apis;
-import com.school.bicycle.global.BaseEvent;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.L;
-import com.school.bicycle.global.PayCore;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.authentication.RealnameActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +29,8 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
     TextView getShareIncomeWithdrawals;
     @BindView(R.id.ok_Withdrawals)
     TextView okWithdrawals;
+    @BindView(R.id.edit_Withdrawals_zfb)
+    EditText editWithdrawalsZfb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +48,21 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
     }
 
 
-
-
     @OnClick(R.id.ok_Withdrawals)
     public void onViewClicked() {
         if (TextUtils.isEmpty(editWithdrawals.getText())) {
             showShort("请输入提现金额");
         } else {
+            if (TextUtils.isEmpty(editWithdrawalsZfb.getText())){
+                showShort("请输入支付宝账号");
+            }else {
             String url = Apis.Base + Apis.withdraw;
             String cookie = new UserService(WithdrawalsActivity.this).getCookie();
 
             OkHttpUtils.post()
-                    .url(url) .addHeader("cookie",cookie)
+                    .url(url).addHeader("cookie", cookie)
                     .addParams("withdraw_money", editWithdrawals.getText().toString())
+                    .addParams("zfb_account", editWithdrawalsZfb.getText().toString())
                     .build()
                     .execute(new StringCallback() {
                         @Override
@@ -76,15 +73,16 @@ public class WithdrawalsActivity extends BaseToolBarActivity {
                         @Override
                         public void onResponse(String response, int id) {
                             L.d(response);
-                            BaseResult b = gson.fromJson(response,BaseResult.class);
-                            if (b.getCode()==1){
-                                startActivity(ResultActivity.class,"type","tixianxiaoe");
+                            BaseResult b = gson.fromJson(response, BaseResult.class);
+                            if (b.getCode() == 1) {
+                                startActivity(ResultActivity.class, "type", "tixianxiaoe");
                                 finish();
-                            }else {
+                            } else {
                                 showShort(b.getMsg());
                             }
                         }
                     });
+            }
         }
 
     }

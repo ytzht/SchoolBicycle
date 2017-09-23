@@ -53,7 +53,7 @@
                     android:id="@+id/by_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5.45h" />
+                    android:text="" />
 
 
             </LinearLayout>
@@ -73,7 +73,7 @@
                     android:id="@+id/by_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="18.56KM" />
+                    android:text="" />
 
 
             </LinearLayout>
@@ -93,7 +93,7 @@
                     android:id="@+id/by_expend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5.45h" />
+                    android:text="" />
 
 
             </LinearLayout>
@@ -113,7 +113,7 @@
                     android:id="@+id/by_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="40RMB" />
+                    android:text="" />
 
 
             </LinearLayout>

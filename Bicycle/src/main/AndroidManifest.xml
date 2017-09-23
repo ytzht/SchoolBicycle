@@ -215,7 +215,11 @@
         <activity android:name=".ui.ChangePhoneActivity" />
         <activity android:name=".ui.setup_yonghuActivity" />
         <activity android:name=".ui.ChangePhoneNextActivity" />
-        <activity android:name=".ui.MyMsgDetailActivity"></activity>
+        <activity android:name=".ui.MyMsgDetailActivity" />
+        <activity
+            android:name=".ui.ZhiDaoActivity"
+            android:theme="@android:style/Theme.Translucent"
+            />
     </application>
 
 </manifest>

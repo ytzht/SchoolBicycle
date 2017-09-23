@@ -43,7 +43,7 @@ public class Mycoupon_choolesday_Activity extends BaseToolBarActivity {
         mycouponList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("cid的", dayLeaseOrder.getCoupon().get(position).getCou_number() + "");
+                Log.d("cid的", dayLeaseOrder.getCoupon().get(position).getUsercou_id() + "");
                 PayActivity.cid = dayLeaseOrder.getCoupon().get(position).getUsercou_id();
                 finish();
             }

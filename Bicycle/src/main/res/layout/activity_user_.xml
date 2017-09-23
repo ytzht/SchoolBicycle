@@ -49,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="39dp"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:text="修改手机号" />
 
         <TextView
@@ -110,9 +111,9 @@
         android:id="@+id/Signout"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/linearLayout5"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="57dp"
+        android:layout_marginBottom="57dp"
         android:background="@drawable/btn_btton_pressed"
         android:gravity="center"
         android:text="退出登录"

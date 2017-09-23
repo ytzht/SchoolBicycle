@@ -4,9 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +15,6 @@ import com.school.bicycle.entity.GetMyRoute;
 import com.school.bicycle.global.Apis;
 import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
-import com.school.bicycle.ui.usebicycle.UseBicycleActivity;
 import com.school.bicycle.ui.xingcheng_map_acvitity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -34,8 +31,11 @@ public class MyRoute_Activity extends BaseToolBarActivity {
     ListView getMyRouteList;
 
     GetMyRoute getMyRoute;
+    GetMyRoute getMyRouteadd;
     @BindView(R.id.myroute_te)
     TextView myrouteTe;
+    int pageNumber = 1;
+    ProgressDialog dialogproa ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class MyRoute_Activity extends BaseToolBarActivity {
     }
 
     private void initview() {
-        final ProgressDialog dialogproa = new ProgressDialog(MyRoute_Activity.this);
+        dialogproa = new ProgressDialog(MyRoute_Activity.this);
         dialogproa.setMessage("请稍候...");
         dialogproa.setCancelable(false);
         dialogproa.show();
@@ -56,6 +56,7 @@ public class MyRoute_Activity extends BaseToolBarActivity {
 
         OkHttpUtils.get()
                 .url(url).addHeader("cookie", cookie)
+                .addParams("pageNumber", pageNumber + "")
                 .build()
                 .execute(new StringCallback() {
                     @Override
@@ -65,22 +66,26 @@ public class MyRoute_Activity extends BaseToolBarActivity {
 
                     @Override
                     public void onResponse(String response, int id) {
-                        if (dialogproa.isShowing()){
-                            dialogproa.dismiss();
-                        }
+
                         Log.d(TAG, "onResponse我的行程: " + response);
                         getMyRoute = gson.fromJson(response, GetMyRoute.class);
-                        if (getMyRoute.getBody().size()==0){
+                        if (getMyRoute.getBody().size() == 0) {
+                            if (dialogproa.isShowing()) {
+                                dialogproa.dismiss();
+                            }
                             myrouteTe.setVisibility(View.VISIBLE);
                             getMyRouteList.setVisibility(View.GONE);
-                        }else {
-                            getMyRouteList.setVisibility(View.VISIBLE);
-                            myrouteTe.setVisibility(View.GONE);
-                            GetMyRoute_adapter getMyRouteAdapter = new GetMyRoute_adapter(MyRoute_Activity.this, getMyRoute.getBody());
-                            getMyRouteList.setAdapter(getMyRouteAdapter);
+                        } else {
+                            if (getMyRoute.getBody().size() < 20) {
+                                getMyRouteList.setVisibility(View.VISIBLE);
+                                myrouteTe.setVisibility(View.GONE);
+                                GetMyRoute_adapter getMyRouteAdapter = new GetMyRoute_adapter(MyRoute_Activity.this, getMyRoute.getBody());
+                                getMyRouteList.setAdapter(getMyRouteAdapter);
+                            } else {
+                                pageNumber++;
+                                addmyroute();
+                            }
                         }
-
-
                     }
                 });
 
@@ -95,5 +100,59 @@ public class MyRoute_Activity extends BaseToolBarActivity {
         });
 
 
+    }
+
+
+    private void addmyroute() {
+        String url = Apis.Base + Apis.getMyRoute;
+        String cookie = new UserService(MyRoute_Activity.this).getCookie();
+
+        OkHttpUtils.get()
+                .url(url).addHeader("cookie", cookie)
+                .addParams("pageNumber", pageNumber + "")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+
+                        Log.d(TAG, "onResponse我的行程: " + response);
+                        getMyRouteadd = gson.fromJson(response, GetMyRoute.class);
+                        if (getMyRouteadd.getBody().size() == 0) {
+                            if (dialogproa.isShowing()) {
+                                dialogproa.dismiss();
+                            }
+                            myrouteTe.setVisibility(View.VISIBLE);
+                            getMyRouteList.setVisibility(View.GONE);
+                        } else {
+
+                            if (getMyRouteadd.getBody().size() < 20) {
+                                if (dialogproa.isShowing()) {
+                                    dialogproa.dismiss();
+                                }
+                                for (int i = 0; i < getMyRouteadd.getBody().size(); i++) {
+                                    getMyRoute.getBody().add(getMyRouteadd.getBody().get(i));
+                                }
+                                getMyRouteList.setVisibility(View.VISIBLE);
+                                myrouteTe.setVisibility(View.GONE);
+                                GetMyRoute_adapter getMyRouteAdapter = new GetMyRoute_adapter(MyRoute_Activity.this, getMyRoute.getBody());
+                                getMyRouteList.setAdapter(getMyRouteAdapter);
+                            } else {
+                                for (int i = 0; i < getMyRouteadd.getBody().size(); i++) {
+                                    getMyRoute.getBody().add(getMyRouteadd.getBody().get(i));
+                                }
+                                pageNumber++;
+                                addmyroute();
+                            }
+
+                        }
+
+
+                    }
+                });
     }
 }

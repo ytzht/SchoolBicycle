@@ -17,6 +17,7 @@ import com.school.bicycle.global.BaseToolBarActivity;
 import com.school.bicycle.global.UserService;
 import com.school.bicycle.ui.Details.DetailsActivity;
 import com.school.bicycle.ui.Withdrawals.WithdrawalsActivity;
+import com.school.bicycle.ui.eposit.DepositActivity;
 import com.school.bicycle.ui.result.ResultActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -85,6 +86,13 @@ public class Mywallet_activity extends BaseToolBarActivity {
                             mywalletBalance.setText(wallet.getBalance());
                             mywalletIncome.setText(wallet.getShare_income());
                             depositMoney.setText(wallet.getDeposit_money());
+                            if (wallet.getDeposit_status()==1){
+                                mywalletRefund.setText("退还押金");
+                            }else if (wallet.getDeposit_status()==0){
+                                mywalletRefund.setText("缴纳押金");
+                            }else {
+                                mywalletRefund.setText("押金退款中");
+                            }
 
                         } else {
                             showShort("网络出现了一点小问题");
@@ -113,48 +121,56 @@ public class Mywallet_activity extends BaseToolBarActivity {
                 startActivity(DetailsActivity.class);
                 break;
             case R.id.mywallet_refund:
-
                 if (new UserService(Mywallet_activity.this).getisgetbiycle().equals("1")){
                     showShort("您有在租的车辆，暂时不能退还您的押金！");
                 }else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("提示");
-                    builder.setMessage("是否退还押金");
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String url = Apis.Base + Apis.depositRefund;
-                            OkHttpUtils
-                                    .get()
-                                    .url(url)
-                                    .addHeader("cookie",new UserService(Mywallet_activity.this).getCookie())
-                                    .build()
-                                    .execute(new StringCallback() {
-                                        @Override
-                                        public void onError(Call call, Exception e, int id) {
+                    if (wallet.getDeposit_status()==1){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("提示");
+                        builder.setMessage("是否退还押金");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String url = Apis.Base + Apis.depositRefund;
+                                OkHttpUtils
+                                        .get()
+                                        .url(url)
+                                        .addHeader("cookie",new UserService(Mywallet_activity.this).getCookie())
+                                        .build()
+                                        .execute(new StringCallback() {
+                                            @Override
+                                            public void onError(Call call, Exception e, int id) {
 
-                                        }
-
-                                        @Override
-                                        public void onResponse(String response, int id) {
-                                            BaseResult baseResult = gson.fromJson(response, BaseResult.class);
-                                            if (baseResult.getCode() == 1) {
-                                                startActivity(ResultActivity.class, "type", "tixian");
-                                                finish();
-                                            } else {
-                                                showShort(baseResult.getMsg());
                                             }
-                                        }
-                                    });
+
+                                            @Override
+                                            public void onResponse(String response, int id) {
+                                                BaseResult baseResult = gson.fromJson(response, BaseResult.class);
+                                                if (baseResult.getCode() == 1) {
+                                                    startActivity(ResultActivity.class, "type", "tixian");
+                                                    finish();
+                                                } else {
+                                                    showShort(baseResult.getMsg());
+                                                }
+                                            }
+                                        });
+                            }
+                        });
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.show();
+                    }else {
+                        if (wallet.getDeposit_status()==0){
+                            startActivity(DepositActivity.class);
+                        }else {
+                            showShort("押金正在退还！");
                         }
-                    });
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.show();
+                    }
+
                 }
 
                 break;

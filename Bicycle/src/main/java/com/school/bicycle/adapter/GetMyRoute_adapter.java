@@ -45,6 +45,11 @@ public class GetMyRoute_adapter extends BaseAdapter {
         return i;
     }
 
+    public void updateView(List<GetMyRoute.BodyBean> nowList) {
+        this.data = nowList;
+        this.notifyDataSetChanged();//强制动态刷新数据进而调用getView方法
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolde = null;
